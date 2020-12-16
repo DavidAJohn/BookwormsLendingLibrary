@@ -1,0 +1,74 @@
+[
+    {
+      "Title": "Deserunt cillum laboris do sit reprehenderit nisi.",
+      "YearPublished": 1963,
+      "ISBN": "ISBN-6418",
+      "Summary": "Dolor laboris exercitation laborum aute sunt commodo commodo consequat esse aute ut amet occaecat esse. Voluptate cillum esse tempor minim eiusmod culpa velit esse velit dolor.",
+      "CoverImageUrl": "cover.jpg",
+      "AuthorId": 1,
+      "CategoryId": 1
+    },
+    {
+      "Title": "Cupidatat magna do commodo labore irure ut duis Lorem ad.",
+      "YearPublished": 1890,
+      "ISBN": "ISBN-4307",
+      "Summary": "Ullamco irure amet exercitation nisi incididunt occaecat. Occaecat non proident exercitation nulla amet ipsum aute ea culpa.",
+      "CoverImageUrl": "cover.jpg",
+      "AuthorId": 1,
+      "CategoryId": 2
+    },
+    {
+      "Title": "Est voluptate consectetur cillum nisi excepteur.",
+      "YearPublished": 1898,
+      "ISBN": "ISBN-4840",
+      "Summary": "Elit cillum magna nulla enim. Labore voluptate culpa velit enim tempor nostrud deserunt deserunt sint dolor commodo.",
+      "CoverImageUrl": "cover.jpg",
+      "AuthorId": 4,
+      "CategoryId": 3
+    },
+    {
+      "Title": "Pariatur voluptate velit ut irure et ullamco.",
+      "YearPublished": 1970,
+      "ISBN": "ISBN-4765",
+      "Summary": "Nisi incididunt occaecat ut dolor Lorem occaecat deserunt eiusmod. Irure reprehenderit incididunt aute quis officia quis mollit ut tempor amet veniam proident fugiat pariatur.",
+      "CoverImageUrl": "cover.jpg",
+      "AuthorId": 4,
+      "CategoryId": 4
+    },
+    {
+      "Title": "Ea esse veniam dolor id labore ex eu laboris dolor.",
+      "YearPublished": 1936,
+      "ISBN": "ISBN-8489",
+      "Summary": "Et quis duis sint minim magna esse. Ea do reprehenderit fugiat reprehenderit non proident culpa culpa sit incididunt.",
+      "CoverImageUrl": "cover.jpg",
+      "AuthorId": 2,
+      "CategoryId": 5
+    },
+    {
+      "Title": "Eiusmod duis eu eu do proident dolor et cillum Lorem Lorem et nulla nostrud.",
+      "YearPublished": 1892,
+      "ISBN": "ISBN-8339",
+      "Summary": "Ex enim exercitation laboris ad. Pariatur irure aliqua velit proident ea magna eu esse et sint.",
+      "CoverImageUrl": "cover.jpg",
+      "AuthorId": 3,
+      "CategoryId": 6
+    },
+    {
+      "Title": "Voluptate dolore dolore consectetur laboris duis officia.",
+      "YearPublished": 1904,
+      "ISBN": "ISBN-4473",
+      "Summary": "Incididunt occaecat qui elit proident pariatur fugiat labore aliquip mollit. Sint cillum sint exercitation consequat.",
+      "CoverImageUrl": "cover.jpg",
+      "AuthorId": 2,
+      "CategoryId": 7
+    },
+    {
+      "Title": "Aliquip laborum sint proident deserunt officia esse dolor.",
+      "YearPublished": 1973,
+      "ISBN": "ISBN-6402",
+      "Summary": "Nisi adipisicing sit irure fugiat consectetur ut aliquip veniam aliquip culpa. Consectetur in nulla tempor anim consectetur mollit qui commodo aliquip culpa proident nostrud quis.",
+      "CoverImageUrl": "cover.jpg",
+      "AuthorId": 3,
+      "CategoryId": 8
+    }
+]
