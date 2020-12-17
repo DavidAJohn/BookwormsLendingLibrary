@@ -34,7 +34,14 @@ namespace BookwormsAPI
             });
             services.AddControllers();
 
-            services.AddSwaggerGen(); // extension method from ApplicationServicesExtensions
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { 
+                    Title = "Bookworms Lending Library API", 
+                    Version = "v1" 
+                });
+            });
+            
             services.ConfigureCors(); // extension method from ApplicationServicesExtensions
 
             services.AddControllers().AddNewtonsoftJson(o =>
