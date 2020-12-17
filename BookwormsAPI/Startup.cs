@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookwormsAPI.Contracts;
 using BookwormsAPI.Data;
 using BookwormsAPI.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -43,6 +44,10 @@ namespace BookwormsAPI
             });
             
             services.ConfigureCors(); // extension method from ApplicationServicesExtensions
+
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             services.AddControllers().AddNewtonsoftJson(o =>
                 o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);

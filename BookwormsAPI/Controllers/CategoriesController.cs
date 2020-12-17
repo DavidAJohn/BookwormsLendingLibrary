@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BookwormsAPI.Contracts;
 using BookwormsAPI.Data;
 using BookwormsAPI.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -9,27 +10,22 @@ namespace BookwormsAPI.Controllers
 {
     public class CategoriesController : BaseApiController
     {
-        private readonly ApplicationDbContext _context;
-        public CategoriesController(ApplicationDbContext context)
+        private readonly ICategoryRepository _categoryRepository;
+        public CategoriesController(ICategoryRepository categoryRepository)
         {
-            _context = context;
+            _categoryRepository = categoryRepository;
         }
 
         [HttpGet]
         public async Task<IEnumerable<Category>> GetCategories()
         {
-            var categories = await _context.Categories
-                .ToListAsync();
-
-            return categories;
+            return await _categoryRepository.FindAllAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategoryById(int id)
         {
-            var category = await _context.Categories
-                .SingleOrDefaultAsync(c => c.Id == id);
-
+            var category = await _categoryRepository.FindByConditionAsync(x => x.Id == id);
             return Ok(category);
         }
     }
