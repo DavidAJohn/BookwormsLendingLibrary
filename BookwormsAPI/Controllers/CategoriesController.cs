@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using BookwormsAPI.Contracts;
 using BookwormsAPI.Data;
 using BookwormsAPI.Entities;
+using BookwormsAPI.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,15 +18,18 @@ namespace BookwormsAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Category>> GetCategories()
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return await _categoryRepository.FindAllAsync();
+            var spec = new CategoriesOrderedByNameSpecification();
+            var categories = await _categoryRepository.ListAsync(spec);
+            return Ok(categories);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategoryById(int id)
+        public async Task<ActionResult> GetCategoryById(int id)
         {
-            var category = await _categoryRepository.FindByConditionAsync(x => x.Id == id);
+            var spec = new CategoriesOrderedByNameSpecification(id);
+            var category = await _categoryRepository.GetEntityWithSpec(spec);
             return Ok(category);
         }
     }

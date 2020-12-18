@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using BookwormsAPI.Contracts;
+using BookwormsAPI.Specifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookwormsAPI.Data
@@ -15,25 +16,30 @@ namespace BookwormsAPI.Data
         {
             _repositoryContext = repositoryContext;
         }
-        public async Task<IEnumerable<T>> FindAllAsync()
+
+        public async Task<IEnumerable<T>> ListAllAsync()
         {
-            return await _repositoryContext.Set<T>().AsNoTracking().ToListAsync();
+            return await _repositoryContext.Set<T>().ToListAsync();
         }
-        public async Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> expression)
+
+        public async Task<T> GetByIdAsync(int id)
         {
-            return await _repositoryContext.Set<T>().Where(expression).AsNoTracking().ToListAsync();
+            return await _repositoryContext.Set<T>().FindAsync(id);
         }
-        public void Create(T entity)
+
+        public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
         {
-            _repositoryContext.Set<T>().Add(entity);
+            return await ApplySpecification(spec).FirstOrDefaultAsync(); 
         }
-        public void Update(T entity)
+
+        public async Task<IEnumerable<T>> ListAsync(ISpecification<T> spec)
         {
-            _repositoryContext.Set<T>().Update(entity);
+            return await ApplySpecification(spec).ToListAsync(); 
         }
-        public void Delete(T entity)
+
+        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
-            _repositoryContext.Set<T>().Remove(entity);
+            return SpecificationEvaluator<T>.GetQuery(_repositoryContext.Set<T>().AsQueryable(), spec);
         }
     }
 

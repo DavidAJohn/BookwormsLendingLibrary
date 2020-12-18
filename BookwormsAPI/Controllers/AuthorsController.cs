@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using BookwormsAPI.Contracts;
 using BookwormsAPI.Data;
 using BookwormsAPI.Entities;
+using BookwormsAPI.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,19 +18,18 @@ namespace BookwormsAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Author>> GetAuthors()
+        public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
         {
-            return await _authorRepository.FindAllAsync();
+            var spec = new AuthorsWithBooksSpecification();
+            var authors = await _authorRepository.ListAsync(spec);
+            return Ok(authors);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAuthorById(int id)
+        public async Task<ActionResult> GetAuthorById(int id)
         {
-            // var author = await _context.Authors
-            //     .Include(a => a.Books)
-            //     .SingleOrDefaultAsync(a => a.Id == id);
-
-            var author = await _authorRepository.FindByConditionAsync(x => x.Id == id);
+            var spec = new AuthorsWithBooksSpecification(id);
+            var author = await _authorRepository.GetEntityWithSpec(spec);
             return Ok(author);
         }
     }

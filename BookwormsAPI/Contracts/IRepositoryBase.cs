@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using BookwormsAPI.Specifications;
 
 namespace BookwormsAPI.Contracts
 {
-    public interface IRepositoryBase<T>
+    public interface IRepositoryBase<T> where T : class
     {
-        Task<IEnumerable<T>> FindAllAsync();
-        Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> expression);
-        void Create(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        Task<IEnumerable<T>> ListAllAsync();
+        Task<T> GetByIdAsync(int id);
+        Task<T> GetEntityWithSpec(ISpecification<T> spec);
+        Task<IEnumerable<T>> ListAsync(ISpecification<T> spec);
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using BookwormsAPI.Contracts;
 using BookwormsAPI.Data;
 using BookwormsAPI.Entities;
+using BookwormsAPI.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,35 +18,19 @@ namespace BookwormsAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Book>> GetBooks()
+        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
-            // var books = await _context.Books
-            //     .Include(b => b.Author)
-            //     .Include(b => b.Category)
-            //     .ToListAsync();
-
-            return await _bookRepository.FindAllAsync();
+            var spec = new BooksWithCategoriesSpecification();
+            var books = await _bookRepository.ListAsync(spec);
+            return Ok(books);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBookById(int id)
+        public async Task<ActionResult> GetBookById(int id)
         {
-            // var book = await _context.Books
-            //     .Include(b => b.Author)
-            //     .Include(b => b.Category)
-            //     .SingleOrDefaultAsync(b => b.Id == id);
-            // return Ok(book);
-
-            var book = await _bookRepository.FindByConditionAsync(x => x.Id == id);
+            var spec = new BooksWithCategoriesSpecification(id);
+            var book = await _bookRepository.GetEntityWithSpec(spec);
             return Ok(book);
         }
-
-        // [HttpPost]
-        // public async Task<IActionResult> CreateBook([FromBody] Book book) 
-        // {
-        //     var newBook = await _context.Books.AddAsync(book);
-        //     await _context.SaveChangesAsync();
-        //     return Ok(newBook);
-        // }
     }
 }
