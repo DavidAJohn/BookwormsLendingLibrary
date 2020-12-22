@@ -12,7 +12,7 @@ namespace BookwormsAPI.Helpers
         {
             CreateMap<Book, BookDTO>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Name))
-                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author.FirstName + ' ' + src.Author.LastName));
+                .ForMember(dest => dest.Author, opt => opt.MapFrom<AuthorFullNameResolver>());
 
             CreateMap<Book, BookForAuthorDTO>();
 
