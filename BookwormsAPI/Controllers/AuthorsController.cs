@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using BookwormsAPI.Contracts;
 using BookwormsAPI.Data;
+using BookwormsAPI.DTOs;
 using BookwormsAPI.Entities;
 using BookwormsAPI.Specifications;
 using Microsoft.AspNetCore.Mvc;
@@ -12,17 +14,20 @@ namespace BookwormsAPI.Controllers
     public class AuthorsController : BaseApiController
     {
         private readonly IAuthorRepository _authorRepository;
-        public AuthorsController(IAuthorRepository authorRepository)
+        private readonly IMapper _mapper;
+        public AuthorsController(IAuthorRepository authorRepository, IMapper mapper)
         {
             _authorRepository = authorRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
+        public async Task<ActionResult<IEnumerable<AuthorDTO>>> GetAuthors()
         {
             var spec = new AuthorsWithBooksSpecification();
             var authors = await _authorRepository.ListAsync(spec);
-            return Ok(authors);
+            
+            return Ok(_mapper.Map<IEnumerable<Author>, IEnumerable<AuthorDTO>>(authors));
         }
 
         [HttpGet("{id}")]
@@ -30,7 +35,8 @@ namespace BookwormsAPI.Controllers
         {
             var spec = new AuthorsWithBooksSpecification(id);
             var author = await _authorRepository.GetEntityWithSpec(spec);
-            return Ok(author);
+
+            return Ok(_mapper.Map<Author, AuthorDTO>(author));
         }
     }
 }

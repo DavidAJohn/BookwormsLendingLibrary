@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using BookwormsAPI.DTOs;
 using BookwormsAPI.Entities;
@@ -8,9 +10,15 @@ namespace BookwormsAPI.Helpers
     {
         public MappingProfiles()
         {
-            CreateMap<Book, BookToReturnDTO>()
+            CreateMap<Book, BookDTO>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Name))
                 .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author.FirstName + ' ' + src.Author.LastName));
+
+            CreateMap<Book, BookForAuthorDTO>();
+
+            CreateMap<Author, AuthorDTO>();
+
+            CreateMap<Category, CategoryDTO>();
         }
     }
 }

@@ -23,21 +23,21 @@ namespace BookwormsAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookToReturnDTO>>> GetBooks()
+        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks()
         {
             var spec = new BooksWithCategoriesAndAuthorsSpecification();
             var books = await _bookRepository.ListAsync(spec);
             
-            return Ok(_mapper.Map<IEnumerable<Book>, IEnumerable<BookToReturnDTO>>(books));
+            return Ok(_mapper.Map<IEnumerable<Book>, IEnumerable<BookDTO>>(books));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BookToReturnDTO>> GetBookById(int id)
+        public async Task<ActionResult<BookDTO>> GetBookById(int id)
         {
             var spec = new BooksWithCategoriesAndAuthorsSpecification(id);
             var book = await _bookRepository.GetEntityWithSpec(spec);
 
-            return _mapper.Map<Book, BookToReturnDTO>(book);
+            return _mapper.Map<Book, BookDTO>(book);
         }
     }
 }
