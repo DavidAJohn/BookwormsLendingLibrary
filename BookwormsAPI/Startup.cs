@@ -1,23 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
-using BookwormsAPI.Contracts;
 using BookwormsAPI.Data;
 using BookwormsAPI.Extensions;
 using BookwormsAPI.Helpers;
 using BookwormsAPI.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 
 namespace BookwormsAPI
 {
@@ -36,26 +27,19 @@ namespace BookwormsAPI
             services.AddDbContext<ApplicationDbContext>(options => {
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+
             services.AddControllers();
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { 
-                    Title = "Bookworms Lending Library API", 
-                    Version = "v1" 
-                });
-            });
-            
-            services.ConfigureCors(); // extension method from ApplicationServicesExtensions
-
-            services.AddScoped<IAuthorRepository, AuthorRepository>();
-            services.AddScoped<IBookRepository, BookRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-
-            services.AddAutoMapper(typeof(MappingProfiles));
 
             services.AddControllers().AddNewtonsoftJson(o =>
                 o.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            
+            services.AddApplicationServices(); // extension method : ApplicationServicesExtensions
+
+            services.AddSwaggerDocumentation(); // extension method : SwaggerServiceExtensions
+            
+            services.AddCorsConfiguration(); // extension method : CorsServiceExtensions
+
+            services.AddAutoMapper(typeof(MappingProfiles));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,8 +50,7 @@ namespace BookwormsAPI
             
             if (env.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BookwormsAPI v1"));
+                app.UseSwaggerDocumentation();
             }
 
             app.UseHttpsRedirection();
