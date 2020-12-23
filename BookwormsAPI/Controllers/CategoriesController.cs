@@ -5,6 +5,7 @@ using BookwormsAPI.Data;
 using BookwormsAPI.Entities;
 using BookwormsAPI.Errors;
 using BookwormsAPI.Specifications;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,8 @@ namespace BookwormsAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> GetCategoryById(int id)
         {
             var spec = new CategoriesOrderedByNameSpecification(id);

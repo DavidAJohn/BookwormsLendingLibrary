@@ -8,6 +8,7 @@ using BookwormsAPI.DTOs;
 using BookwormsAPI.Entities;
 using BookwormsAPI.Errors;
 using BookwormsAPI.Specifications;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +34,8 @@ namespace BookwormsAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<BookDTO>> GetBookById(int id)
         {
             var spec = new BooksWithCategoriesAndAuthorsSpecification(id);
