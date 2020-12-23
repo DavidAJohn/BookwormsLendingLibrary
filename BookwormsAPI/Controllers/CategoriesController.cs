@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using BookwormsAPI.Contracts;
 using BookwormsAPI.Data;
 using BookwormsAPI.Entities;
+using BookwormsAPI.Errors;
 using BookwormsAPI.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace BookwormsAPI.Controllers
         {
             var spec = new CategoriesOrderedByNameSpecification();
             var categories = await _categoryRepository.ListAsync(spec);
+
             return Ok(categories);
         }
 
@@ -30,6 +32,12 @@ namespace BookwormsAPI.Controllers
         {
             var spec = new CategoriesOrderedByNameSpecification(id);
             var category = await _categoryRepository.GetEntityWithSpec(spec);
+
+            if (category == null) 
+            {
+                return NotFound(new ApiResponse(404));
+            }
+
             return Ok(category);
         }
     }

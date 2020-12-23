@@ -5,6 +5,7 @@ using BookwormsAPI.Contracts;
 using BookwormsAPI.Data;
 using BookwormsAPI.DTOs;
 using BookwormsAPI.Entities;
+using BookwormsAPI.Errors;
 using BookwormsAPI.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,11 @@ namespace BookwormsAPI.Controllers
         {
             var spec = new AuthorsWithBooksSpecification(id);
             var author = await _authorRepository.GetEntityWithSpec(spec);
+
+            if (author == null)
+            {
+                return NotFound(new ApiResponse(404));
+            }
 
             return Ok(_mapper.Map<Author, AuthorDTO>(author));
         }
