@@ -7,6 +7,7 @@ using BookwormsAPI.Contracts;
 using BookwormsAPI.Data;
 using BookwormsAPI.Extensions;
 using BookwormsAPI.Helpers;
+using BookwormsAPI.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -60,9 +61,11 @@ namespace BookwormsAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ExceptionMiddleware>(); // custom exception middleware
+            app.UseStatusCodePagesWithReExecute("/errors/{0}"); // when requested path is not found
+            
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BookwormsAPI v1"));
             }
