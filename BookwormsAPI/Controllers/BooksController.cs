@@ -25,9 +25,9 @@ namespace BookwormsAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks(string sort)
+        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks(string sort, int? authorId, int? categoryId)
         {
-            var spec = new BooksOrderedByTitleOrAuthorSpecification(sort);
+            var spec = new BooksWithCategoriesAndAuthorsSpecification(sort, authorId, categoryId);
             var books = await _bookRepository.ListAsync(spec);
             
             return Ok(_mapper.Map<IEnumerable<Book>, IEnumerable<BookDTO>>(books));
