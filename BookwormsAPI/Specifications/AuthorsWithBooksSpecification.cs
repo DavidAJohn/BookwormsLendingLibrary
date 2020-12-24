@@ -9,12 +9,14 @@ namespace BookwormsAPI.Specifications
         public AuthorsWithBooksSpecification()
         {
             AddInclude(a => a.Books);
+            ApplyOrderBy(a => a.LastName);
         }
 
         public AuthorsWithBooksSpecification(int id) 
             : base(a => a.Id == id)
         {
             AddInclude(a => a.Books);
+            ApplyOrderBy(a => a.LastName);
         }
     }
 }

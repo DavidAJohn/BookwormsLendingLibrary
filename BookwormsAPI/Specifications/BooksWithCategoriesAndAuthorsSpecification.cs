@@ -6,12 +6,6 @@ namespace BookwormsAPI.Specifications
 {
     public class BooksWithCategoriesAndAuthorsSpecification : BaseSpecification<Book>
     {
-        public BooksWithCategoriesAndAuthorsSpecification()
-        {
-            AddInclude(b => b.Category);
-            AddInclude(b => b.Author);
-        }
-
         public BooksWithCategoriesAndAuthorsSpecification(int id) 
             : base(b => b.Id == id)
         {
