@@ -6,18 +6,19 @@ namespace BookwormsAPI.Specifications
 {
     public class BooksWithCategoriesAndAuthorsSpecification : BaseSpecification<Book>
     {
-        public BooksWithCategoriesAndAuthorsSpecification(string sort, int? authorId, int? categoryId)
+        public BooksWithCategoriesAndAuthorsSpecification(BookSpecificationParams bookParams)
             : base(b =>
-                (!authorId.HasValue || b.AuthorId == authorId) &&
-                (!categoryId.HasValue || b.CategoryId == categoryId)
+                (!bookParams.AuthorId.HasValue || b.AuthorId == bookParams.AuthorId) &&
+                (!bookParams.CategoryId.HasValue || b.CategoryId == bookParams.CategoryId)
             )
         {
             AddInclude(b => b.Category);
             AddInclude(b => b.Author);
+            ApplyPaging(bookParams.PageSize * (bookParams.PageIndex - 1), bookParams.PageSize);
 
-            if (!string.IsNullOrEmpty(sort))
+            if (!string.IsNullOrEmpty(bookParams.Sort))
             {
-                switch (sort)
+                switch (bookParams.Sort)
                 {
                     case "titleAsc":
                         ApplyOrderBy(b => b.Title);
