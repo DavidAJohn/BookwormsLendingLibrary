@@ -6,6 +6,7 @@ using BookwormsAPI.Data;
 using BookwormsAPI.DTOs;
 using BookwormsAPI.Entities;
 using BookwormsAPI.Errors;
+using BookwormsAPI.Extensions;
 using BookwormsAPI.Specifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,16 +18,26 @@ namespace BookwormsAPI.Controllers
     {
         private readonly IAuthorRepository _authorRepository;
         private readonly IMapper _mapper;
-        public AuthorsController(IAuthorRepository authorRepository, IMapper mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public AuthorsController(IAuthorRepository authorRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _authorRepository = authorRepository;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AuthorDTO>>> GetAuthors()
+        public async Task<ActionResult<IEnumerable<AuthorDTO>>> GetAuthors([FromQuery] AuthorSpecificationParams authorParams)
         {
-            var spec = new AuthorsWithBooksSpecification();
+            var spec = new AuthorsWithBooksSpecification(authorParams);
+
+            // get any overall count of items (after filtering has been applied)
+            var countSpec = new AuthorsWithFiltersForCountSpecification(authorParams);
+            var totalItems = await _authorRepository.CountAsync(countSpec);
+
+            // add pagination response headers to help client applications
+            _httpContextAccessor.HttpContext.AddPaginationResponseHeaders(totalItems, authorParams.PageSize, authorParams.PageIndex);
+
             var authors = await _authorRepository.ListAsync(spec);
             
             return Ok(_mapper.Map<IEnumerable<Author>, IEnumerable<AuthorDTO>>(authors));
