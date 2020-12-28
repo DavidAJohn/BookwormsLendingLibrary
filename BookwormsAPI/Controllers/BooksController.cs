@@ -29,7 +29,7 @@ namespace BookwormsAPI.Controllers
         {
             var spec = new BooksWithCategoriesAndAuthorsSpecification(bookParams);
 
-            // get any overall count of items
+            // get any overall count of items (after filtering has been applied)
             var countSpec = new BooksWithFiltersForCountSpecification(bookParams);
             var totalItems = await _bookRepository.CountAsync(countSpec);
 
