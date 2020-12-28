@@ -40,6 +40,8 @@ namespace BookwormsAPI
             services.AddCorsConfiguration(); // extension method : CorsServiceExtensions
 
             services.AddAutoMapper(typeof(MappingProfiles));
+
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
