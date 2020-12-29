@@ -15,6 +15,8 @@ namespace BookwormsAPI.Helpers
                 .ForMember(dest => dest.Author, opt => opt.MapFrom<AuthorFullNameResolver>());
 
             CreateMap<Book, BookForAuthorDTO>();
+            CreateMap<BookCreateDTO, Book>();
+            CreateMap<BookUpdateDTO, Book>().ReverseMap();
 
             CreateMap<Author, AuthorDTO>();
             CreateMap<AuthorCreateDTO, Author>();
