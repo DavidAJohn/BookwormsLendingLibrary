@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using BookwormsAPI.Contracts;
 using BookwormsAPI.Data;
+using BookwormsAPI.DTOs;
 using BookwormsAPI.Entities;
 using BookwormsAPI.Errors;
 using BookwormsAPI.Specifications;
@@ -14,11 +16,14 @@ namespace BookwormsAPI.Controllers
     public class CategoriesController : BaseApiController
     {
         private readonly ICategoryRepository _categoryRepository;
-        public CategoriesController(ICategoryRepository categoryRepository)
+        private readonly IMapper _mapper;
+        public CategoriesController(ICategoryRepository categoryRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
+        // GET api/categories
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
@@ -28,7 +33,8 @@ namespace BookwormsAPI.Controllers
             return Ok(categories);
         }
 
-        [HttpGet("{id}")]
+        // GET api/categories/{id}
+        [HttpGet("{id}", Name="GetCategoryById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> GetCategoryById(int id)
@@ -42,6 +48,63 @@ namespace BookwormsAPI.Controllers
             }
 
             return Ok(category);
+        }
+
+        // POST api/categories
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<CategoryDTO>> CreateCategory([FromBody] CategoryCreateDTO categoryCreateDTO)
+        {
+            if (categoryCreateDTO == null)
+            {
+                return BadRequest(new ApiResponse(400));
+            }
+
+            var category = _mapper.Map<Category>(categoryCreateDTO);
+            await _categoryRepository.Create(category);
+            var categoryDTO = _mapper.Map<CategoryDTO>(category);
+
+            return CreatedAtRoute(nameof(GetCategoryById), new {Id = categoryDTO.Id}, categoryDTO);
+        }
+
+        // DELETE api/categories/{id}
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteCategory(int id)
+        {
+            var category = await _categoryRepository.GetByIdAsync(id);
+
+            if (category == null)
+            {
+                return NotFound(new ApiResponse(404));
+            }
+
+            await _categoryRepository.Delete(category);
+            return NoContent();
+        }
+
+        // PUT api/categories/{id}
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> UpdateCategory(int id, CategoryCreateDTO categoryUpdateDTO)
+        {
+            var category = await _categoryRepository.GetByIdAsync(id);
+
+            if (category == null)
+            {
+                return NotFound(new ApiResponse(404));
+            }
+
+            _mapper.Map(categoryUpdateDTO, category);
+            await _categoryRepository.Update(category);
+
+            return NoContent();
         }
     }
 }
