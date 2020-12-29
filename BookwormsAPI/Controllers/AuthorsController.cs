@@ -9,6 +9,7 @@ using BookwormsAPI.Errors;
 using BookwormsAPI.Extensions;
 using BookwormsAPI.Specifications;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -116,6 +117,35 @@ namespace BookwormsAPI.Controllers
             _mapper.Map(authorUpdateDTO, author);
             await _authorRepository.Update(author);
 
+            return NoContent();
+        }
+
+        // PATCH api/authors/{id}
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> PatchAuthor(int id, JsonPatchDocument<AuthorUpdateDTO> patchDocument)
+        {
+            var author = await _authorRepository.GetByIdAsync(id);
+
+            if (author == null)
+            {
+                return NotFound(new ApiResponse(404));
+            }
+
+            var authorToPatch = _mapper.Map<AuthorUpdateDTO>(author);
+            patchDocument.ApplyTo(authorToPatch, ModelState);
+
+            if (!TryValidateModel(authorToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(authorToPatch, author);
+            await _authorRepository.Update(author);
+            
             return NoContent();
         }
     }

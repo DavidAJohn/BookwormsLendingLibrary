@@ -18,7 +18,7 @@ namespace BookwormsAPI.Helpers
 
             CreateMap<Author, AuthorDTO>();
             CreateMap<AuthorCreateDTO, Author>();
-            CreateMap<AuthorUpdateDTO, Author>();
+            CreateMap<AuthorUpdateDTO, Author>().ReverseMap();
 
             CreateMap<Category, CategoryDTO>();
         }
