@@ -14,5 +14,9 @@ namespace BookwormsAPI.Contracts
         Task<T> GetEntityWithSpec(ISpecification<T> spec);
         Task<IEnumerable<T>> ListAsync(ISpecification<T> spec);
         Task<int> CountAsync(ISpecification<T> spec);
+        Task<T> Create(T entity);
+        Task<bool> Update(T entity);
+        Task<bool> Delete(T entity);
+        Task<bool> Save();
     }
 }

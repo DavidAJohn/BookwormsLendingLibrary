@@ -47,5 +47,29 @@ namespace BookwormsAPI.Data
             return SpecificationEvaluator<T>.GetQuery(_repositoryContext.Set<T>().AsQueryable(), spec);
         }
 
+        public async Task<T> Create(T entity)
+        {
+            await _repositoryContext.Set<T>().AddAsync(entity);
+            await Save();
+            return entity;
+        }
+
+        public async Task<bool> Update(T entity)
+        {
+            _repositoryContext.Set<T>().Update(entity);
+            return await Save();
+        }
+
+        public async Task<bool> Delete(T entity)
+        {
+            _repositoryContext.Set<T>().Remove(entity);
+            return await Save();
+        }
+
+        public async Task<bool> Save()
+        {
+            var changes = await _repositoryContext.SaveChangesAsync();
+            return changes > 0;
+        }
     }
 }

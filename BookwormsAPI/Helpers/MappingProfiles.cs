@@ -17,6 +17,8 @@ namespace BookwormsAPI.Helpers
             CreateMap<Book, BookForAuthorDTO>();
 
             CreateMap<Author, AuthorDTO>();
+            CreateMap<AuthorCreateDTO, Author>();
+            CreateMap<AuthorUpdateDTO, Author>();
 
             CreateMap<Category, CategoryDTO>();
         }
