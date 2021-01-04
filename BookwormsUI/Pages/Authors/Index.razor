@@ -1,0 +1,45 @@
+﻿@page "/authors/"
+
+@inject IAuthorRepository authorRepo
+@inject AuthorService authorService
+
+<h3>Authors Index</h3>
+
+@if (authors == null)
+{
+    <h4>Loading authors...</h4>
+}
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var author in authors)
+            {
+                <tr>
+                    <td>@author.FirstName</td>
+                    <td>@author.LastName</td>
+                    <td>
+                        <a href="/authors/view/@author.Id" class="btn btn-primary"><span class="oi oi-book"></span></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Author> authors;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var url = authorService.GetAuthorsApiEndpoint();
+        authors = await authorRepo.Get(url);
+    }
+}

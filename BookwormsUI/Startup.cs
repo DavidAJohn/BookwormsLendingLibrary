@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BookwormsUI.Data;
+using BookwormsUI.Contracts;
+using BookwormsUI.Repository;
+using BookwormsUI.Services;
 
 namespace BookwormsUI
 {
@@ -29,6 +32,11 @@ namespace BookwormsUI
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+
+            services.AddHttpClient();
+            services.AddTransient<IAuthorRepository, AuthorRepository>();
+            services.AddSingleton<SettingsService>();
+            services.AddSingleton<AuthorService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
