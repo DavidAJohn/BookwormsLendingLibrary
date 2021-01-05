@@ -35,8 +35,10 @@ namespace BookwormsUI
 
             services.AddHttpClient();
             services.AddTransient<IAuthorRepository, AuthorRepository>();
+            services.AddTransient<IBookRepository, BookRepository>();
             services.AddSingleton<SettingsService>();
             services.AddSingleton<AuthorService>();
+            services.AddSingleton<BookService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

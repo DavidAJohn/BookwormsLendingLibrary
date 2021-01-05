@@ -1,0 +1,82 @@
+﻿@page "/books/view/{Id}"
+
+@inject IBookRepository BookRepository
+@inject BookService BookService
+@inject NavigationManager NavigationManager
+
+<h3>View Book</h3>
+
+@if (int.Parse(Id) < 1 || string.IsNullOrWhiteSpace(Id))
+{
+    <h4>Error - the requested book could not be found</h4>
+}
+else if (book == null)
+{
+    <LoadingMessage Message="Loading book details..." />
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                <img src="@book." style="width: 200px;" />
+            </div>
+            <div class="col-8">
+                <h4>Book details</h4>
+                <table class="table table-responsive">
+                    <tr>
+                        <td>Title:</td>
+                        <td>@book.Title</td>
+                    </tr>
+                    <tr>
+                        <td>Published:</td>
+                        <td>@book.YearPublished</td>
+                    </tr>
+                    <tr>
+                        <td>Author:</td>
+                        <td>
+                            @if (book.Author == null)
+                            {
+                                <span class="text-muted">No author listed</span>
+                            }
+                            else
+                            {
+                                <a href="/authors/view/@book.AuthorId">@book.Author</a>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Summary:</td>
+                        <td>@book.Summary</td>
+                    </tr>
+                </table>
+                <br />
+            </div>
+        </div>
+    </div>
+
+}
+
+<button class="btn btn-secondary" @onclick="BackToBooks">
+    <span class="oi oi-media-skip-backward"></span>
+    Back to List of Books
+</button>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private Book book = new Book();
+
+    protected async override Task OnInitializedAsync()
+    {
+        int id = int.Parse(Id);
+        var url = BookService.GetBooksApiEndpoint();
+        book = await BookRepository.GetByIdAsync(url, id);
+    }
+
+    private void BackToBooks()
+    {
+        NavigationManager.NavigateTo("/books/");
+    }
+}

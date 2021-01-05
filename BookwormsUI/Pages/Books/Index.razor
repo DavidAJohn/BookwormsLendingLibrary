@@ -1,0 +1,59 @@
+﻿@page "/books/"
+
+@inject IBookRepository BookRepository
+@inject BookService BookService
+
+<h3>Books Index</h3>
+
+@if (books == null)
+{
+    <LoadingMessage Message="Loading books..." />
+}
+else
+{
+    @if (books.Count() < 1)
+    {
+        <h4>No books currently listed</h4>
+    }
+    else
+    {
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Title</th>
+                    <th>Year</th>
+                    <th>Author</th>
+                    <th>Category</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in books)
+                {
+                <tr>
+                    <td>
+                        <img src="@book.CoverImageUrl" style="width:50px;" />
+                    </td>
+                    <td>@book.Title</td>
+                    <td>@book.YearPublished</td>
+                    <td>@book.Author</td>
+                    <td>@book.Category</td>
+                    <td>
+                        <a href="/books/view/@book.Id" class="btn btn-primary"><span class="oi oi-book"></span></a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    private IEnumerable<Book> books;
+    protected override async Task OnInitializedAsync()
+    {
+        var url = BookService.GetBooksApiEndpoint();
+        books = await BookRepository.GetAsync(url);
+    }
+}
