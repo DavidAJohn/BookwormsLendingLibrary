@@ -40,6 +40,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         var url = authorService.GetAuthorsApiEndpoint();
-        authors = await authorRepo.Get(url);
+        authors = await authorRepo.GetAsync(url);
     }
 }

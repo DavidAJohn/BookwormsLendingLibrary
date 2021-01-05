@@ -1,0 +1,82 @@
+﻿@page "/authors/view/{Id}"
+
+@inject IAuthorRepository authorRepo
+@inject AuthorService authorService
+@inject NavigationManager navManager
+
+<h3>View Author</h3>
+
+@if (author == null)
+{
+    <LoadingMessage Message="Loading author details..." />
+}
+else
+{
+    <div class="col-md-5">
+        <h4>Author details</h4>
+        <table class="table table-responsive">
+            <tr>
+                <td>First name:</td>
+                <td>@author.FirstName</td>
+            </tr>
+            <tr>
+                <td>Last name:</td>
+                <td>@author.LastName</td>
+            </tr>
+            <tr>
+                <td>Biography:</td>
+                <td>@author.Biography</td>
+            </tr>
+        </table>
+        <br />
+
+        @if (author.Books == null || author.Books.Count < 1)
+        {
+            <div class="alert alert-dismissible alert-secondary">
+                No books to display for this author
+            </div>
+        }
+        else
+        {
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                    <h4>Author's books:</h4>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var book in author.Books)
+                    {
+                        <li class="list-group-item">@book.Title - (@book.YearPublished)</li>
+                    }
+                </ul>
+            </div>
+        }
+
+        <br />
+
+        <button class="btn btn-secondary" @onclick="BackToAuthors">
+            <span class="oi oi-media-skip-backward"></span>
+            Back to List of Authors
+        </button>
+
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private Author author = new Author();
+
+    protected override async Task OnInitializedAsync()
+    {
+        int id = int.Parse(Id);
+        var url = authorService.GetAuthorsApiEndpoint();
+        author = await authorRepo.GetByIdAsync(url, id);
+    }
+
+    private void BackToAuthors()
+    {
+        navManager.NavigateTo("/authors/");
+    }
+
+}
