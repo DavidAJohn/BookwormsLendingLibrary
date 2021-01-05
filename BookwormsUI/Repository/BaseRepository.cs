@@ -15,7 +15,44 @@ namespace BookwormsUI.Repository
             _client = client;
         }
 
-        public async Task<bool> Create(string url, T obj)
+        public async Task<T> GetByIdAsync(string url, int id)
+        {
+            if (id < 0)
+            {
+                return null;
+            }
+
+            var request = new HttpRequestMessage(HttpMethod.Get, url + id);
+
+            var client = _client.CreateClient();
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<T>(content);
+            }
+
+            return null;
+        }
+
+        public async Task<IList<T>> GetAsync(string url)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+            var client = _client.CreateClient();
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<T>>(content);
+            }
+
+            return null;
+        }
+
+        public async Task<bool> CreateAsync(string url, T obj)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, url);
 
@@ -37,7 +74,7 @@ namespace BookwormsUI.Repository
             return false;
         }
 
-        public async Task<bool> Delete(string url, int id)
+        public async Task<bool> DeleteAsync(string url, int id)
         {
             if (id < 1)
             {
@@ -57,44 +94,7 @@ namespace BookwormsUI.Repository
             return false;
         }
 
-        public async Task<T> Get(string url, int id)
-        {
-            if (id < 0)
-            {
-                return null;
-            }
-
-            var request = new HttpRequestMessage(HttpMethod.Get, url + id);
-
-            var client = _client.CreateClient();
-            HttpResponseMessage response = await client.SendAsync(request);
-
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<T>(content);
-            }
-
-            return null;
-        }
-
-        public async Task<IList<T>> Get(string url)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
-
-            var client = _client.CreateClient();
-            HttpResponseMessage response = await client.SendAsync(request);
-
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<T>>(content);
-            }
-
-            return null;
-        }
-
-        public async Task<bool> Update(string url, T obj)
+        public async Task<bool> UpdateAsync(string url, T obj)
         {
             if (obj == null)
             {
