@@ -13,6 +13,9 @@ using BookwormsUI.Data;
 using BookwormsUI.Contracts;
 using BookwormsUI.Repository;
 using BookwormsUI.Services;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
 
 namespace BookwormsUI
 {
@@ -39,6 +42,14 @@ namespace BookwormsUI
             services.AddSingleton<SettingsService>();
             services.AddSingleton<AuthorService>();
             services.AddSingleton<BookService>();
+
+            services
+                .AddBlazorise( options =>
+                {
+                    options.ChangeTextOnKeyPress = true; // optional
+                } )
+                .AddBootstrapProviders()
+                .AddFontAwesomeIcons();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

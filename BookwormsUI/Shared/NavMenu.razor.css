@@ -19,7 +19,7 @@
 }
 
 .nav-item {
-    font-size: 0.9rem;
+    font-size: 1rem;
     padding-bottom: 0.5rem;
 }
 
@@ -59,4 +59,11 @@
         /* Never collapse the sidebar for wide screens */
         display: block;
     }
+}
+
+i {
+    width: 2rem;
+    font-size: 1.1rem;
+    vertical-align: text-top;
+    top: -2px;
 }
