@@ -1,0 +1,58 @@
+﻿@inject NavigationManager NavigationManager
+@using BookwormsUI.Extensions
+
+<Breadcrumb>
+    <BreadcrumbItem>
+        <BreadcrumbLink To="">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+
+    @if (pages.Count() > 1)
+    {
+        @foreach (var item in pages)
+        {
+            @if (@item != @lastElement)
+            {
+                <BreadcrumbItem>
+                    <BreadcrumbLink To="@item">@item.ToTitleCase()</BreadcrumbLink>
+                </BreadcrumbItem>
+            }
+        }
+    }
+
+    <BreadcrumbItem Active="true">
+        <BreadcrumbLink To="#">@lastElement.ToTitleCase()</BreadcrumbLink>
+    </BreadcrumbItem>
+</Breadcrumb>
+
+@code {
+    [Parameter]
+    public string CurrentUrl { get; set; }
+    private string _CurrentUrl;
+    private string[] pages = new string[] {};
+    private string lastElement = "";
+
+    protected override void OnInitialized()
+    {
+        _CurrentUrl = CurrentUrl;
+
+        // split the current url passed from the parent component
+        pages = _CurrentUrl.Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+        pages = pages
+            .Where((item, index) => index > 1) // strip out the first two elements (http, domain)
+            .Where(item => !isNumber(item)) // and any trailing numeric value ("/[id]")
+            .ToArray();
+
+        // get the last element, so it can be set as 'Active' (not a link)
+        if (pages.Count() > 0 )
+        {
+            lastElement = pages.Last();
+        }
+    }
+
+    private bool isNumber(string item) 
+    {   
+        int n;   
+        return int.TryParse(item, out n);
+    }
+}

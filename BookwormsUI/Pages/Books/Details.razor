@@ -1,10 +1,8 @@
-﻿@page "/books/view/{Id}"
+﻿@page "/books/details/{Id}"
 
-@inject IBookRepository BookRepository
-@inject BookService BookService
-@inject NavigationManager NavigationManager
-
-<h3>View Book</h3>
+@inject IBookRepository bookRepository
+@inject BookService bookService
+@inject NavigationManager navigationManager
 
 @if (int.Parse(Id) < 1 || string.IsNullOrWhiteSpace(Id))
 {
@@ -16,6 +14,13 @@ else if (book == null)
 }
 else
 {
+    @if (CurrentUrl != null)
+    {
+        <div>
+            <BreadcrumbHeader CurrentUrl=@CurrentUrl />
+        </div>
+    }
+    
     <div class="container">
         <div class="row">
             <div class="col-2">
@@ -41,7 +46,7 @@ else
                             }
                             else
                             {
-                                <a href="/authors/view/@book.AuthorId">@book.Author</a>
+                                <a href="/authors/details/@book.AuthorId">@book.Author</a>
                             }
                         </td>
                     </tr>
@@ -67,16 +72,19 @@ else
     public string Id { get; set; }
 
     private Book book = new Book();
+    private string CurrentUrl;
 
     protected async override Task OnInitializedAsync()
     {
         int id = int.Parse(Id);
-        var url = BookService.GetBooksApiEndpoint();
-        book = await BookRepository.GetByIdAsync(url, id);
+        var url = bookService.GetBooksApiEndpoint();
+        book = await bookRepository.GetByIdAsync(url, id);
+
+        CurrentUrl = navigationManager.Uri;
     }
 
     private void BackToBooks()
     {
-        NavigationManager.NavigateTo("/books/");
+        navigationManager.NavigateTo("/books/");
     }
 }

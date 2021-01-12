@@ -1,10 +1,8 @@
-﻿@page "/authors/view/{Id}"
+﻿@page "/authors/details/{Id}"
 
 @inject IAuthorRepository authorRepo
 @inject AuthorService authorService
-@inject NavigationManager navManager
-
-<h3>View Author</h3>
+@inject NavigationManager navigationManager
 
 @if (author == null)
 {
@@ -12,6 +10,13 @@
 }
 else
 {
+    @if (CurrentUrl != null)
+    {
+        <div>
+            <BreadcrumbHeader CurrentUrl=@CurrentUrl />
+        </div>
+    }
+
     <div class="col-md-5">
         <h4>Author details</h4>
         <table class="table table-responsive">
@@ -64,19 +69,21 @@ else
 @code {
     [Parameter]
     public string Id { get; set; }
-
     private Author author = new Author();
+    private string CurrentUrl;
 
     protected override async Task OnInitializedAsync()
     {
         int id = int.Parse(Id);
         var url = authorService.GetAuthorsApiEndpoint();
         author = await authorRepo.GetByIdAsync(url, id);
+
+        CurrentUrl = navigationManager.Uri;
     }
 
     private void BackToAuthors()
     {
-        navManager.NavigateTo("/authors/");
+        navigationManager.NavigateTo("/authors/");
     }
 
 }
