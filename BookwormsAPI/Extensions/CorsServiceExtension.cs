@@ -12,7 +12,8 @@ namespace BookwormsAPI.Extensions
                     builder => builder
                     .AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowAnyHeader());
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("Pagination"));
             });
 
             return services;
