@@ -1,4 +1,6 @@
 using System;
+using System.Text.Json;
+using BookwormsAPI.Helpers;
 using Microsoft.AspNetCore.Http;
 
 namespace BookwormsAPI.Extensions
@@ -17,9 +19,24 @@ namespace BookwormsAPI.Extensions
                 throw new ArgumentNullException(nameof(httpContext));
             }
 
-            httpContext.Response.Headers.Add("Pagination-Count", recordCount.ToString());
-            httpContext.Response.Headers.Add("Pagination-Page", pageIndex.ToString());
-            httpContext.Response.Headers.Add("Pagination-Limit", pageSize.ToString());
+            // calculate total number of pages
+            int totalPages = (int)Math.Ceiling(recordCount / (double)pageSize);
+
+            // also work out if there are previous or next pages
+            bool hasPrevious = pageIndex > 1;
+            bool hasNext = pageIndex < totalPages;
+
+            var paginationHeader = new PaginationResponseHeader
+            {
+                TotalCount = recordCount,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalPages = totalPages,
+                HasPreviousPage = hasPrevious,
+                HasNextPage = hasNext
+            };
+
+            httpContext.Response.Headers.Add("Pagination", JsonSerializer.Serialize(paginationHeader));
         }
     }
 }
