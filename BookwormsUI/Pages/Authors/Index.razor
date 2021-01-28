@@ -1,6 +1,6 @@
 ﻿@page "/authors/"
 
-@inject IAuthorRepository authorRepo
+@inject IAuthorRepository authorRepository
 @inject AuthorService authorService
 @inject NavigationManager navigationManager
 
@@ -45,18 +45,35 @@ else
                 }
             </tbody>
         </table>
+
+        <div>
+            <Paging metadata="metadata" Spread="2" SelectedPage="SelectedPage" />
+        </div>
     }
 }
 
 @code {
-    private IEnumerable<Author> authors;
+    private List<Author> authors;
+    private string url;
+    private PagingMetadata metadata;
+    private ItemParameters itemParams = new ItemParameters();
     private string CurrentUrl;
 
     protected override async Task OnInitializedAsync()
     {
-        var url = authorService.GetAuthorsApiEndpoint();
-        authors = await authorRepo.GetAsync(url);
+        await SelectedPage(1);
 
+        // get current url from navigation manager to pass to breadcrumb component
         CurrentUrl = navigationManager.Uri;
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        itemParams.PageIndex = page;
+        url = authorService.GetAuthorsApiEndpoint();
+        var response = await authorRepository.GetAsync(url, itemParams);
+
+        authors = response.Items;
+        metadata = response.Metadata;
     }
 }

@@ -1,0 +1,10 @@
+﻿<Pagination class="justify-content-center">
+    @foreach (var link in _links)
+    {
+        <PaginationItem class=@($"{(link.Enabled ? "" : "disabled")} {(link.Active ? "active" : "")}")>
+            <PaginationLink @onclick="() => OnSelectedPage(link)">
+                @link.Text
+            </PaginationLink>
+        </PaginationItem>
+    }
+</Pagination>

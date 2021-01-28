@@ -1,9 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using BookwormsUI.Contracts;
-using Newtonsoft.Json;
+using BookwormsUI.Models;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace BookwormsUI.Repository
 {
@@ -27,26 +31,50 @@ namespace BookwormsUI.Repository
             var client = _client.CreateClient();
             HttpResponseMessage response = await client.SendAsync(request);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.OK)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<T>(content);
+                var json = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(content);
+                return json;
             }
 
             return null;
         }
 
-        public async Task<IList<T>> GetAsync(string url)
+        public async Task<PagedList<T>> GetAsync(string url, ItemParameters itemParams)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            var request = new HttpRequestMessage();
 
+            if (itemParams != null) 
+            {
+                var queryStringParam = new Dictionary<string, string>
+                {
+                    ["pageIndex"] = itemParams.PageIndex.ToString()
+                };
+
+                request = new HttpRequestMessage(HttpMethod.Get, QueryHelpers.AddQueryString(url, queryStringParam));
+            }
+            else
+            {
+                request = new HttpRequestMessage(HttpMethod.Get, url);
+            }
+            
             var client = _client.CreateClient();
             HttpResponseMessage response = await client.SendAsync(request);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.OK)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<List<T>>(content);
+
+                var pagedResponse = new PagedList<T>
+                {
+                    Items = JsonSerializer.Deserialize<List<T>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }),
+                    Metadata = JsonSerializer.Deserialize<PagingMetadata>(
+                        response.Headers.GetValues("Pagination")
+                        .First(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                };
+
+                return pagedResponse;
             }
 
             return null;
@@ -61,12 +89,12 @@ namespace BookwormsUI.Repository
                 return false;
             }
 
-            request.Content = new StringContent(JsonConvert.SerializeObject(obj));
+            request.Content = new StringContent(JsonSerializer.Serialize(obj));
 
             var client = _client.CreateClient();
             HttpResponseMessage response = await client.SendAsync(request);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.Created)
+            if (response.StatusCode == HttpStatusCode.Created)
             {
                 return true;
             }
@@ -86,7 +114,7 @@ namespace BookwormsUI.Repository
             var client = _client.CreateClient();
             HttpResponseMessage response = await client.SendAsync(request);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+            if (response.StatusCode == HttpStatusCode.NoContent)
             {
                 return true;
             }
@@ -102,12 +130,12 @@ namespace BookwormsUI.Repository
             }
 
             var request = new HttpRequestMessage(HttpMethod.Put, url);
-            request.Content = new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
+            request.Content = new StringContent(JsonSerializer.Serialize(obj), Encoding.UTF8, "application/json");
 
             var client = _client.CreateClient();
             HttpResponseMessage response = await client.SendAsync(request);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+            if (response.StatusCode == HttpStatusCode.NoContent)
             {
                 return true;
             }

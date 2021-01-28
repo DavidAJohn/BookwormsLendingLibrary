@@ -53,18 +53,35 @@ else
                 }
             </tbody>
         </table>
+
+        <div>
+            <Paging metadata="metadata" Spread="2" SelectedPage="SelectedPage" />
+        </div>
     }
 }
 
 @code {
-    private IEnumerable<Book> books;
+    private List<Book> books;
+    private string url;
+    private PagingMetadata metadata = new PagingMetadata();
+    private ItemParameters itemParams = new ItemParameters();
     private string CurrentUrl;
 
     protected override async Task OnInitializedAsync()
     {
-        var url = bookService.GetBooksApiEndpoint();
-        books = await bookRepository.GetAsync(url);
+        await SelectedPage(1);
 
+        // get current url from navigation manager to pass to breadcrumb component
         CurrentUrl = navigationManager.Uri;
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        itemParams.PageIndex = page;
+        url = bookService.GetBooksApiEndpoint();
+        var response = await bookRepository.GetAsync(url, itemParams);
+
+        books = response.Items;
+        metadata = response.Metadata;
     }
 }
