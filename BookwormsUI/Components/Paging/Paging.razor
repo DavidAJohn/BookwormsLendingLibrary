@@ -1,4 +1,9 @@
 ﻿<Pagination class="justify-content-center">
+    <span class="paging-showing">
+        Showing @(metadata.PageIndex > 1 ? (metadata.PageIndex -1) + metadata.PageSize : metadata.PageIndex ) 
+        - @(metadata.PageSize * metadata.PageIndex) 
+        of @metadata.TotalCount
+    </span>
     @foreach (var link in _links)
     {
         <PaginationItem class=@($"{(link.Enabled ? "" : "disabled")} {(link.Active ? "active" : "")}")>

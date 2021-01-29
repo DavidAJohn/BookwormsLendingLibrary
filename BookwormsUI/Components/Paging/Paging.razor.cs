@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using BookwormsUI.Models;
 using Microsoft.AspNetCore.Components;
 
-namespace BookwormsUI.Components
+namespace BookwormsUI.Components.Paging
 {
     public partial class Paging
     {
