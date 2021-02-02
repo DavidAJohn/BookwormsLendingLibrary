@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -47,12 +48,18 @@ namespace BookwormsUI.Repository
 
             if (itemParams != null) 
             {
-                var queryStringParam = new Dictionary<string, string>
+                var queryStringParams = new Dictionary<string, string>
                 {
-                    ["pageIndex"] = itemParams.PageIndex.ToString()
+                    ["pageIndex"] = itemParams.PageIndex < 1  ? "1" : itemParams.PageIndex.ToString(),
                 };
 
-                request = new HttpRequestMessage(HttpMethod.Get, QueryHelpers.AddQueryString(url, queryStringParam));
+                // conditionally add a search term
+                if (!String.IsNullOrEmpty(itemParams.Search))
+                {
+                    queryStringParams.Add("search", itemParams.Search.ToString());
+                };
+
+                request = new HttpRequestMessage(HttpMethod.Get, QueryHelpers.AddQueryString(url, queryStringParams));
             }
             else
             {

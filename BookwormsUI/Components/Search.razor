@@ -1,0 +1,30 @@
+﻿<section style="margin-bottom: 10px">
+    <input type="text" class="form-control" placeholder="Search" 
+        @bind-value="@SearchTerm" 
+        @bind-value:event="oninput" 
+        @onkeyup="SearchChanged" />
+</section>
+
+@code {
+    public string SearchTerm { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnSearchChanged { get; set; }
+
+    [Parameter]
+    public bool ClearSearch { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (ClearSearch)
+        {
+            SearchTerm = "";
+        }
+    }
+
+    private async void SearchChanged()
+    {
+        await Task.Delay(500);
+        await OnSearchChanged.InvokeAsync(SearchTerm);
+    }
+}

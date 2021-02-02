@@ -11,50 +11,58 @@
 }
 else
 {
+    <div>
+        <BreadcrumbHeader CurrentUrl=@CurrentUrl />
+    </div>
+    <div>
+        <Search OnSearchChanged="SearchChanged" ClearSearch=@ClearSearch />
+    </div>
     @if (books.Count() < 1)
     {
-        <h4>No books currently listed</h4>
+        <div>
+            <h5>No books found</h5>
+        </div>
+        <div>
+            <Button Color="Color.Info" @onclick="async () => await ResetSearch()">
+                Clear search
+            </Button>
+        </div>
     }
     else
     {
         <div>
-            <BreadcrumbHeader CurrentUrl=@CurrentUrl />
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Title</th>
+                        <th>Year</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var book in books)
+                    {
+                    <tr>
+                        <td>
+                            <img src="@book.CoverImageUrl" style="width:50px;" />
+                        </td>
+                        <td>@book.Title</td>
+                        <td>@book.YearPublished</td>
+                        <td>@book.Author</td>
+                        <td>@book.Category</td>
+                        <td>
+                            <a href="/books/details/@book.Id" class="btn btn-primary">
+                                <i class="fa fa-pencil-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-
-        <h4>List of Books</h4>
-
-        <table class="table table-responsive">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Title</th>
-                    <th>Year</th>
-                    <th>Author</th>
-                    <th>Category</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var book in books)
-                {
-                <tr>
-                    <td>
-                        <img src="@book.CoverImageUrl" style="width:50px;" />
-                    </td>
-                    <td>@book.Title</td>
-                    <td>@book.YearPublished</td>
-                    <td>@book.Author</td>
-                    <td>@book.Category</td>
-                    <td>
-                        <a href="/books/details/@book.Id" class="btn btn-primary">
-                            <i class="fa fa-pencil-alt"></i>
-                        </a>
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
-
         <div>
             <Paging metadata="metadata" Spread="2" SelectedPage="SelectedPage" />
         </div>
@@ -67,22 +75,43 @@ else
     private PagingMetadata metadata = new PagingMetadata();
     private ItemParameters itemParams = new ItemParameters();
     private string CurrentUrl;
+    private bool ClearSearch = false;
 
     protected override async Task OnInitializedAsync()
     {
-        await SelectedPage(1);
+        await SelectedPage();
 
         // get current url from navigation manager to pass to breadcrumb component
         CurrentUrl = navigationManager.Uri;
     }
 
-    private async Task SelectedPage(int page)
+    private async Task SelectedPage(int page = 1)
     {
         itemParams.PageIndex = page;
+
+        await GetData();
+    }
+
+    private async Task SearchChanged(string searchTerm = "")
+    {
+        itemParams.PageIndex = 1;
+        itemParams.Search = searchTerm;
+        
+        await GetData();
+    }
+
+    private async Task GetData()
+    {
         url = bookService.GetBooksApiEndpoint();
         var response = await bookRepository.GetAsync(url, itemParams);
 
         books = response.Items;
         metadata = response.Metadata;
+    }
+
+    private async Task ResetSearch()
+    {
+        ClearSearch = true;
+        await SearchChanged();
     }
 }

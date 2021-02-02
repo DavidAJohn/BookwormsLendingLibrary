@@ -16,5 +16,7 @@ namespace BookwormsUI.Models
                 _pageSize = (value > maxPageSize) ? maxPageSize : value; 
             }
         }
+
+        public string Search { get; set; } = "";
     }
 }
