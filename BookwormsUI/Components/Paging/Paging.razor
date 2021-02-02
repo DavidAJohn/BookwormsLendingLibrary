@@ -1,8 +1,18 @@
 ﻿<Pagination class="justify-content-center">
     <span class="paging-showing">
-        Showing @(metadata.PageIndex > 1 ? (metadata.PageIndex -1) + metadata.PageSize : metadata.PageIndex ) 
-        - @(metadata.PageSize * metadata.PageIndex) 
-        of @metadata.TotalCount
+        Showing <span class="font-weight-bold"> 
+            @(metadata.PageIndex > 1 
+            ? (metadata.PageIndex -1) + metadata.PageSize 
+            : metadata.PageIndex) 
+            </span>
+        - <span class="font-weight-bold">
+            @((metadata.PageSize * metadata.PageIndex) <= metadata.TotalCount 
+            ? (metadata.PageSize * metadata.PageIndex) 
+            : metadata.TotalCount) 
+            </span>
+        of <span class="font-weight-bold">
+            @metadata.TotalCount
+            </span>
     </span>
     @foreach (var link in _links)
     {

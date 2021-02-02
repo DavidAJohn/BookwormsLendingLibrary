@@ -23,11 +23,13 @@ else
     
     <div class="container">
         <div class="row">
-            <div class="col-2">
-                <img src="@book.CoverImageUrl" style="width: 200px;" />
+            <div class="col-3">
+                <img 
+                    src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) && book.CoverImageUrl != "cover.jpg" ? book.CoverImageUrl : "images/BookCover.png")}")"  
+                    style="width: 200px;max-height: 300px;"
+                />
             </div>
-            <div class="col-8">
-                <h4>Book details</h4>
+            <div class="col-9">
                 <table class="table table-responsive">
                     <tr>
                         <td>Title:</td>
@@ -60,12 +62,12 @@ else
         </div>
     </div>
 
+    <div>
+        <button class="btn btn-info" @onclick="BackToBooks">
+            Back to List of Books
+        </button>
+    </div>
 }
-
-<button class="btn btn-secondary" @onclick="BackToBooks">
-    <i class="fa fa-backward"></i>&nbsp;
-    Back to List of Books
-</button>
 
 @code {
     [Parameter]

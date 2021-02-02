@@ -47,7 +47,10 @@ else
                     {
                     <tr>
                         <td>
-                            <img src="@book.CoverImageUrl" style="width:50px;" />
+                            <img 
+                                src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) && book.CoverImageUrl != "cover.jpg" ? book.CoverImageUrl : "images/BookCover.png")}")" 
+                                style="width:75px; max-height: 125px;" 
+                            />
                         </td>
                         <td>@book.Title</td>
                         <td>@book.YearPublished</td>

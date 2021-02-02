@@ -396,3 +396,5 @@ appsettings.json
 *.db
 *.db-*
 *.log
+*.jpg
+*.jpeg
