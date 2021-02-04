@@ -2,7 +2,7 @@
     <span class="paging-showing">
         Showing <span class="font-weight-bold"> 
             @(metadata.PageIndex > 1 
-            ? (metadata.PageIndex -1) + metadata.PageSize 
+            ? (metadata.PageIndex * metadata.PageSize) - (metadata.PageSize - 1)
             : metadata.PageIndex) 
             </span>
         - <span class="font-weight-bold">
