@@ -1,5 +1,6 @@
 using AutoMapper;
 using BookwormsAPI.Data;
+using BookwormsAPI.Data.Identity;
 using BookwormsAPI.Extensions;
 using BookwormsAPI.Helpers;
 using BookwormsAPI.Middleware;
@@ -27,6 +28,10 @@ namespace BookwormsAPI
         {
             services.AddDbContext<ApplicationDbContext>(options => {
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            services.AddDbContext<AppIdentityDbContext>(options => {
+                options.UseSqlite(Configuration.GetConnectionString("IdentityConnection"));
             });
 
             services.AddControllers();
