@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookwormsAPI.Data;
+using BookwormsAPI.Data.Identity;
+using BookwormsAPI.Entities.Identity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +33,13 @@ namespace BookwormsAPI
                     await SeedInitialData.SeedAuthorsDataAsync(context);
                     await SeedInitialData.SeedCategoriesDataAsync(context);
                     await SeedInitialData.SeedBooksDataAsync(context);
+
+                    // Identity
+                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                    var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+
+                    await identityContext.Database.MigrateAsync();
+                    await SeedIdentityData.SeedUsersAsync(userManager);
                 }
                 catch (Exception ex)
                 {
