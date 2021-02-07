@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using BookwormsAPI.Contracts;
 using BookwormsAPI.DTOs;
 using BookwormsAPI.Entities.Identity;
 using BookwormsAPI.Errors;
@@ -11,8 +12,10 @@ namespace BookwormsAPI.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        private readonly ITokenService _tokenService;
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService)
         {
+            _tokenService = tokenService;
             _signInManager = signInManager;
             _userManager = userManager;
         }
@@ -37,7 +40,7 @@ namespace BookwormsAPI.Controllers
             return new UserDTO
             {
                 Email = user.Email,
-                Token = "login token",
+                Token = _tokenService.CreateToken(user),
                 DisplayName = user.DisplayName
             };
         }
@@ -61,7 +64,7 @@ namespace BookwormsAPI.Controllers
             return new UserDTO
             {
                 DisplayName = user.DisplayName,
-                Token = "reg token",
+                Token = _tokenService.CreateToken(user),
                 Email = user.Email
             };
         }

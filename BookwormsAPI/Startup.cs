@@ -44,7 +44,7 @@ namespace BookwormsAPI
             
             services.AddApplicationServices(); // extension method : ApplicationServicesExtensions
 
-            services.AddIdentityServices(); // extension method : IdentityServiceExtensions
+            services.AddIdentityServices(Configuration); // extension method : IdentityServiceExtensions
 
             services.AddSwaggerDocumentation(); // extension method : SwaggerServiceExtensions
             
@@ -72,6 +72,7 @@ namespace BookwormsAPI
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
