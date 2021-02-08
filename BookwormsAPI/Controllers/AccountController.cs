@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using API.Errors;
 using AutoMapper;
 using BookwormsAPI.Contracts;
 using BookwormsAPI.DTOs;
@@ -104,6 +105,15 @@ namespace BookwormsAPI.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
         {
+            if (CheckEmailExistsAsync(registerDTO.Email).Result.Value)
+            {
+                return new BadRequestObjectResult(
+                    new ApiValidationErrorResponse{
+                        Errors = new [] {"The email address is already in use"}
+                    }
+                );
+            }
+
             var user = new AppUser
             {
                 DisplayName = registerDTO.DisplayName,
