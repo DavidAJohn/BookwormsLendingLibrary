@@ -1,8 +1,12 @@
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using BookwormsAPI.Contracts;
 using BookwormsAPI.DTOs;
 using BookwormsAPI.Entities.Identity;
 using BookwormsAPI.Errors;
+using BookwormsAPI.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +22,35 @@ namespace BookwormsAPI.Controllers
             _tokenService = tokenService;
             _signInManager = signInManager;
             _userManager = userManager;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<UserDTO>> GetCurrentUser()
+        {
+            var user = await _userManager.FindUserByEmailFromClaimsPrincipal(HttpContext.User);
+
+            return new UserDTO
+            {
+                Email = user.Email,
+                Token = _tokenService.CreateToken(user),
+                DisplayName = user.DisplayName
+            };
+        }
+
+        [Authorize]
+        [HttpGet("address")]
+        public async Task<ActionResult<Address>> GetUserAddress()
+        {
+            var user = await _userManager.FindUserByClaimsPrincipalWithAddressAsync(HttpContext.User);
+
+            return user.Address;
+        }
+
+        [HttpGet("emailexists")]
+        public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email)
+        {
+            return await _userManager.FindByEmailAsync(email) != null;
         }
 
         [HttpPost("login")]
