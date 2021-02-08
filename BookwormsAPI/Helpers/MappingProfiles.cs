@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMapper;
 using BookwormsAPI.DTOs;
 using BookwormsAPI.Entities;
+using BookwormsAPI.Entities.Identity;
 
 namespace BookwormsAPI.Helpers
 {
@@ -24,6 +25,8 @@ namespace BookwormsAPI.Helpers
 
             CreateMap<Category, CategoryDTO>();
             CreateMap<CategoryCreateDTO, Category>();
+
+            CreateMap<Address, AddressDTO>().ReverseMap();
         }
     }
 }
