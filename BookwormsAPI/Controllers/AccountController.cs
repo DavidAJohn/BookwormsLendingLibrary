@@ -41,12 +41,11 @@ namespace BookwormsAPI.Controllers
             return new UserDTO
             {
                 Email = user.Email,
-                Token = _tokenService.CreateToken(user),
+                Token = await _tokenService.CreateToken(user),
                 DisplayName = user.DisplayName
             };
         }
 
-        [Authorize]
         [HttpGet("address")]
         public async Task<ActionResult<AddressDTO>> GetUserAddress()
         {
@@ -55,7 +54,6 @@ namespace BookwormsAPI.Controllers
             return _mapper.Map<Address, AddressDTO>(user.Address);
         }
 
-        [Authorize]
         [HttpPut("address")]
         public async Task<ActionResult<AddressDTO>> UpdateUserAddress(AddressDTO addressDTO)
         {
@@ -98,7 +96,7 @@ namespace BookwormsAPI.Controllers
             return new UserDTO
             {
                 Email = user.Email,
-                Token = _tokenService.CreateToken(user),
+                Token = await _tokenService.CreateToken(user),
                 DisplayName = user.DisplayName
             };
         }
@@ -128,10 +126,17 @@ namespace BookwormsAPI.Controllers
                 return BadRequest(new ApiResponse(400));
             }
 
+            var roleResult = await _userManager.AddToRoleAsync(user, "Borrower");
+
+            if (!roleResult.Succeeded)
+            {
+                return BadRequest(new ApiResponse(400));
+            }
+
             return new UserDTO
             {
                 DisplayName = user.DisplayName,
-                Token = _tokenService.CreateToken(user),
+                Token = await _tokenService.CreateToken(user),
                 Email = user.Email
             };
         }

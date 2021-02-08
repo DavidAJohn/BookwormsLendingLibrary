@@ -36,10 +36,12 @@ namespace BookwormsAPI
 
                     // Identity
                     var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+                    var config = services.GetRequiredService<IConfiguration>();
 
                     await identityContext.Database.MigrateAsync();
-                    await SeedIdentityData.SeedUsersAsync(userManager);
+                    await SeedIdentityData.SeedUsersAndRolesAsync(userManager, roleManager, config);
                 }
                 catch (Exception ex)
                 {
