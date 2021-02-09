@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Errors;
 using AutoMapper;
@@ -46,6 +44,7 @@ namespace BookwormsAPI.Controllers
             };
         }
 
+        [Authorize]
         [HttpGet("address")]
         public async Task<ActionResult<AddressDTO>> GetUserAddress()
         {
@@ -54,6 +53,7 @@ namespace BookwormsAPI.Controllers
             return _mapper.Map<Address, AddressDTO>(user.Address);
         }
 
+        [Authorize]
         [HttpPut("address")]
         public async Task<ActionResult<AddressDTO>> UpdateUserAddress(AddressDTO addressDTO)
         {

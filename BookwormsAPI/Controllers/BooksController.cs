@@ -7,6 +7,7 @@ using BookwormsAPI.Entities;
 using BookwormsAPI.Errors;
 using BookwormsAPI.Extensions;
 using BookwormsAPI.Specifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -61,6 +62,7 @@ namespace BookwormsAPI.Controllers
         }
 
         // POST api/books
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -80,6 +82,7 @@ namespace BookwormsAPI.Controllers
         }
 
         // DELETE api/books/{id}
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
@@ -98,6 +101,7 @@ namespace BookwormsAPI.Controllers
         }
 
         // PUT api/books/{id}
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -120,6 +124,7 @@ namespace BookwormsAPI.Controllers
 
         // PATCH api/books/{id}
         [HttpPatch("{id}")]
+        [Authorize(Policy = "RequireAdminRole")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
