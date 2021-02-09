@@ -33,6 +33,10 @@ namespace BookwormsAPI.Extensions
                     };
                 });
 
+            services.AddAuthorization(opt => {
+                opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Administrator"));
+            });
+
             return services;
         }
     }
