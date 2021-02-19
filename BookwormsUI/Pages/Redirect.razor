@@ -1,0 +1,11 @@
+﻿@page "/redirect"
+@inject NavigationManager NavigationManager
+
+@code {
+    protected override void OnInitialized()
+    {
+        // this component is used to redirect the user after they log out,
+        // forcing a page refresh to update any auth-based page elements
+        NavigationManager.NavigateTo("/", forceLoad: true);
+    }
+}

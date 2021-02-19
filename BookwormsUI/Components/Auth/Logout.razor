@@ -1,0 +1,16 @@
+﻿@page "/logout"
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await AuthenticationService.Logout();
+
+            // we still need to force a page refresh by changing the url
+            NavigationManager.NavigateTo("/redirect");
+        }
+    }
+}

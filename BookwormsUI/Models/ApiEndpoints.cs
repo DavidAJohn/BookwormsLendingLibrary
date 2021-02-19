@@ -6,5 +6,7 @@ namespace BookwormsUI.Models
         public string AuthorsEndpoint { get; set; }
         public string BooksEndpoint { get; set; }
         public string CategoriesEndpoint { get; set; }
+        public string LoginEndpoint { get; set; }
+        public string RegisterEndpoint { get; set; }
     }
 }

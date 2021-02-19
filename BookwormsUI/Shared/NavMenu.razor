@@ -1,4 +1,10 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@using BookwormsUI.Extensions
+@using Microsoft.AspNetCore.Identity
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">Bookworms Library</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -22,11 +28,22 @@
                 <i class="fa fa-book" aria-hidden="true"></i> Books
             </NavLink>
         </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="admin/">
-                <i class="fas fa-user-shield" aria-hidden="true"></i> Admin
-            </NavLink>
-        </li>
+        @if (@Role == "Borrower")
+        {
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="">
+                    <i class="fas fa-user" aria-hidden="true"></i> Your Profile
+                </NavLink>
+            </li>
+        }
+        @if (@Role == "Administrator")
+        {
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="admin/">
+                    <i class="fas fa-user-shield" aria-hidden="true"></i> Admin
+                </NavLink>
+            </li>
+        }
     </ul>
 </div>
 
@@ -38,5 +55,28 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private string Role;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GetClaimsPrincipalData();
+            StateHasChanged();
+        }
+    }
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            Role = user.GetRoleFromPrincipal();
+        }
+
     }
 }

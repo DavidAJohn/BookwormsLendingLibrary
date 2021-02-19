@@ -1,0 +1,49 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using BookwormsUI.Extensions
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+    <Authorized>
+        @if (@displayName != null)
+        {
+            <span>Hi, @displayName</span>
+        }
+        else 
+        {
+            <span>&nbsp;</span>
+        }
+        <a href="logout">Log out</a>
+    </Authorized>
+    <NotAuthorized>
+        <a href="register">Register</a>
+        <a href="login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private string displayName;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetClaimsPrincipalData();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GetClaimsPrincipalData();
+        }
+    }
+    
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            displayName = user?.GetDisplayNameFromPrincipal();
+        }
+    }
+}
