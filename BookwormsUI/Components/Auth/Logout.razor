@@ -10,7 +10,7 @@
             await AuthenticationService.Logout();
 
             // we still need to force a page refresh by changing the url
-            NavigationManager.NavigateTo("/redirect");
+            NavigationManager.NavigateTo("/?logout=true", forceLoad: true);
         }
     }
 }

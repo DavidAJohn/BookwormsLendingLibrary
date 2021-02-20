@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using BookwormsUI.Extensions
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService ToastService
+@inject NavigationManager NavigationManager
 
 <AuthorizeView>
     <Authorized>
@@ -27,14 +29,6 @@
     {
         await GetClaimsPrincipalData();
     }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await GetClaimsPrincipalData();
-        }
-    }
     
     private async Task GetClaimsPrincipalData()
     {
@@ -43,7 +37,17 @@
 
         if (user.Identity.IsAuthenticated)
         {
+            ToastService.ShowSuccess("You have logged in successfully", "Logged In");
             displayName = user?.GetDisplayNameFromPrincipal();
+        }
+        else 
+        {
+            var logout = NavigationManager.GetQueryString("logout");
+
+            if (logout == "true")
+            {
+                ToastService.ShowInfo("You have now logged out", "Logged Out");
+            }
         }
     }
 }

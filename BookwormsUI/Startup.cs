@@ -12,6 +12,7 @@ using Blazorise.Icons.FontAwesome;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using BookwormsUI.Providers;
+using Blazored.Toast;
 
 namespace BookwormsUI
 {
@@ -35,7 +36,6 @@ namespace BookwormsUI
             services.AddSingleton<AuthorService>();
             services.AddSingleton<BookService>();
 
-            services.AddBlazoredLocalStorage();
             services.AddAuthorizationCore();
             services.AddHttpContextAccessor();
 
@@ -51,6 +51,9 @@ namespace BookwormsUI
                 } )
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
+
+            services.AddBlazoredLocalStorage();
+            services.AddBlazoredToast();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
