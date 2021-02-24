@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -8,6 +9,7 @@ using BookwormsUI.Contracts;
 using BookwormsUI.Models;
 using BookwormsUI.Providers;
 using Microsoft.AspNetCore.Components.Authorization;
+using Newtonsoft.Json;
 
 namespace BookwormsUI.Services
 {
@@ -42,10 +44,14 @@ namespace BookwormsUI.Services
                 };
             }
 
+            var registerResult = JsonConvert.DeserializeObject<ApiErrorResponse>(
+                await response.Content.ReadAsStringAsync()
+            );
+
             return new RegisterResult
             {
                 Successful = false,
-                Errors = new string[] {response.StatusCode.ToString()}
+                Errors = registerResult.Errors.ToList()
             };
         }
 
@@ -54,7 +60,7 @@ namespace BookwormsUI.Services
             JsonContent content = JsonContent.Create(loginModel);
             var response = await _httpClient.PostAsync(GetApiEndpoint("login"), content);
 
-            var loginResult = JsonSerializer.Deserialize<LoginResult>(
+            var loginResult = System.Text.Json.JsonSerializer.Deserialize<LoginResult>(
                 await response.Content.ReadAsStringAsync(), 
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 

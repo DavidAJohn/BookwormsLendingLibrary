@@ -42,11 +42,19 @@
         }
         else 
         {
-            var logout = NavigationManager.GetQueryString("logout");
+            var queryStringParams = NavigationManager.GetQueryStringCollection();
+
+            var logout = queryStringParams["logout"];
+            var register = queryStringParams["register"];
 
             if (logout == "true")
             {
                 ToastService.ShowInfo("You have now logged out", "Logged Out");
+            }
+
+            if (register == "true")
+            {
+                ToastService.ShowSuccess("Thanks for registering with Bookworms", "Welcome!");
             }
         }
     }
