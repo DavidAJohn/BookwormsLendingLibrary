@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BookwormsAPI.Entities
 {
-    public class Book
+    public class Book : BaseEntity
     {
-        public int Id { get; set; }
-        
         [Required]
         public string Title { get; set; }
         

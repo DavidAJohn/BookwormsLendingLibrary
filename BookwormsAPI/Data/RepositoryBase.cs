@@ -4,12 +4,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using BookwormsAPI.Contracts;
+using BookwormsAPI.Entities;
 using BookwormsAPI.Specifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookwormsAPI.Data
 {
-    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
+    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : BaseEntity
     {
         protected ApplicationDbContext _repositoryContext { get; set; }
         public RepositoryBase(ApplicationDbContext repositoryContext)
