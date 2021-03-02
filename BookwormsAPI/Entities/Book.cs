@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BookwormsAPI.Entities
@@ -19,5 +18,6 @@ namespace BookwormsAPI.Entities
         public Author Author { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+        public int Copies { get; set; }
     }
 }
