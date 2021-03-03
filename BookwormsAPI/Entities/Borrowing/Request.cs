@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookwormsAPI.Entities.Borrowing
 {
@@ -15,8 +16,11 @@ namespace BookwormsAPI.Entities.Borrowing
             RequestedBookId = requestedBookId;
         }
 
+        [Required]
         public string BorrowerEmail { get; set; }
+        [Required]
         public Address SendToAddress { get; set; }
+        [Required]
         public int RequestedBookId { get; set; }
         public RequestStatus Status { get; set; } = RequestStatus.Pending;
         public DateTimeOffset DateRequested { get; set; } = DateTimeOffset.Now;
