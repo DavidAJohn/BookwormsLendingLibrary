@@ -9,11 +9,11 @@ namespace BookwormsAPI.Entities.Borrowing
         {
         }
 
-        public Request(int requestedBookId, string borrowerEmail, Address sendToAddress)
+        public Request(int bookId, string borrowerEmail, Address sendToAddress)
         {
             BorrowerEmail = borrowerEmail;
             SendToAddress = sendToAddress;
-            RequestedBookId = requestedBookId;
+            BookId = bookId;
         }
 
         [Required]
@@ -21,7 +21,8 @@ namespace BookwormsAPI.Entities.Borrowing
         [Required]
         public Address SendToAddress { get; set; }
         [Required]
-        public int RequestedBookId { get; set; }
+        public int BookId { get; set; }
+        public Book Book { get; set; }
         public RequestStatus Status { get; set; } = RequestStatus.Pending;
         public DateTimeOffset DateRequested { get; set; } = DateTimeOffset.Now;
         public DateTime? DateSent { get; set; } = null;

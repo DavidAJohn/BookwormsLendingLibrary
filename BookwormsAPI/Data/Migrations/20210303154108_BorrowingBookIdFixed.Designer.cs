@@ -3,14 +3,16 @@ using System;
 using BookwormsAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookwormsAPI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210303154108_BorrowingBookIdFixed")]
+    partial class BorrowingBookIdFixed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,8 +100,8 @@ namespace BookwormsAPI.Data.Migrations
                     b.Property<DateTime?>("DateDue")
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("DateRequested")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("DateRequested")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("DateReturned")
                         .HasColumnType("TEXT");
