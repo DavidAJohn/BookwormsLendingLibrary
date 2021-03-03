@@ -12,7 +12,9 @@ namespace BookwormsAPI.Extensions
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IRequestRepository, RequestRepository>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IRequestService, RequestService>();
 
             return services;
         }
