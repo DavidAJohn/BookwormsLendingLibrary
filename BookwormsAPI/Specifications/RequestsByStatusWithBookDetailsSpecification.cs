@@ -10,6 +10,7 @@ namespace BookwormsAPI.Specifications
             : base(r => r.Status == requestStatus)
         {
             AddInclude(r => r.Book);
+            AddInclude(r => r.Book.Author);
             ApplyOrderByDescending(r => r.DateRequested);
         }
     }

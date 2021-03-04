@@ -10,6 +10,7 @@ namespace BookwormsAPI.Specifications
             : base(r => r.BorrowerEmail == borrowerEmail)
         {
             AddInclude(r => r.Book);
+            AddInclude(r => r.Book.Author);
             ApplyOrderByDescending(r => r.DateRequested);
         }
 
@@ -20,6 +21,7 @@ namespace BookwormsAPI.Specifications
             )
         {
             AddInclude(r => r.Book);
+            AddInclude(r => r.Book.Author);
             ApplyOrderByDescending(r => r.DateRequested);
         }
     }

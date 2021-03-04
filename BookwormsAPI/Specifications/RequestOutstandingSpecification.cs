@@ -14,6 +14,8 @@ namespace BookwormsAPI.Specifications
                 )
             )
         {
+            AddInclude(r => r.Book);
+            AddInclude(r => r.Book.Author);
             ApplyOrderByDescending(r => r.DateRequested);
         }
     }
