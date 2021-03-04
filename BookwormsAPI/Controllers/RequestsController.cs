@@ -54,8 +54,7 @@ namespace BookwormsAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<RequestToReturnDTO>>> GetRequestByIdAsync(int id)
         {
-            var email = HttpContext.User.GetEmailFromClaimsPrincipal();
-            var request = await _requestService.GetRequestByIdAsync(id, email);
+            var request = await _requestService.GetRequestByIdAsync(id);
 
             if (request == null) return NotFound(new ApiResponse(404));
 

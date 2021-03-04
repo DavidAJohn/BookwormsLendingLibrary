@@ -44,9 +44,9 @@ namespace BookwormsAPI.Services
             return await _requestRepository.ListAsync(spec);
         }
 
-        public async Task<Request> GetRequestByIdAsync(int id, string borrowerEmail)
+        public async Task<Request> GetRequestByIdAsync(int id)
         {
-            var spec = new RequestsForUserWithBookDetailsSpecification(id, borrowerEmail);
+            var spec = new RequestByIdWithBookDetailsSpecification(id);
             return await _requestRepository.GetEntityWithSpec(spec);
         }
 
@@ -55,5 +55,6 @@ namespace BookwormsAPI.Services
             var spec = new RequestsByStatusWithBookDetailsSpecification(requestStatus);
             return await _requestRepository.ListAsync(spec);
         }
+
     }
 }

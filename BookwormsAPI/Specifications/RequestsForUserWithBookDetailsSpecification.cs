@@ -14,15 +14,5 @@ namespace BookwormsAPI.Specifications
             ApplyOrderByDescending(r => r.DateRequested);
         }
 
-        public RequestsForUserWithBookDetailsSpecification(int id, string borrowerEmail) 
-            : base(
-                r => r.Id == id && 
-                r.BorrowerEmail == borrowerEmail
-            )
-        {
-            AddInclude(r => r.Book);
-            AddInclude(r => r.Book.Author);
-            ApplyOrderByDescending(r => r.DateRequested);
-        }
     }
 }

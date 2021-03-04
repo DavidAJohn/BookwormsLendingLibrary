@@ -8,7 +8,7 @@ namespace BookwormsAPI.Contracts
     {
         Task<Request> CreateRequestAsync(int requestedBookId, string borrowerEmail, Address sendToAddress);
         Task<IEnumerable<Request>> GetRequestsForUserAsync(string borrowerEmail);
-        Task<Request> GetRequestByIdAsync(int id, string borrowerEmail);
+        Task<Request> GetRequestByIdAsync(int id);
         Task<IEnumerable<Request>> GetRequestsByStatusAsync(RequestStatus requestStatus);
     }
 }
