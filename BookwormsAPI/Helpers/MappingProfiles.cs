@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using BookwormsAPI.DTOs;
 using BookwormsAPI.Entities;
+using BookwormsAPI.Entities.Borrowing;
 using BookwormsAPI.Entities.Identity;
 
 namespace BookwormsAPI.Helpers
@@ -26,7 +25,12 @@ namespace BookwormsAPI.Helpers
             CreateMap<Category, CategoryDTO>();
             CreateMap<CategoryCreateDTO, Category>();
 
-            CreateMap<Address, AddressDTO>().ReverseMap();
+            CreateMap<BookwormsAPI.Entities.Identity.Address, AddressDTO>().ReverseMap();
+            CreateMap<AddressDTO, BookwormsAPI.Entities.Borrowing.Address>();
+
+            CreateMap<Request, RequestToReturnDTO>()
+                .ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book.Title))
+                .ForMember(dest => dest.BookAuthor, opt => opt.MapFrom(src => src.Book.Author.FirstName + ' ' + src.Book.Author.LastName));
         }
     }
 }
