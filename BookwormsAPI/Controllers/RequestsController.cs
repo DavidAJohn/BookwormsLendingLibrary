@@ -52,7 +52,7 @@ namespace BookwormsAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<RequestToReturnDTO>>> GetRequestByIdAsync(int id)
+        public async Task<ActionResult<RequestToReturnDTO>> GetRequestByIdAsync(int id)
         {
             var request = await _requestService.GetRequestByIdAsync(id);
 
@@ -61,5 +61,12 @@ namespace BookwormsAPI.Controllers
             return Ok(_mapper.Map<Request, RequestToReturnDTO>(request));
         }
 
+        [Authorize(Policy = "RequireAdminRole")]
+        [HttpGet("status")]
+        public async Task<ActionResult<IEnumerable<RequestToReturnDTO>>> GetRequestsByStatusAsync([FromQuery] RequestStatus status)
+        {
+            var requests = await _requestService.GetRequestsByStatusAsync(status);
+            return Ok(_mapper.Map<IEnumerable<Request>, IEnumerable<RequestToReturnDTO>>(requests));
+        }
     }
 }

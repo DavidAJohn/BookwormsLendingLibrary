@@ -17,6 +17,7 @@ namespace BookwormsAPI.Errors
             {
                 400 => "You have made an invalid request",
                 401 => "You are not authorised to make this request",
+                403 => "You are not authorised to make this request",
                 404 => "You have requested a resource that can not be found",
                 500 => "A server error has occurred",
                 _ => null
