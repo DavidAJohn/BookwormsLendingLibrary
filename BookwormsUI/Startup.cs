@@ -13,6 +13,7 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using BookwormsUI.Providers;
 using Blazored.Toast;
+using Blazored.Modal;
 
 namespace BookwormsUI
 {
@@ -35,6 +36,7 @@ namespace BookwormsUI
             services.AddSingleton<SettingsService>();
             services.AddSingleton<AuthorService>();
             services.AddSingleton<BookService>();
+            services.AddScoped<RequestService>();
 
             services.AddAuthorizationCore();
             services.AddHttpContextAccessor();
@@ -54,6 +56,7 @@ namespace BookwormsUI
 
             services.AddBlazoredLocalStorage();
             services.AddBlazoredToast();
+            services.AddBlazoredModal();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

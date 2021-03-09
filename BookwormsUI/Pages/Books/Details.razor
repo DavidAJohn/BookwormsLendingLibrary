@@ -56,6 +56,18 @@ else
                         <td>Summary:</td>
                         <td>@book.Summary</td>
                     </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button class="btn btn-success" @onclick="@(() => ShowConfirmAddress(book.Id))">
+                                Request This Book
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            There is currently <strong>1</strong> copy of this book available to borrow
+                        </td>
+                    </tr>
                 </table>
                 <br />
             </div>
@@ -70,6 +82,9 @@ else
 }
 
 @code {
+    [CascadingParameter] 
+    public IModalService Modal { get; set; }
+
     [Parameter]
     public string Id { get; set; }
 
@@ -88,5 +103,18 @@ else
     private void BackToBooks()
     {
         navigationManager.NavigateTo("/books/");
+    }
+
+    void ShowConfirmAddress(int bookId)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(ConfirmAddress.BookId), bookId);
+
+        var options = new ModalOptions()
+        {
+            Class = "blazored-modal-address"
+        };
+
+        Modal.Show<ConfirmAddress>("", parameters, options);
     }
 }

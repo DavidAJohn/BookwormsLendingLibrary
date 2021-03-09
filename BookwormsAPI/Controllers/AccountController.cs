@@ -67,7 +67,7 @@ namespace BookwormsAPI.Controllers
                 return Ok(_mapper.Map<Address, AddressDTO>(user.Address));
             }
 
-            return BadRequest("There was a problem updaing this user");
+            return BadRequest("There was a problem updating this user");
         }
 
         [HttpGet("emailexists")]

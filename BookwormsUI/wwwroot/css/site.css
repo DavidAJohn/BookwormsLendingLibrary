@@ -52,3 +52,28 @@ a, .btn-link {
 .breadcrumb-item a {
     text-decoration: none;
 }
+
+.blazored-modal-address {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    background-color: #fefefe;
+    border-radius: 4px;
+    border: 1px solid #fff;
+    padding: 0.5rem;
+    z-index: 102;
+    box-shadow: 0 2px 2px rgb(0 0 0 / 75%);
+}
+
+.blazored-modal-header {
+    padding: 0;
+}
+
+.address-modal-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 2rem 0
+}

@@ -1,0 +1,105 @@
+﻿@inject RequestService RequestService
+
+<div class="address-modal-title">
+    Please Confirm Your Address
+</div>
+
+<div class="address-form">
+
+    <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input @bind="@Address.FirstName" type="text" class="form-control" id="first-name" />
+    </div>
+
+    <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input @bind="@Address.LastName" type="text" class="form-control" id="last-name" />
+    </div>
+
+    <div class="form-group">
+        <label for="street">Street</label>
+        <input @bind="@Address.Street" type="text" class="form-control" id="street" />
+    </div>
+
+    <div class="form-group">
+        <label for="city">City</label>
+        <input @bind="@Address.City" type="text" class="form-control" id="city" />
+    </div>
+
+    <div class="form-group">
+        <label for="county">County</label>
+        <input @bind="@Address.County" type="text" class="form-control" id="county" />
+    </div>
+
+    <div class="form-group">
+        <label for="post-code">Post Code</label>
+        <input @bind="@Address.PostCode" type="text" class="form-control" id="post-code" />
+    </div>
+
+    <button @onclick="SaveAddress" class="btn btn-primary">Submit</button>
+    <button @onclick="Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+
+    [CascadingParameter] 
+    BlazoredModalInstance ModalInstance { get; set; }
+
+    [Parameter] 
+    public int BookId { get; set; }
+
+    Address Address { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // set a default empty address initially
+        Address = new Address{};
+
+        // check if the user has an existing address saved
+        var address = await RequestService.GetBorrowerAddress();
+
+        if (address != null)
+        {
+            // display the user's existing address if they have one saved
+            Address = address;
+        }
+    }
+
+    public async Task SaveAddress()
+    {
+        await ModalInstance.CloseAsync(ModalResult.Ok<Address>(Address));
+
+        // save the address on the form
+        var savedAddress = await RequestService.SaveBorrowerAddress(Address);
+
+        if (savedAddress != null)
+        {
+            // create new book request
+            await CreateBookRequest(savedAddress);
+        }
+        else 
+        {
+            // address could not be saved
+            Console.WriteLine("Address could not be saved");
+        }
+    }
+
+    public async Task CreateBookRequest(Address savedAddress)
+    {
+        var request = await RequestService.CreateBookRequest(BookId, savedAddress);
+
+        if (request != null)
+        {
+            Console.WriteLine("New book request created");
+        }
+        else
+        {
+            Console.WriteLine("New book request could not be created");
+        }
+    }
+
+    void Cancel()
+    {
+        ModalInstance.CancelAsync();
+    }
+}
