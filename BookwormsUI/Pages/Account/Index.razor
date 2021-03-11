@@ -1,13 +1,13 @@
-﻿@page "/admin/"
+﻿@page "/account/"
 
 @using Microsoft.AspNetCore.Components.Authorization
 @using BookwormsUI.Extensions
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 
-<h3>Bookworms Admin</h3>
+<h3>Your Account</h3>
 
-@if (Role != "" && Role != "Administrator")
+@if (Role != "" && Role != "Borrower")
 {
     NavigationManager.NavigateTo("/login");
 }
@@ -19,6 +19,7 @@ else
 }
 
 @code {
+
     private string Role = "";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
