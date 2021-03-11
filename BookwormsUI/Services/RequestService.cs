@@ -86,7 +86,7 @@ namespace BookwormsUI.Services
             return null;
         }
 
-        public async Task<Request> CreateBookRequest(int bookId, Address address)
+        public async Task<RequestResult> CreateBookRequest(int bookId, Address address)
         {
             var savedToken = await _localStorage.GetItemAsync<string>("authToken");
 
@@ -116,14 +116,20 @@ namespace BookwormsUI.Services
 
             if (response.IsSuccessStatusCode)
             {
-                var newRequest = JsonConvert.DeserializeObject<Request>(
-                    await response.Content.ReadAsStringAsync()
-                );
-
-                return newRequest;
+                return new RequestResult {
+                    Successful = true,
+                    Error = ""
+                };
             }
 
-            return null;
+            var error = JsonConvert.DeserializeObject<ApiErrorResponse>(
+                await response.Content.ReadAsStringAsync()
+            );
+
+            return new RequestResult {
+                Successful = false,
+                Error = error.Message
+            };
         }
     }
 }

@@ -67,8 +67,6 @@
 
     public async Task SaveAddress()
     {
-        await ModalInstance.CloseAsync(ModalResult.Ok<Address>(Address));
-
         // save the address on the form
         var savedAddress = await RequestService.SaveBorrowerAddress(Address);
 
@@ -80,7 +78,7 @@
         else 
         {
             // address could not be saved
-            Console.WriteLine("Address could not be saved");
+            await ModalInstance.CloseAsync(ModalResult.Ok($"Your address could not be saved"));
         }
     }
 
@@ -90,11 +88,18 @@
 
         if (request != null)
         {
-            Console.WriteLine("New book request created");
+            if (request.Successful)
+            {
+                await ModalInstance.CloseAsync(ModalResult.Ok($"Your request has been created"));
+            }
+            else 
+            {
+                await ModalInstance.CloseAsync(ModalResult.Ok("Error: " + request.Error));
+            }
         }
-        else
+        else 
         {
-            Console.WriteLine("New book request could not be created");
+            await ModalInstance.CloseAsync(ModalResult.Ok($"Error: Your request could not be created"));
         }
     }
 

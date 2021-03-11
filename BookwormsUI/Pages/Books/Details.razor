@@ -3,6 +3,8 @@
 @inject IBookRepository bookRepository
 @inject BookService bookService
 @inject NavigationManager navigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService ToastService
 
 @if (int.Parse(Id) < 1 || string.IsNullOrWhiteSpace(Id))
 {
@@ -57,17 +59,36 @@ else
                         <td>@book.Summary</td>
                     </tr>
                     <tr>
-                        <td colspan="2">
-                            <button class="btn btn-success" @onclick="@(() => ShowConfirmAddress(book.Id))">
-                                Request This Book
-                            </button>
-                        </td>
+                        @if (LoggedIn)
+                        {
+                            <td colspan="2">
+                                <button class="btn btn-success" @onclick="@(() => ShowConfirmAddress(book.Id))">
+                                    Request This Book
+                                </button>
+                            </td>
+                        }
+                        else
+                        {
+                            <td colspan="2">
+                                <strong>You must be logged in to request this book. Log in <a href="/login">here</a>, or register <a href="/register">here</a>.</strong>
+                            </td>
+                        }
                     </tr>
                     <tr>
                         <td colspan="2">
                             There is currently <strong>1</strong> copy of this book available to borrow
                         </td>
                     </tr>
+                    @if (ShowErrors)
+                    {
+                        <tr>
+                            <td colspan="2">
+                                <div class="alert alert-danger" role="alert">
+                                    <p>@Error</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
                 </table>
                 <br />
             </div>
@@ -91,6 +112,10 @@ else
     private Book book = new Book();
     private string CurrentUrl;
 
+    private bool ShowErrors;
+    private string Error = "";
+    private bool LoggedIn = false;
+
     protected override async Task OnInitializedAsync()
     {
         int id = int.Parse(Id);
@@ -98,6 +123,19 @@ else
         book = await bookRepository.GetByIdAsync(url + "/", id);
 
         CurrentUrl = navigationManager.Uri;
+
+        await GetClaimsPrincipalData();
+    }
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            LoggedIn = true;
+        }
     }
 
     private void BackToBooks()
@@ -105,16 +143,34 @@ else
         navigationManager.NavigateTo("/books/");
     }
 
-    void ShowConfirmAddress(int bookId)
+    async Task ShowConfirmAddress(int bookId)
     {
         var parameters = new ModalParameters();
         parameters.Add(nameof(ConfirmAddress.BookId), bookId);
 
         var options = new ModalOptions()
         {
-            Class = "blazored-modal-address"
+            Class = "blazored-modal-address",
         };
 
-        Modal.Show<ConfirmAddress>("", parameters, options);
+        var addressModal = Modal.Show<ConfirmAddress>("", parameters, options);
+        var result = await addressModal.Result;
+
+        if (!result.Cancelled)
+        {
+            var requestResponse = result.Data.ToString();
+
+            if (requestResponse.Substring(0,5) == "Error")
+            {
+                ShowErrors = true;
+                Error = requestResponse;
+            }
+            else 
+            {
+                ShowErrors = false;
+                ToastService.ShowSuccess("Thanks, your book request is now being reviewed by our staff", "Request saved");
+                await InvokeAsync(StateHasChanged);
+            }
+        }
     }
 }
