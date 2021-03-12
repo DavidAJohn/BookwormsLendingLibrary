@@ -1,0 +1,40 @@
+﻿
+@using Microsoft.AspNetCore.Components.Authorization
+@using BookwormsUI.Extensions
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+@if (UserRole != "" && UserRole != RoleAllowed)
+{
+    NavigationManager.NavigateTo("/");
+}
+
+@code {
+    [Parameter]
+    public string RoleAllowed { get; set; }
+    private string UserRole = "";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GetClaimsPrincipalData();
+            StateHasChanged();
+        }
+    }
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            UserRole = user.GetRoleFromPrincipal();
+        }
+        else
+        {
+            UserRole = "Unauthenticated";
+        }
+    }
+}
