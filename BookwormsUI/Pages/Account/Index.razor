@@ -1,48 +1,11 @@
 ﻿@page "/account/"
 
-@using Microsoft.AspNetCore.Components.Authorization
-@using BookwormsUI.Extensions
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject NavigationManager NavigationManager
+@using BookwormsUI.Components.Auth
+
+<AuthGuard RoleAllowed="Borrower" />
 
 <h3>Your Account</h3>
 
-@if (Role != "" && Role != "Borrower")
-{
-    NavigationManager.NavigateTo("/login");
-}
-else
-{
-    <div>
-        Role: @Role
-    </div>
-}
-
 @code {
 
-    private string Role = "";
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await GetClaimsPrincipalData();
-            StateHasChanged();
-        }
-    }
-
-    private async Task GetClaimsPrincipalData()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user.Identity.IsAuthenticated)
-        {
-            Role = user.GetRoleFromPrincipal();
-        }
-        else
-        {
-            Role = "Unauthenticated";
-        }
-    }
 }
