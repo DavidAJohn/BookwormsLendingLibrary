@@ -3,15 +3,16 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 
-@if (UserRole != "" && UserRole != RoleAllowed)
+@if (UserRole != "" && IsAuthorised == false)
 {
     NavigationManager.NavigateTo("/");
 }
 
 @code {
     [Parameter]
-    public string RoleAllowed { get; set; }
+    public string RolesAllowed { get; set; }
     private string UserRole = "";
+    private bool IsAuthorised = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -30,10 +31,35 @@
         if (user.Identity.IsAuthenticated)
         {
             UserRole = user.GetRoleFromPrincipal();
+            CheckIsAuthorised();
         }
         else
         {
             UserRole = "Unauthenticated";
+            IsAuthorised = false;
+        }
+    }
+
+    private void CheckIsAuthorised() 
+    {
+        var rolesList = RolesAllowed.Split(",");
+        
+        if (rolesList.Length >= 1)
+        {
+            int roleExists = 0;
+
+            foreach (string role in rolesList)
+            {
+                if (role.Trim() == UserRole)
+                {
+                    roleExists++;
+                }
+            }
+
+            if (roleExists > 0) 
+            {
+                IsAuthorised = true;
+            }
         }
     }
 }
