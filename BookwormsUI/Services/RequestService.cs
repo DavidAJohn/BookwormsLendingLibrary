@@ -157,5 +157,30 @@ namespace BookwormsUI.Services
 
             return null;
         }
+
+        public async Task<List<Request>> GetRequestsByStatus(RequestStatus status) 
+        {
+            var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+
+            if (string.IsNullOrWhiteSpace(savedToken))
+            {
+                return null;
+            }
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
+
+            var response = await _httpClient.GetAsync(GetApiEndpoint("requests") + "/status?status=" + status);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var requests = JsonConvert.DeserializeObject<List<Request>>(
+                    await response.Content.ReadAsStringAsync()
+                );
+
+                return requests;
+            }
+
+            return null;
+        }
     }
 }

@@ -1,11 +1,56 @@
 ﻿@page "/admin/"
 
 @using BookwormsUI.Components.Auth
+@inject RequestService requestService
 
 <AuthGuard RolesAllowed="Administrator" />
 
 <h3>Bookworms Admin</h3>
 
+<div class="py-4">
+    <h5>Pending book requests</h5>
+</div>
+
+@if (pendingRequests == null)
+    {
+        <div>
+            <h5>No pending requests found</h5>
+        </div>
+    }
+    else
+    {
+        <div>
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Borrower</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Status</th>
+                        <th>Date Requested</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var request in pendingRequests)
+                    {
+                    <tr>
+                        <td>@request.BorrowerEmail</td>
+                        <td>@request.BookTitle</td>
+                        <td>@request.BookAuthor</td>
+                        <td>@request.Status</td>
+                        <td>@request.DateRequested</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
 @code {
-    
+    private List<Request> pendingRequests;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pendingRequests = await requestService.GetRequestsByStatus(RequestStatus.Pending);
+    }
 }
