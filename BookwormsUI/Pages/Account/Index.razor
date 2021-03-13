@@ -1,11 +1,59 @@
 ﻿@page "/account/"
 
 @using BookwormsUI.Components.Auth
+@inject RequestService requestService
+@inject NavigationManager navigationManager
 
 <AuthGuard RolesAllowed="Borrower, Administrator" />
 
 <h3>Your Account</h3>
 
-@code {
+<div class="py-4">
+    <h5>Your book requests</h5>
+</div>
 
+    @if (requests == null)
+    {
+        <div>
+            <h5>No requests found</h5>
+        </div>
+    }
+    else
+    {
+        <div>
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Status</th>
+                        <th>Date Requested</th>
+                        <th>Date Sent</th>
+                        <th>Date Due</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var request in requests)
+                    {
+                    <tr>
+                        <td>@request.BookTitle</td>
+                        <td>@request.BookAuthor</td>
+                        <td>@request.Status</td>
+                        <td>@request.DateRequested</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+@code {
+    private List<Request> requests;
+
+    protected override async Task OnInitializedAsync()
+    {
+        requests = await requestService.GetRequestsForUser();
+    }
 }

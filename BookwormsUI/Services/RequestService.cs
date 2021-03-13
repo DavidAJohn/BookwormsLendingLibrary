@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -97,7 +98,7 @@ namespace BookwormsUI.Services
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
 
-            var bookRequest = new Request {
+            var bookRequest = new RequestCreate {
                 BookId = bookId,
                 SendToAddress = new Address {
                     FirstName = address.FirstName,
@@ -130,6 +131,31 @@ namespace BookwormsUI.Services
                 Successful = false,
                 Error = error.Message
             };
+        }
+
+        public async Task<List<Request>> GetRequestsForUser() 
+        {
+            var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+
+            if (string.IsNullOrWhiteSpace(savedToken))
+            {
+                return null;
+            }
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
+
+            var response = await _httpClient.GetAsync(GetApiEndpoint("requests"));
+
+            if (response.IsSuccessStatusCode)
+            {
+                var requests = JsonConvert.DeserializeObject<List<Request>>(
+                    await response.Content.ReadAsStringAsync()
+                );
+
+                return requests;
+            }
+
+            return null;
         }
     }
 }
