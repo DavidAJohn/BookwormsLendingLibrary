@@ -1,6 +1,7 @@
 ﻿@page "/account/"
 
 @using BookwormsUI.Components.Auth
+@using BookwormsUI.Extensions
 @inject RequestService requestService
 
 <AuthGuard RolesAllowed="Borrower, Administrator" />
@@ -38,9 +39,9 @@
                         <td>@request.BookTitle</td>
                         <td>@request.BookAuthor</td>
                         <td>@request.Status</td>
-                        <td>@request.DateRequested</td>
-                        <td></td>
-                        <td></td>
+                        <td>@request.DateRequested.ToUKStandardDate()</td>
+                        <td>@request.DateSent</td>
+                        <td>@request.DateDue</td>
                     </tr>
                     }
                 </tbody>
