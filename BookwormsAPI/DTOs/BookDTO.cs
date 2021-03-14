@@ -12,6 +12,7 @@ namespace BookwormsAPI.DTOs
         public string Summary { get; set; }
         public string CoverImageUrl { get; set; }
         public string Author { get; set; }
+        public int AuthorId { get; set; }
         public string Category { get; set; }
     }
 }
