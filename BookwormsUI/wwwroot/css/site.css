@@ -69,6 +69,10 @@ a, .btn-link {
     padding: 0;
 }
 
+.blazored-modal-content {
+    padding: 30px;
+}
+
 .address-modal-title {
     font-size: 1.25rem;
     font-weight: 500;
@@ -76,4 +80,15 @@ a, .btn-link {
     align-items: center;
     justify-content: center;
     margin: 0 0 2rem 0
+}
+
+.address-modal-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1.5rem
+}
+
+.address-modal-buttons button {
+    margin: 0.25rem;
 }
