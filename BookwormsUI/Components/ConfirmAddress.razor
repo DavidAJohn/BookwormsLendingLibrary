@@ -74,7 +74,7 @@
         }
     }
 
-    public async Task SaveAddress()
+    private async Task SaveAddress()
     {
         // save the address on the form
         var savedAddress = await RequestService.SaveBorrowerAddress(Address);
@@ -87,11 +87,16 @@
         else 
         {
             // address could not be saved
-            await ModalInstance.CloseAsync(ModalResult.Ok($"Your address could not be saved"));
+            var requestResult = new RequestResult {
+                Successful = false,
+                Error = "Sorry, your address could not be saved"
+            };
+
+            await ModalInstance.CloseAsync(ModalResult.Ok(requestResult));
         }
     }
 
-    public async Task CreateBookRequest(Address savedAddress)
+    private async Task CreateBookRequest(Address savedAddress)
     {
         var request = await RequestService.CreateBookRequest(BookId, savedAddress);
 
@@ -99,16 +104,31 @@
         {
             if (request.Successful)
             {
-                await ModalInstance.CloseAsync(ModalResult.Ok($"Your request has been created"));
+                var requestResult = new RequestResult {
+                    Successful = true,
+                    Error = ""
+                };
+
+                await ModalInstance.CloseAsync(ModalResult.Ok(requestResult));
             }
             else 
             {
-                await ModalInstance.CloseAsync(ModalResult.Ok("Error: " + request.Error));
+                var requestResult = new RequestResult {
+                    Successful = false,
+                    Error = request.Error
+                };
+
+                await ModalInstance.CloseAsync(ModalResult.Ok(requestResult));
             }
         }
         else 
         {
-            await ModalInstance.CloseAsync(ModalResult.Ok($"Error: Your request could not be created"));
+            var requestResult = new RequestResult {
+                    Successful = false,
+                    Error = request.Error
+                };
+
+            await ModalInstance.CloseAsync(ModalResult.Ok(requestResult));
         }
     }
 

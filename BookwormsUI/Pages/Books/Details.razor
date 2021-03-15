@@ -143,7 +143,7 @@ else
         navigationManager.NavigateTo("/books/");
     }
 
-    async Task ShowConfirmAddress(int bookId)
+    private async Task ShowConfirmAddress(int bookId)
     {
         var parameters = new ModalParameters();
         parameters.Add(nameof(ConfirmAddress.BookId), bookId);
@@ -158,17 +158,17 @@ else
 
         if (!result.Cancelled)
         {
-            var requestResponse = result.Data.ToString();
+            var requestResponse = (RequestResult)result.Data;
 
-            if (requestResponse.Substring(0,5) == "Error")
+            if (requestResponse.Successful == false)
             {
                 ShowErrors = true;
-                Error = requestResponse;
+                Error = requestResponse.Error;
             }
             else 
             {
                 ShowErrors = false;
-                ToastService.ShowSuccess("Thanks, your book request is now being reviewed by our staff", "Request saved");
+                ToastService.ShowSuccess("Thanks, your book request will now be reviewed by our staff as soon as possible", "Request saved");
                 await InvokeAsync(StateHasChanged);
             }
         }
