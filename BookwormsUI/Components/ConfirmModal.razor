@@ -1,0 +1,29 @@
+﻿@if (!String.IsNullOrWhiteSpace(Message))
+{
+    <div class="confirm-modal-message">
+        @Message
+    </div>
+}
+
+<div class="confirm-modal-buttons">
+    <button @onclick="Confirm" class="btn btn-success">Yes, confirm</button>
+    <button @onclick="Cancel" class="btn btn-danger">No, cancel</button>
+</div>
+
+@code {
+    [CascadingParameter] 
+    BlazoredModalInstance ModalInstance { get; set; }
+
+    [Parameter]
+    public string Message { get; set; }
+
+    void Confirm()
+    {
+        ModalInstance.CloseAsync(ModalResult.Ok($"Confirm"));
+    }
+
+    void Cancel()
+    {
+        ModalInstance.CancelAsync();
+    }
+}
