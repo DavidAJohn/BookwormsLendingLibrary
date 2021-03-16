@@ -69,10 +69,8 @@
         var parameters = new ModalParameters();
         parameters.Add(nameof(ConfirmModal.Message), "This will start the borrower's lending period");
 
-        @* var options = new ModalOptions()
-        {
-            Class = "blazored-modal-address",
-        }; *@
+        parameters.Add(nameof(ConfirmModal.ConfirmButtonText), "Yes, confirm");
+        parameters.Add(nameof(ConfirmModal.CancelButtonText), "No, cancel");
 
         var confirmModal = Modal.Show<ConfirmModal>("Are you sure?", parameters);
         var result = await confirmModal.Result;

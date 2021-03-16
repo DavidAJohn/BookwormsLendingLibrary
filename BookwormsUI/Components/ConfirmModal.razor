@@ -6,8 +6,8 @@
 }
 
 <div class="confirm-modal-buttons">
-    <button @onclick="Confirm" class="btn btn-success">Yes, confirm</button>
-    <button @onclick="Cancel" class="btn btn-danger">No, cancel</button>
+    <button @onclick="Confirm" class="btn btn-success">@ConfirmButtonText</button>
+    <button @onclick="Cancel" class="btn btn-danger">@CancelButtonText</button>
 </div>
 
 @code {
@@ -16,6 +16,12 @@
 
     [Parameter]
     public string Message { get; set; }
+
+    [Parameter]
+    public string ConfirmButtonText { get; set; } = "Confirm";
+
+    [Parameter]
+    public string CancelButtonText { get; set; } = "Cancel";
 
     void Confirm()
     {
