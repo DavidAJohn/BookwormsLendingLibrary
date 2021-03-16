@@ -147,13 +147,9 @@ else
     {
         var parameters = new ModalParameters();
         parameters.Add(nameof(ConfirmAddress.BookId), bookId);
+        parameters.Add(nameof(ConfirmAddress.Message), "This is where your book will be sent, so please make sure it is correct");
 
-        var options = new ModalOptions()
-        {
-            Class = "blazored-modal-address",
-        };
-
-        var addressModal = Modal.Show<ConfirmAddress>("", parameters, options);
+        var addressModal = Modal.Show<ConfirmAddress>("Please confirm your address", parameters);
         var result = await addressModal.Result;
 
         if (!result.Cancelled)

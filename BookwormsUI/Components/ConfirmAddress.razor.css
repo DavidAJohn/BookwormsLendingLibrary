@@ -1,0 +1,30 @@
+.address-modal-message {
+    font-size: 1rem;
+    font-weight: 600;
+    width: 575px;
+    color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.5rem 0 1.5rem 0
+}
+
+.address-modal-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0 2rem 0
+}
+
+.address-modal-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1.5rem
+}
+
+.address-modal-buttons button {
+    margin: 0.25rem;
+}

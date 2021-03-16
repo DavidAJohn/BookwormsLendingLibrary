@@ -1,8 +1,11 @@
 ﻿@inject RequestService RequestService
 
-<div class="address-modal-title">
-    Please Confirm Your Address
-</div>
+@if (!String.IsNullOrWhiteSpace(Message))
+{
+    <div class="address-modal-message">
+        @Message
+    </div>
+}
 
 <div class="address-form">
     <EditForm Model="Address" OnValidSubmit="SaveAddress">
@@ -54,6 +57,9 @@
     [CascadingParameter] 
     BlazoredModalInstance ModalInstance { get; set; }
 
+    [Parameter]
+    public string Message { get; set; }
+
     [Parameter] 
     public int BookId { get; set; }
 
@@ -92,7 +98,7 @@
                 Error = "Sorry, your address could not be saved"
             };
 
-            await ModalInstance.CloseAsync(ModalResult.Ok(requestResult));
+            await ModalInstance.CloseAsync(ModalResult.Ok<RequestResult>(requestResult));
         }
     }
 
@@ -109,7 +115,7 @@
                     Error = ""
                 };
 
-                await ModalInstance.CloseAsync(ModalResult.Ok(requestResult));
+                await ModalInstance.CloseAsync(ModalResult.Ok<RequestResult>(requestResult));
             }
             else 
             {
@@ -118,7 +124,7 @@
                     Error = request.Error
                 };
 
-                await ModalInstance.CloseAsync(ModalResult.Ok(requestResult));
+                await ModalInstance.CloseAsync(ModalResult.Ok<RequestResult>(requestResult));
             }
         }
         else 
@@ -128,7 +134,7 @@
                     Error = request.Error
                 };
 
-            await ModalInstance.CloseAsync(ModalResult.Ok(requestResult));
+            await ModalInstance.CloseAsync(ModalResult.Ok<RequestResult>(requestResult));
         }
     }
 
