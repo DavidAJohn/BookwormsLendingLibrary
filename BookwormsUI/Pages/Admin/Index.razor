@@ -29,6 +29,7 @@
                         <th>Author</th>
                         <th>Status</th>
                         <th>Date Requested</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,6 +41,11 @@
                         <td>@request.BookAuthor</td>
                         <td>@request.Status</td>
                         <td>@request.DateRequested.ToUKStandardDate()</td>
+                        <td>
+                            <button class="btn btn-success" 
+                                @onclick="@(() => ShowConfirm(request.Id))">Mark as Sent
+                            </button>
+                        </td>
                     </tr>
                     }
                 </tbody>
@@ -50,8 +56,34 @@
 @code {
     private List<Request> pendingRequests;
 
+    [CascadingParameter] 
+    public IModalService Modal { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         pendingRequests = await requestService.GetRequestsByStatus(RequestStatus.Pending);
+    }
+
+    private async Task ShowConfirm(int requestId)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(ConfirmModal.Message), "This will start the borrower's lending period");
+
+        @* var options = new ModalOptions()
+        {
+            Class = "blazored-modal-address",
+        }; *@
+
+        var confirmModal = Modal.Show<ConfirmModal>("Are you sure?", parameters);
+        var result = await confirmModal.Result;
+
+        if (!result.Cancelled)
+        {
+            Console.WriteLine("Modal returned confirmation - requestId " + requestId + " marked as sent");
+        }
+        else
+        {
+            Console.WriteLine("Modal was cancelled");
+        }
     }
 }

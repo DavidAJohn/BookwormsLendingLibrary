@@ -5,6 +5,7 @@ namespace BookwormsUI.Models
 {
     public class Request
     {
+        public int Id { get; set; }
         [Required]
         public string BorrowerEmail { get; set; }
         [Required]
