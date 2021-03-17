@@ -71,7 +71,7 @@
         Address = new Address{};
 
         // check if the user has an existing address saved
-        var address = await RequestService.GetBorrowerAddress();
+        var address = await RequestService.GetBorrowerAddressAsync();
 
         if (address != null)
         {
@@ -83,7 +83,7 @@
     private async Task SaveAddress()
     {
         // save the address on the form
-        var savedAddress = await RequestService.SaveBorrowerAddress(Address);
+        var savedAddress = await RequestService.SaveBorrowerAddressAsync(Address);
 
         if (savedAddress != null)
         {
@@ -104,7 +104,7 @@
 
     private async Task CreateBookRequest(Address savedAddress)
     {
-        var request = await RequestService.CreateBookRequest(BookId, savedAddress);
+        var request = await RequestService.CreateBookRequestAsync(BookId, savedAddress);
 
         if (request != null)
         {
