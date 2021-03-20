@@ -52,7 +52,16 @@
 @code {
     private List<Request> requests;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GetRequestsForUser();
+            StateHasChanged();
+        }
+    }
+
+    private async Task GetRequestsForUser()
     {
         requests = await requestService.GetRequestsForUserAsync();
     }

@@ -70,9 +70,13 @@
     private bool ShowErrors;
     private string Error = "";
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await GetPendingRequests();
+        if (firstRender)
+        {
+            await GetPendingRequests();
+            StateHasChanged();
+        }
     }
     
     private async Task GetPendingRequests()
