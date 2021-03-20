@@ -54,6 +54,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        requests = await requestService.GetRequestsForUser();
+        requests = await requestService.GetRequestsForUserAsync();
     }
 }

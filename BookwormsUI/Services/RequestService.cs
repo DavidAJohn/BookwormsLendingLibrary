@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -33,7 +34,7 @@ namespace BookwormsUI.Services
             };
         }
 
-        public async Task<Address> GetBorrowerAddress() 
+        public async Task<Address> GetBorrowerAddressAsync() 
         {
             var savedToken = await _localStorage.GetItemAsync<string>("authToken");
 
@@ -59,7 +60,7 @@ namespace BookwormsUI.Services
         }
         
 
-        public async Task<Address> SaveBorrowerAddress(Address address)
+        public async Task<Address> SaveBorrowerAddressAsync(Address address)
         {
             var savedToken = await _localStorage.GetItemAsync<string>("authToken");
 
@@ -87,7 +88,7 @@ namespace BookwormsUI.Services
             return null;
         }
 
-        public async Task<RequestResult> CreateBookRequest(int bookId, Address address)
+        public async Task<RequestResult> CreateBookRequestAsync(int bookId, Address address)
         {
             var savedToken = await _localStorage.GetItemAsync<string>("authToken");
 
@@ -133,7 +134,7 @@ namespace BookwormsUI.Services
             };
         }
 
-        public async Task<List<Request>> GetRequestsForUser() 
+        public async Task<List<Request>> GetRequestsForUserAsync() 
         {
             var savedToken = await _localStorage.GetItemAsync<string>("authToken");
 
@@ -158,7 +159,7 @@ namespace BookwormsUI.Services
             return null;
         }
 
-        public async Task<List<Request>> GetRequestsByStatus(RequestStatus status) 
+        public async Task<List<Request>> GetRequestsByStatusAsync(RequestStatus status) 
         {
             var savedToken = await _localStorage.GetItemAsync<string>("authToken");
 
@@ -181,6 +182,44 @@ namespace BookwormsUI.Services
             }
 
             return null;
+        }
+
+        public async Task<RequestResult> UpdateRequestStatusAsync(int requestId, RequestStatus newStatus)
+        {
+            var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+
+            if (string.IsNullOrWhiteSpace(savedToken))
+            {
+                return null;
+            }
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
+
+            var requestUpdate = new RequestUpdate {
+                Id = requestId,
+                Status = newStatus
+            };
+
+            string json = JsonConvert.SerializeObject(requestUpdate);
+            StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync(GetApiEndpoint("requests") + "/" + requestId, httpContent);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return new RequestResult {
+                    Successful = true,
+                    Error = ""
+                };
+            }
+            else
+            {
+                return new RequestResult {
+                    Successful = false,
+                    Error = "This request could not be updated"
+                };
+            }
+            
         }
     }
 }
