@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace BookwormsAPI.Entities.Borrowing
 {
@@ -23,6 +24,9 @@ namespace BookwormsAPI.Entities.Borrowing
         [Required]
         public int BookId { get; set; }
         public Book Book { get; set; }
+        
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        [Required]
         public RequestStatus Status { get; set; } = RequestStatus.Pending;
         public DateTimeOffset DateRequested { get; set; } = DateTimeOffset.Now;
         public DateTime? DateSent { get; set; } = null;

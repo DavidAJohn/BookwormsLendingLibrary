@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using BookwormsAPI.Contracts;
 using BookwormsAPI.Entities;
@@ -25,7 +23,9 @@ namespace BookwormsAPI.Data
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _repositoryContext.Set<T>().FindAsync(id);
+            return await _repositoryContext.Set<T>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
