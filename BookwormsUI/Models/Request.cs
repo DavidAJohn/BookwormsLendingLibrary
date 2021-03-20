@@ -18,5 +18,6 @@ namespace BookwormsUI.Models
         public DateTimeOffset DateRequested { get; set; }
         public DateTime? DateSent { get; set; }
         public DateTime? DateDue { get; set; }
+        public DateTime? DateReturned { get; set; }
     }
 }

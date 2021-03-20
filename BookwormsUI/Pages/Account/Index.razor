@@ -30,6 +30,7 @@
                         <th>Date Requested</th>
                         <th>Date Sent</th>
                         <th>Date Due</th>
+                        <th>Date Returned</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,8 +41,24 @@
                         <td>@request.BookAuthor</td>
                         <td>@request.Status</td>
                         <td>@request.DateRequested.ToUKStandardDate()</td>
-                        <td>@request.DateSent</td>
-                        <td>@request.DateDue</td>
+                        <td>
+                            @(request.DateSent == null 
+                            ? ""
+                            : GetFormattedDate(request.DateSent)
+                            )
+                        </td>
+                        <td>
+                            @(request.DateDue == null
+                            ? ""
+                            : GetFormattedDate(request.DateDue)
+                            )
+                        </td>
+                        <td>
+                            @(request.DateReturned == null
+                            ? ""
+                            : GetFormattedDate(request.DateReturned)
+                            )
+                        </td>
                     </tr>
                     }
                 </tbody>
@@ -64,5 +81,10 @@
     private async Task GetRequestsForUser()
     {
         requests = await requestService.GetRequestsForUserAsync();
+    }
+
+    private string GetFormattedDate(DateTime? dateTime)
+    {
+        return String.Format("{0:dd/MM/yyyy}", dateTime);
     }
 }
