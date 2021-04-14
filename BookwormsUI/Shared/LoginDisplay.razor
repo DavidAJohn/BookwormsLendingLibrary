@@ -8,17 +8,32 @@
     <Authorized>
         @if (@displayName != null)
         {
-            <span>Hi, @displayName</span>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link">Hi, @displayName</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="account/">Your Account</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout">Log Out</a>
+                </li>
+            </ul>
         }
         else 
         {
             <span>&nbsp;</span>
         }
-        <a href="logout">Log out</a>
     </Authorized>
     <NotAuthorized>
-        <a href="register">Register</a>
-        <a href="login">Log in</a>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="register">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="login">Log In</a>
+            </li>
+        </ul>
     </NotAuthorized>
 </AuthorizeView>
 

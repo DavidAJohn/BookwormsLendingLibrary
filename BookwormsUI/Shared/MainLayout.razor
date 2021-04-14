@@ -10,19 +10,49 @@
                 InfoIcon="fas fa-info-circle"
                 ErrorIcon="fas fa-exclamation-circle" />
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <div class="main">
-        <div class="top-row px-4">
+<!-- navbar -->
+<nav class="navbar navbar-expand-sm navbar-light bg-light" id="upper-nav">
+    <div class="container">
+        <a class="navbar-brand ml-2" href="#"><i class="fas fa-book-reader mr-3"></i>Bookworms Lending Library</a>
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
             <LoginDisplay />
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>
+    </div>
+</nav>
+<nav class="navbar navbar-expand-sm navbar-light bg-light" id="lower-nav">
+    <div class="container">
+
+        <div class="collapse navbar-collapse ml-auto d-none d-md-block" id="navbarNav2">
+            <NavMenu />
+            <form class="form-inline ml-auto">
+                <input type="text" class="form-control mr-2" placeholder="Search">
+                <button class="btn btn-outline-success mr-2">Search</button>
+            </form>
         </div>
 
-        <div class="content px-4">
+    </div>
+</nav>
+
+<!-- main body content -->
+<main role="main" class="flex-shrink-0">
+    <div class="container">
+        <div class="py-5 px-2 body-content">
             @Body
         </div>
     </div>
-</div>
+</main>
+
+<!-- footer -->
+<footer id="footer" class="text-center p-4 bg-dark text-white mt-auto">
+    <div class="container">
+        <div class="row">
+        <div class="col">
+            <p>Copyright &copy;
+            <span id="year">2021</span> Bookworms Lending Library</p>
+        </div>
+        </div>
+    </div>
+</footer>
