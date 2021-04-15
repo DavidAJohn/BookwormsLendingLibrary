@@ -53,6 +53,10 @@ a, .btn-link {
     text-decoration: none;
 }
 
+::placeholder { 
+    color: rgba(0, 0, 0, 0.3) !important;
+}
+
 /* Blazored.Modal */
 
 .blazored-modal-header {
@@ -67,4 +71,11 @@ a, .btn-link {
 
 .blazored-modal-content {
     padding: 5px;
+}
+
+/* Navbar */
+
+.nav-item {
+    font-size: 0.75rem;
+    text-transform: uppercase;
 }
