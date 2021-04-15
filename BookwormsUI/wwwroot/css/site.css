@@ -79,3 +79,8 @@ a, .btn-link {
     font-size: 0.75rem;
     text-transform: uppercase;
 }
+
+.static-nav-link {
+    color:rgba(0, 0, 0, 0.8) !important;
+    cursor: default !important;
+}

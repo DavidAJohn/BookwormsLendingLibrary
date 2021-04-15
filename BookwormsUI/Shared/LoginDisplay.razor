@@ -10,13 +10,29 @@
         {
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link">Hi, @displayName</a>
+                    <NavLink class="nav-link static-nav-link">
+                        Hi, @displayName
+                    </NavLink>
                 </li>
+                @if (@role == "Administrator")
+                {
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="admin">
+                            Admin Page
+                        </NavLink>
+                    </li>
+                }
+                else {
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="account">
+                            Your Account
+                        </NavLink>
+                    </li>
+                }
                 <li class="nav-item">
-                    <a class="nav-link" href="account/">Your Account</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="logout">Log Out</a>
+                    <NavLink class="nav-link" href="logout">
+                        Log Out
+                    </NavLink>
                 </li>
             </ul>
         }
@@ -28,10 +44,14 @@
     <NotAuthorized>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="register">Register</a>
+                <NavLink class="nav-link" href="login">
+                    Log In
+                </NavLink>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="login">Log In</a>
+                <NavLink class="nav-link" href="register">
+                    Register
+                </NavLink>
             </li>
         </ul>
     </NotAuthorized>
@@ -39,6 +59,7 @@
 
 @code {
     private string displayName;
+    private string role;
 
     protected override async Task OnInitializedAsync()
     {
@@ -54,6 +75,7 @@
         {
             ToastService.ShowSuccess("You have logged in successfully", "Logged In");
             displayName = user?.GetDisplayNameFromPrincipal();
+            role = user?.GetRoleFromPrincipal();
         }
         else 
         {
