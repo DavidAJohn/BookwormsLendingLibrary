@@ -1,14 +1,17 @@
 .navbar#lower-nav {
     box-shadow: 0px 5px 5px rgba(202, 202, 202, 0.5);
     border-bottom: rgb(77, 77, 77);
-    z-index: 100;
+    z-index: 99;
     padding-bottom: 1.25rem;
 }
 
 .body-content {
-    min-height: 900px;
+    min-height: 800px;
 }
 
+#main-body {
+    border-top: gray solid 2px;
+}
 
 /* @media (max-width: 640.98px) {
     .top-row:not(.auth) {

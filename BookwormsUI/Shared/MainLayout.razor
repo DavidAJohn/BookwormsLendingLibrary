@@ -1,4 +1,5 @@
 @inherits LayoutComponentBase
+@inject NavigationManager navigationManager
 
 @using Blazored.Toast.Configuration
 
@@ -40,11 +41,15 @@
 
 <!-- main body content -->
 <main role="main" class="flex-shrink-0">
+
+    <PromoCarousel showCarousel=@showPromoCarousel />
+
     <div class="container">
         <div class="py-5 px-2 body-content">
             @Body
         </div>
     </div>
+    
 </main>
 
 <!-- footer -->
@@ -58,3 +63,35 @@
         </div>
     </div>
 </footer>
+
+@code {
+    private string currentUrl;
+    public bool showPromoCarousel = false;
+    private string[] urlParts = new string[] {};
+
+    protected override void OnParametersSet()
+    {
+        ShowCarousel();
+    }
+
+    private void ShowCarousel() 
+    {
+        currentUrl = navigationManager.Uri;
+        
+        urlParts = currentUrl.Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+        urlParts = urlParts
+            .Where((item, index) => index > 1) // strip out the first two elements (http, domain)
+            .ToArray();
+
+        if (urlParts.Count() == 0)
+        {
+            showPromoCarousel = true;
+        }
+        else 
+        {
+            showPromoCarousel = false;
+        }
+    }
+
+}

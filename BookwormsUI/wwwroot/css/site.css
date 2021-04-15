@@ -57,6 +57,10 @@ a, .btn-link {
     color: rgba(0, 0, 0, 0.3) !important;
 }
 
+.carousel {
+    border-bottom:rgba(0, 0, 0, 0.1) solid 1px;
+}
+
 /* Blazored.Modal */
 
 .blazored-modal-header {
