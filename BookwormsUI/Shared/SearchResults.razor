@@ -1,0 +1,107 @@
+﻿@page "/searchresults/"
+
+@inject NavigationManager navigationManager
+@using BookwormsUI.Extensions
+@inject IBookRepository bookRepository
+@inject BookService bookService
+@inject IAuthorRepository authorRepository
+@inject AuthorService authorService
+
+<div class="container">
+    <h4 class="mb-4">Search Results</h4>
+    <p class="mb-3">You searched for: <strong>@SearchTerm</strong></p>
+    <div class="row">
+        <div class="col-md-6">
+            @if (books.Count > 0) 
+            {
+                <p>We found the following results in <strong>Books</strong>:</p>
+                <div class="list-group">
+                    @foreach (var book in books) {
+                        <a href="@($"/books/details/{@book.Id}")" class="list-group-item list-group-item-action flex-column align-items-start">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">
+                                    @book.Title
+                                </h5>
+                            </div>
+                            <p class="mb-1">by @book.Author</p>
+                        </a>
+                    }
+                </div>
+            }
+            else 
+            {
+                <p>There were <strong>no</strong> results found in <strong>Books</strong></p>
+            }
+        </div>
+        <div class="col-md-6">
+            @if (authors.Count > 0)
+            {
+                <p>We found the following results in <strong>Authors</strong>:</p>
+                <div class="list-group">
+                @foreach (var author in authors) {
+                    <a href="@($"/authors/details/{@author.Id}")" class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">
+                                @author.FirstName @author.LastName
+                            </h5>
+                        </div>
+                        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                    </a>
+                }
+                </div>
+            }
+            else 
+            {
+                <p>There were <strong>no</strong> results found in <strong>Authors</strong></p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string SearchTerm { get; set; }
+    private List<Book> books = new List<Book>();
+    private List<Author> authors = new List<Author>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var queryStringParams = navigationManager.GetQueryStringCollection();
+        SearchTerm = queryStringParams["searchTerm"];
+
+        await GetBookResults();
+        await GetAuthorResults();
+
+        
+    }
+
+    private async Task GetBookResults()
+    {
+        ItemParameters itemParams = new ItemParameters
+        {
+            PageIndex = 1,
+            PageSize = 5,
+            Search = SearchTerm
+        };
+        
+        string url = bookService.GetBooksApiEndpoint();
+        var response = await bookRepository.GetAsync(url, itemParams);
+
+        books = response.Items;
+    }
+
+    private async Task GetAuthorResults()
+    {
+        ItemParameters itemParams = new ItemParameters
+        {
+            PageIndex = 1,
+            PageSize = 5,
+            Search = SearchTerm
+        };
+        
+        string url = authorService.GetAuthorsApiEndpoint();
+        var response = await authorRepository.GetAsync(url, itemParams);
+
+        authors = response.Items;
+    }
+}

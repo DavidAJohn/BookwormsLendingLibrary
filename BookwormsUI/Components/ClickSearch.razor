@@ -1,0 +1,27 @@
+﻿@inject NavigationManager navigationManager
+
+<div class="input-group input-group-sm mr-2">
+    <input type="text" class="form-control" placeholder="Search for a book or author"
+        @bind-value="@SearchTerm" 
+        @bind-value:event="oninput"
+        @onkeydown:preventDefault
+    >
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" @onclick="SearchSubmitted">Search</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string SearchTerm { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnSearchSubmitted { get; set; }
+
+    private async Task SearchSubmitted()
+    {
+        await OnSearchSubmitted.InvokeAsync(SearchTerm);
+        navigationManager.NavigateTo("/searchresults?searchTerm=" + SearchTerm);
+    }
+
+}

@@ -15,7 +15,7 @@ else
         <BreadcrumbHeader CurrentUrl=@CurrentUrl />
     </div>
     <div>
-        <Search OnSearchChanged="SearchChanged" ClearSearch=@ClearSearch />
+        <AutoSearch OnSearchChanged="SearchChanged" ClearSearch=@ClearSearch />
     </div>
 
     @if (authors.Count() < 1)
