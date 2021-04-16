@@ -1,5 +1,7 @@
 @inherits LayoutComponentBase
 @inject NavigationManager navigationManager
+@using BookwormsUI.Extensions
+@using System.Linq
 
 @using Blazored.Toast.Configuration
 
@@ -79,18 +81,30 @@
         currentUrl = navigationManager.Uri;
         
         urlParts = currentUrl.Split('/', StringSplitOptions.RemoveEmptyEntries);
-
+        
         urlParts = urlParts
             .Where((item, index) => index > 1) // strip out the first two elements (http, domain)
             .ToArray();
 
+        // essentially, is there anything left after we strip out the base url?
+        // i.e. are we on the home page?
         if (urlParts.Count() == 0)
         {
             showPromoCarousel = true;
         }
         else 
         {
-            showPromoCarousel = false;
+            // there could also be other parameters and chars that we need to ignore
+            string[] arrRemoveItems = { "#", "?logout=true", "?register=true" };
+
+            if (urlParts.ContainsInArray(arrRemoveItems))
+            {
+                showPromoCarousel = true;
+            } 
+            else 
+            {
+                showPromoCarousel = false;
+            }
         }
     }
 
