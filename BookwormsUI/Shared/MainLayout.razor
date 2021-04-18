@@ -50,22 +50,82 @@
 </main>
 
 <!-- footer -->
-<footer id="footer" class="text-center p-4 bg-dark text-white mt-auto">
-    <div class="container">
-        <div class="row">
-        <div class="col">
-            <p>Copyright &copy;
-            <span id="year">2021</span> Bookworms Lending Library</p>
+<footer id="footer" class="bg-dark text-white">
+    <div class="container p-4">
+      <div class="row">
+        <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+          <h5 class="mb-4">Bookworms Lending Library</h5>
+          <p>
+            This website was not actually built for a real library (as you've probably guessed!). 
+            It was created by David John as a way of exploring Microsoft's Blazor web development framework.
+            You can view the project's source code on GitHub from the link to the right.
+          </p>
         </div>
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0 pl-5">
+          <h5 class="text-uppercase mb-4">Links</h5>
+          <ul class="list-unstyled mb-0">
+            <li>
+                <i class="fab fa-github mr-2"></i> 
+                <a href="https://github.com/DavidAJohn/BookwormsLendingLibrary" class="text-white">GitHub source</a>
+            </li>
+            <li>
+                <i class="fab fa-microsoft mr-2"></i> 
+                <a href="https://blazor.net" class="text-white">Blazor.net</a>
+            </li>
+            <li>
+                <i class="fas fa-globe mr-2"></i>
+                <a href="/about" class="text-white">About the Site</a>
+            </li>
+            <li>
+                <i class="fas fa-globe mr-2"></i>
+                <a href="/contact" class="text-white">Contact Me</a>
+            </li>
+          </ul>
         </div>
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase mb-4">Social</h5>
+
+          <ul class="list-unstyled">
+            <li>
+                <i class="fab fa-facebook mr-2"></i> 
+                <a href="https://facebook.com" class="text-white">Facebook</a>
+            </li>
+            <li>
+                <i class="fab fa-twitter mr-2"></i> 
+                <a href="https://twitter.com" class="text-white">Twitter</a>
+            </li>
+            <li>
+                <i class="fab fa-instagram mr-2"></i> 
+                <a href="https://instagram.com" class="text-white">Instagram</a>
+            </li>
+            <li>
+                <i class="fab fa-pinterest mr-2"></i> 
+                <a href="https://pinterest.com" class="text-white">Pinterest</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-</footer>
+
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+      &copy; @currentYear Copyright - Bookworms Lending Library
+    </div>
+  </footer>
 
 @code {
     private string currentUrl;
     public bool showPromoCarousel = false;
     private string[] urlParts = new string[] {};
 
+    private string currentYear;
+
+    protected override void OnInitialized()
+    {
+        // set footer copyright year
+        DateTime currentDateTime = DateTime.Now;
+        currentYear = currentDateTime.Year.ToString();
+    }
+    
     protected override void OnParametersSet()
     {
         ShowCarousel();
