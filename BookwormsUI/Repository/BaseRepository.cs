@@ -59,6 +59,18 @@ namespace BookwormsUI.Repository
                     queryStringParams.Add("search", itemParams.Search.ToString());
                 };
 
+                // conditionally add a categoryId param
+                if (itemParams.CategoryId != 0)
+                {
+                    queryStringParams.Add("categoryId", itemParams.CategoryId.ToString());
+                };
+
+                // conditionally add a sort param
+                if (!String.IsNullOrEmpty(itemParams.SortBy))
+                {
+                    queryStringParams.Add("sort", itemParams.SortBy.ToString());
+                };
+
                 request = new HttpRequestMessage(HttpMethod.Get, QueryHelpers.AddQueryString(url, queryStringParams));
             }
             else

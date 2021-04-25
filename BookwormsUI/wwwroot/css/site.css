@@ -5,7 +5,13 @@ html, body {
 }
 
 a, .btn-link {
-    color: #0366d6;
+    color: #000000;
+}
+
+a:hover, .btn-link:hover {
+    color: #000000;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .btn-primary {
@@ -87,4 +93,51 @@ a, .btn-link {
 .static-nav-link {
     color:rgba(0, 0, 0, 0.8) !important;
     cursor: default !important;
+}
+
+/* books/authors list */
+
+.sidebar-heading {
+    background-color: whitesmoke;
+    border: rgba(0, 0, 0, 0.1) solid 1px;
+    border-radius: 5px;
+    padding: 0.5rem;
+    margin-left: -15px;
+    margin-right: -15px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+ul.list {
+    text-align: center;
+    list-style-type: none;
+    cursor: pointer;
+    padding-left: 30px;
+}
+
+.list-items {
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 500;
+    font-style: italic;
+    padding-bottom: 5px;
+}
+
+.list-items:hover {
+    text-decoration: underline !important;
+}
+
+.dropdown-button {
+    font-size: 0.8rem !important;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.dropdown-item {
+    font-size: 0.8rem;
+    font-weight: 500;
+    font-style: italic;
+    padding-top: 0.25rem;
+    margin-right: 5px;
 }

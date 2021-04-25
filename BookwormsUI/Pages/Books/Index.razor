@@ -3,6 +3,8 @@
 @using BookwormsUI.Components.Paging
 @inject IBookRepository bookRepository
 @inject BookService bookService
+@inject ICategoryRepository categoryRepository
+@inject CategoryService categoryService
 @inject NavigationManager navigationManager
 
 @if (books == null)
@@ -30,61 +32,125 @@ else
     }
     else
     {
-        <div>
-            <table class="table table-responsive">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Title</th>
-                        <th>Year</th>
-                        <th>Author</th>
-                        <th>Category</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var book in books)
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="mb-5 mt-2">
+                        <p class="sidebar-heading">Sort By</p>
+                        <div class="btn-group w-100">
+                            <button class="btn btn-light btn-sm dropdown-toggle px-3 dropdown-button" type="button" data-toggle="dropdown">
+                                @SortBySelected
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item">
+                                    <NavLink @onclick='async () => await AddSort("titleAsc", "Title")'>
+                                        Title
+                                    </NavLink>
+                                </li>
+                                <li class="dropdown-item">
+                                    <NavLink @onclick='async () => await AddSort("authorAsc", "Author Name")'>
+                                        Author Name
+                                    </NavLink>
+                                </li>
+                                <li class="dropdown-item">
+                                    <NavLink @onclick='async () => await AddSort("yearPublishedDesc", "Published (new to old)")'>
+                                        Published (new to old)
+                                    </NavLink>
+                                </li>
+                                <li class="dropdown-item">
+                                    <NavLink @onclick='async () => await AddSort("yearPublishedAsc", "Published (old to new)")'>
+                                        Published (old to new)
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    @if (categories != null) 
                     {
-                    <tr>
-                        <td>
-                            <img 
-                                src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) && book.CoverImageUrl != "cover.jpg" ? book.CoverImageUrl : "images/BookCover.png")}")" 
-                                style="width:75px; max-height: 125px;" 
-                            />
-                        </td>
-                        <td>@book.Title</td>
-                        <td>@book.YearPublished</td>
-                        <td>@book.Author</td>
-                        <td>@book.Category</td>
-                        <td>
-                            <a href="/books/details/@book.Id" class="btn btn-primary">
-                                <i class="fa fa-pencil-alt"></i>
-                            </a>
-                        </td>
-                    </tr>
+                        <div class="sidebar-heading">
+                            Category
+                        </div>
+                        <div class="w-100">
+                            <ul class="list pt-3">
+                                <li class="list-items">
+                                    <NavLink @onclick="async () => await CategorySearch(0)"><strong>All Categories</strong></NavLink>
+                                </li>
+                            @foreach (var category in categories)
+                            {
+                                <li class="list-items">
+                                    <NavLink @onclick="async () => await CategorySearch(category.Id)">@category.Name</NavLink>
+                                </li>
+                            }
+                            </ul>
+                        </div>
                     }
-                </tbody>
-            </table>
+                </div>
+                <div class="col-md-10 pl-5">
+                    <table class="table table-responsive">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Year</th>
+                                <th>Category</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var book in books)
+                            {
+                            <tr>
+                                <td>
+                                    <a href="/books/details/@book.Id">
+                                        <img 
+                                            src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) && book.CoverImageUrl != "cover.jpg" ? book.CoverImageUrl : "images/BookCover.png")}")" 
+                                            style="width:75px; max-height: 125px;" 
+                                        />
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="/books/details/@book.Id">
+                                        @book.Title
+                                    </a>
+                                </td>
+                                <td>@book.Author</td>
+                                <td>@book.YearPublished</td>
+                                <td>@book.Category</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        <Paging metadata="metadata" Spread="2" SelectedPage="SelectedPage" />
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
-            <Paging metadata="metadata" Spread="2" SelectedPage="SelectedPage" />
-        </div>
+
     }
 }
 
 @code {
     private List<Book> books;
+    private List<Category> categories;
     private string url;
     private PagingMetadata metadata = new PagingMetadata();
     private ItemParameters itemParams = new ItemParameters();
     private string CurrentUrl;
     private bool ClearSearch = false;
+    private string SortBySelected = "Title";
 
     protected override async Task OnInitializedAsync()
     {
         await SelectedPage();
+        await GetCategories();
 
-        // get current url from navigation manager to pass to breadcrumb component
+        // pass current url to breadcrumb component
         CurrentUrl = navigationManager.Uri;
     }
 
@@ -110,6 +176,27 @@ else
 
         books = response.Items;
         metadata = response.Metadata;
+    }
+
+    private async Task GetCategories() 
+    {
+        url = categoryService.GetCategoriesApiEndpoint();
+        categories = await categoryRepository.GetListAsync(url);
+    }
+
+    private async Task CategorySearch(int categoryId = 0) 
+    {
+        itemParams.CategoryId = categoryId;
+
+        await GetData();
+    }
+
+    private async Task AddSort(string SortBy, string SortByName) 
+    {
+        itemParams.SortBy = SortBy;
+        SortBySelected = SortByName;
+
+        await GetData();
     }
 
     private async Task ResetSearch()

@@ -33,9 +33,11 @@ namespace BookwormsUI
 
             services.AddTransient<IAuthorRepository, AuthorRepository>();
             services.AddTransient<IBookRepository, BookRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddSingleton<SettingsService>();
             services.AddSingleton<AuthorService>();
             services.AddSingleton<BookService>();
+            services.AddSingleton<CategoryService>();
             services.AddScoped<RequestService>();
 
             services.AddAuthorizationCore();

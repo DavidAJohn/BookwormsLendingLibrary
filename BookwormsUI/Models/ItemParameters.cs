@@ -18,5 +18,7 @@ namespace BookwormsUI.Models
         }
 
         public string Search { get; set; } = "";
+        public int CategoryId { get; set; } = 0;
+        public string SortBy { get; set; }
     }
 }
