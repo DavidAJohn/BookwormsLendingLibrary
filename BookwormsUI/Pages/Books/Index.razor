@@ -16,76 +16,77 @@ else
     <div>
         <BreadcrumbHeader CurrentUrl=@CurrentUrl />
     </div>
-    <div>
-        <AutoSearch OnSearchChanged="SearchChanged" ClearSearch=@ClearSearch />
-    </div>
-    @if (books.Count() < 1)
-    {
-        <div>
-            <h5>No books found</h5>
-        </div>
-        <div>
-            <Button Color="Color.Info" @onclick="async () => await ResetSearch()">
-                Clear search
-            </Button>
-        </div>
-    }
-    else
-    {
-        <div class="container">
-            <div class="row">
-                <div class="col-md-2">
-                    <div class="mb-5 mt-2">
-                        <p class="sidebar-heading">Sort By</p>
-                        <div class="btn-group w-100">
-                            <button class="btn btn-light btn-sm dropdown-toggle px-3 dropdown-button" type="button" data-toggle="dropdown">
-                                @SortBySelected
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-item">
-                                    <NavLink @onclick='async () => await AddSort("titleAsc", "Title")'>
-                                        Title
-                                    </NavLink>
-                                </li>
-                                <li class="dropdown-item">
-                                    <NavLink @onclick='async () => await AddSort("authorAsc", "Author Name")'>
-                                        Author Name
-                                    </NavLink>
-                                </li>
-                                <li class="dropdown-item">
-                                    <NavLink @onclick='async () => await AddSort("yearPublishedDesc", "Published (new to old)")'>
-                                        Published (new to old)
-                                    </NavLink>
-                                </li>
-                                <li class="dropdown-item">
-                                    <NavLink @onclick='async () => await AddSort("yearPublishedAsc", "Published (old to new)")'>
-                                        Published (old to new)
-                                    </NavLink>
-                                </li>
-                            </ul>
-                        </div>
+    
+    <div class="container pt-3">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="mb-5 mt-2">
+                    <p class="sidebar-heading">Sort By</p>
+                    <div class="btn-group w-100">
+                        <button class="btn btn-light btn-sm dropdown-toggle px-3 dropdown-button" type="button" data-toggle="dropdown">
+                            @SortBySelected
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <NavLink @onclick='async () => await AddSort("titleAsc", "Title")'>
+                                    Title
+                                </NavLink>
+                            </li>
+                            <li class="dropdown-item">
+                                <NavLink @onclick='async () => await AddSort("authorAsc", "Author Name")'>
+                                    Author Name
+                                </NavLink>
+                            </li>
+                            <li class="dropdown-item">
+                                <NavLink @onclick='async () => await AddSort("yearPublishedDesc", "Published (new to old)")'>
+                                    Published (new to old)
+                                </NavLink>
+                            </li>
+                            <li class="dropdown-item">
+                                <NavLink @onclick='async () => await AddSort("yearPublishedAsc", "Published (old to new)")'>
+                                    Published (old to new)
+                                </NavLink>
+                            </li>
+                        </ul>
                     </div>
-                    @if (categories != null) 
-                    {
-                        <div class="sidebar-heading">
-                            Category
-                        </div>
-                        <div class="w-100">
-                            <ul class="list pt-3">
-                                <li class="list-items">
-                                    <NavLink @onclick="async () => await CategorySearch(0)"><strong>All Categories</strong></NavLink>
-                                </li>
-                            @foreach (var category in categories)
-                            {
-                                <li class="list-items">
-                                    <NavLink @onclick="async () => await CategorySearch(category.Id)">@category.Name</NavLink>
-                                </li>
-                            }
-                            </ul>
-                        </div>
-                    }
                 </div>
-                <div class="col-md-10 pl-5">
+                @if (categories != null) 
+                {
+                    <div class="sidebar-heading">
+                        Category
+                    </div>
+                    <div class="w-100">
+                        <ul class="list pt-3">
+                            <li class="list-items">
+                                <NavLink @onclick="async () => await CategorySearch(0)"><strong>All Categories</strong></NavLink>
+                            </li>
+                        @foreach (var category in categories)
+                        {
+                            <li class="list-items">
+                                <NavLink @onclick="async () => await CategorySearch(category.Id)">@category.Name</NavLink>
+                            </li>
+                        }
+                        </ul>
+                    </div>
+                }
+            </div>
+            <div class="col-md-10 pl-5">
+                <div class="py-2">
+                    <AutoSearch OnSearchChanged="SearchChanged" ClearSearch=@ClearSearch />
+                </div>
+                @if (books.Count() < 1)
+                {
+                    <div class="no-results pt-3">
+                        <p>No books found for this search</p>
+                    </div>
+                    <div class="pt-3">
+                        <Button Color="Color.Light" @onclick="async () => await ResetSearch()">
+                            Clear search
+                        </Button>
+                    </div>
+                }
+                else
+                {
                     <table class="table table-responsive">
                         <thead>
                             <tr>
@@ -120,9 +121,12 @@ else
                             }
                         </tbody>
                     </table>
-                </div>
+                }
             </div>
+        </div>
             
+        @if (books.Count() > 1)
+        {
             <div class="row">
                 <div class="col-md-12">
                     <div>
@@ -130,9 +134,9 @@ else
                     </div>
                 </div>
             </div>
-        </div>
+        }
 
-    }
+    </div>
 }
 
 @code {

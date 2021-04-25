@@ -141,3 +141,10 @@ ul.list {
     padding-top: 0.25rem;
     margin-right: 5px;
 }
+
+.no-results {
+font-size: 1rem;
+font-weight: 500;
+font-style: italic;
+padding-left: 0.8rem;
+}
