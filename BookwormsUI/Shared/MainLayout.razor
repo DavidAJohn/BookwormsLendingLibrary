@@ -2,6 +2,7 @@
 @inject NavigationManager navigationManager
 @using BookwormsUI.Extensions
 @using System.Linq
+@inject IJSRuntime JsRuntime;
 
 @using Blazored.Toast.Configuration
 
@@ -125,7 +126,7 @@
         DateTime currentDateTime = DateTime.Now;
         currentYear = currentDateTime.Year.ToString();
     }
-    
+
     protected override void OnParametersSet()
     {
         ShowCarousel();
@@ -163,4 +164,16 @@
         }
     }
 
+}
+
+@functions {     
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)     
+    {         
+        if (firstRender)         
+        {             
+            await JsRuntime.InvokeAsync<object>("initializeCarousel");             
+            firstRender = false;         
+        }     
+    }     
 }

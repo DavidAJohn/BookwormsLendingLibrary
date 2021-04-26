@@ -1,15 +1,15 @@
 ﻿@if (@showCarousel) 
 {
-    <div id="carousel1" class="carousel slide d-none d-md-block" data-ride="carousel">
+    <div id="promo-carousel" class="carousel slide d-none d-md-block" data-ride="carousel">
         <!-- slide location indicators -->
         <ol class="carousel-indicators">
-            <li data-target="#carousel1" data-slide-to='0' class="active" ></li>
-            <li data-target="#carousel1" data-slide-to='1' ></li>
-            <li data-target="#carousel1" data-slide-to='2' ></li>
+            <li data-target="#promo-carousel" data-slide-to='0' class="active" ></li>
+            <li data-target="#promo-carousel" data-slide-to='1' ></li>
+            <li data-target="#promo-carousel" data-slide-to='2' ></li>
         </ol>
         <!-- main carousel images -->
         <div class="carousel-inner">
-            <div class="carousel-item carousel-image-1 active" data-interval="5000">
+            <div class="carousel-item carousel-image-1 active">
                 <img class="d-block" src="images/carousel-image-delillo.png" alt="">
                 <div class="carousel-caption d-none d-md-block text-dark">
                     <NavLink href="/authors/details/5">
@@ -17,7 +17,7 @@
                     </NavLink>
                 </div>
             </div>
-            <div class="carousel-item carousel-image-2" data-interval="5000">
+            <div class="carousel-item carousel-image-2">
                 <img class="d-block" src="images/carousel-image-gibson.png" alt="">
                 <div class="carousel-caption d-none d-md-block text-light">
                     <NavLink href="/authors/details/1">
@@ -25,7 +25,7 @@
                     </NavLink>
                 </div>
             </div>
-            <div class="carousel-item carousel-image-3" data-interval="3000">
+            <div class="carousel-item carousel-image-3">
                 <NavLink href="/books?categoryId=7">
                     <img class="d-block" src="images/carousel-image2.png" alt="">
                     <div class="carousel-caption d-none d-md-block text-dark">
@@ -36,12 +36,12 @@
             </div>
         </div>
         <!-- next/prev controls -->
-        <a href="#carousel1" class="carousel-control-prev" data-slide="prev">
+        @* <a href="#promo-carousel" class="carousel-control-prev" data-slide="prev">
             <span class="carousel-control-prev-icon"></span>
         </a>
-        <a href="#carousel1" class="carousel-control-next" data-slide="next">
+        <a href="#promo-carousel" class="carousel-control-next" data-slide="next">
             <span class="carousel-control-next-icon"></span>
-        </a>
+        </a> *@
     </div>
 }
 
