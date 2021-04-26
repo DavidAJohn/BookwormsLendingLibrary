@@ -16,7 +16,7 @@
 <!-- navbar -->
 <nav class="navbar navbar-expand-sm navbar-light bg-light" id="upper-nav">
     <div class="container">
-        <a class="navbar-brand ml-2" href="#"><i class="fas fa-book-reader mr-3"></i>Bookworms Lending Library</a>
+        <a class="ml-2 navbar-brand" href="#"><i class="mr-3 fas fa-book-reader"></i>Bookworms Lending Library</a>
         <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -27,9 +27,9 @@
 </nav>
 <nav class="navbar navbar-expand-sm navbar-light bg-light" id="lower-nav">
     <div class="container">
-        <div class="collapse navbar-collapse ml-auto d-none d-md-block" id="navbarNav2">
+        <div class="ml-auto collapse navbar-collapse d-none d-md-block" id="navbarNav2">
             <NavMenu />
-            <form class="form-inline ml-auto">
+            <form class="ml-auto form-inline">
                 <ClickSearch />
             </form>
         </div>
@@ -42,7 +42,7 @@
     <PromoCarousel showCarousel=@showPromoCarousel />
 
     <div class="container">
-        <div class="py-5 px-2 body-content">
+        <div class="px-2 py-5 body-content">
             @Body
         </div>
     </div>
@@ -50,10 +50,10 @@
 </main>
 
 <!-- footer -->
-<footer id="footer" class="bg-dark text-white">
+<footer id="footer" class="text-white bg-dark">
     <div class="container p-4">
       <div class="row">
-        <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <div class="mb-4 col-lg-6 col-md-12 mb-md-0">
           <h5 class="mb-4">Bookworms Lending Library</h5>
           <p>
             This website was not actually built for a real library (as you've probably guessed!). 
@@ -61,45 +61,45 @@
             You can view the project's source code on GitHub from the link to the right.
           </p>
         </div>
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0 pl-5">
-          <h5 class="text-uppercase mb-4">Links</h5>
-          <ul class="list-unstyled mb-0">
+        <div class="pl-5 mb-4 col-lg-3 col-md-6 mb-md-0">
+          <h5 class="mb-4 text-uppercase">Links</h5>
+          <ul class="mb-0 list-unstyled">
             <li>
-                <i class="fab fa-github mr-2"></i> 
+                <i class="mr-2 fab fa-github"></i> 
                 <a href="https://github.com/DavidAJohn/BookwormsLendingLibrary" class="text-white">GitHub source</a>
             </li>
             <li>
-                <i class="fab fa-microsoft mr-2"></i> 
+                <i class="mr-2 fab fa-microsoft"></i> 
                 <a href="https://blazor.net" class="text-white">Blazor.net</a>
             </li>
             <li>
-                <i class="fas fa-globe mr-2"></i>
+                <i class="mr-2 fas fa-globe"></i>
                 <a href="/about" class="text-white">About the Site</a>
             </li>
             <li>
-                <i class="fas fa-globe mr-2"></i>
+                <i class="mr-2 fas fa-globe"></i>
                 <a href="/contact" class="text-white">Contact Me</a>
             </li>
           </ul>
         </div>
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <h5 class="text-uppercase mb-4">Social</h5>
+        <div class="mb-4 col-lg-3 col-md-6 mb-md-0">
+          <h5 class="mb-4 text-uppercase">Social</h5>
 
           <ul class="list-unstyled">
             <li>
-                <i class="fab fa-facebook mr-2"></i> 
+                <i class="mr-2 fab fa-facebook"></i> 
                 <a href="https://facebook.com" class="text-white">Facebook</a>
             </li>
             <li>
-                <i class="fab fa-twitter mr-2"></i> 
+                <i class="mr-2 fab fa-twitter"></i> 
                 <a href="https://twitter.com" class="text-white">Twitter</a>
             </li>
             <li>
-                <i class="fab fa-instagram mr-2"></i> 
+                <i class="mr-2 fab fa-instagram"></i> 
                 <a href="https://instagram.com" class="text-white">Instagram</a>
             </li>
             <li>
-                <i class="fab fa-pinterest mr-2"></i> 
+                <i class="mr-2 fab fa-pinterest"></i> 
                 <a href="https://pinterest.com" class="text-white">Pinterest</a>
             </li>
           </ul>
@@ -107,7 +107,7 @@
       </div>
     </div>
 
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    <div class="p-3 text-center" style="background-color: rgba(0, 0, 0, 0.2);">
       &copy; @currentYear Copyright - Bookworms Lending Library
     </div>
   </footer>
