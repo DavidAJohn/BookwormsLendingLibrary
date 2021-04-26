@@ -1,38 +1,38 @@
 ﻿@if (@showCarousel) 
 {
-    <div id="carousel1" class="carousel slide mb-5 d-none d-md-block" data-ride="carousel">
+    <div id="carousel1" class="carousel slide d-none d-md-block" data-ride="carousel">
         <!-- slide location indicators -->
         <ol class="carousel-indicators">
             <li data-target="#carousel1" data-slide-to='0' class="active" ></li>
             <li data-target="#carousel1" data-slide-to='1' ></li>
             <li data-target="#carousel1" data-slide-to='2' ></li>
         </ol>
+        <!-- main carousel images -->
         <div class="carousel-inner">
-            <div class="carousel-item carousel-image-1 active">
-                <img class="d-block" src="images/carousel-image1.png" alt="First Slide">
+            <div class="carousel-item carousel-image-1 active" data-interval="5000">
+                <img class="d-block" src="images/carousel-image-delillo.png" alt="">
                 <div class="carousel-caption d-none d-md-block text-dark">
-                    <h5>First slide label</h5>
-                    <p>Some representative placeholder content for the first slide.</p>
-                </div>
-            </div>
-            <div class="carousel-item carousel-image-2">
-                <NavLink href="/books">
-                    <img class="d-block" src="images/carousel-image2.png" alt="Second Slide">
-                    <div class="carousel-caption d-none d-md-block text-dark">
-                        <h5>Link to the <strong>Books</strong> page</h5>
-                        <p>Clicking anywhere on this slide will take you to the books page</p>
-                    </div>
-                </NavLink>
-            </div>
-            <div class="carousel-item carousel-image-3">
-                <img class="d-block" src="images/carousel-image3.png" alt="Third Slide">
-                <div class="carousel-caption d-none d-md-block text-dark">
-                    <h5>Link to an Author</h5>
-                    <p>Clicking on the button below will take you to details of author no 5</p>
                     <NavLink href="/authors/details/5">
-                        <button class="btn btn-outline-dark my-3">Go to <strong>Author</strong></button>
+                        <button class="my-3 btn btn-outline-dark">View Collection</button>
                     </NavLink>
                 </div>
+            </div>
+            <div class="carousel-item carousel-image-2" data-interval="5000">
+                <img class="d-block" src="images/carousel-image-gibson.png" alt="">
+                <div class="carousel-caption d-none d-md-block text-light">
+                    <NavLink href="/authors/details/1">
+                        <button class="my-3 btn btn-outline-light">View Collection</button>
+                    </NavLink>
+                </div>
+            </div>
+            <div class="carousel-item carousel-image-3" data-interval="3000">
+                <NavLink href="/books?categoryId=7">
+                    <img class="d-block" src="images/carousel-image2.png" alt="">
+                    <div class="carousel-caption d-none d-md-block text-dark">
+                        <h5>Link to the <strong>Horror</strong> category</h5>
+                        <p>Clicking anywhere on this slide will take you to the <strong>Horror</strong> category on the books page</p>
+                    </div>
+                </NavLink>
             </div>
         </div>
         <!-- next/prev controls -->
