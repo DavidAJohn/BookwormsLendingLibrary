@@ -6,6 +6,7 @@
 @inject ICategoryRepository categoryRepository
 @inject CategoryService categoryService
 @inject NavigationManager navigationManager
+@using BookwormsUI.Extensions
 
 @if (books == null)
 {
@@ -14,16 +15,16 @@
 else
 {
     <div>
-        <BreadcrumbHeader CurrentUrl=@CurrentUrl />
+        <BreadcrumbHeader CurrentUrl=@CurrentUrl BreadcrumbElements=@BreadcrumbElements />
     </div>
     
     <div class="container pt-3">
         <div class="row">
             <div class="col-md-2">
-                <div class="mb-5 mt-2">
+                <div class="mt-2 mb-5">
                     <p class="sidebar-heading">Sort By</p>
                     <div class="btn-group w-100">
-                        <button class="btn btn-light btn-sm dropdown-toggle px-3 dropdown-button" type="button" data-toggle="dropdown">
+                        <button class="px-3 btn btn-light btn-sm dropdown-toggle dropdown-button" type="button" data-toggle="dropdown">
                             @SortBySelected
                         </button>
                         <ul class="dropdown-menu">
@@ -56,7 +57,7 @@ else
                         Category
                     </div>
                     <div class="w-100">
-                        <ul class="list pt-3">
+                        <ul class="pt-3 list">
                             <li class="list-items">
                                 <NavLink @onclick="async () => await CategorySearch(0)"><strong>All Categories</strong></NavLink>
                             </li>
@@ -70,13 +71,13 @@ else
                     </div>
                 }
             </div>
-            <div class="col-md-10 pl-5">
+            <div class="pl-5 col-md-10">
                 <div class="py-2">
                     <AutoSearch OnSearchChanged="SearchChanged" ClearSearch=@ClearSearch />
                 </div>
                 @if (books.Count() < 1)
                 {
-                    <div class="no-results pt-3">
+                    <div class="pt-3 no-results">
                         <p>No books found for this search</p>
                     </div>
                     <div class="pt-3">
@@ -146,11 +147,15 @@ else
     private PagingMetadata metadata = new PagingMetadata();
     private ItemParameters itemParams = new ItemParameters();
     private string CurrentUrl;
+    private List<string> BreadcrumbElements = new List<string>();
     private bool ClearSearch = false;
     private string SortBySelected = "Title";
 
     protected override async Task OnInitializedAsync()
     {
+        // check for any parameters in the querystring
+        CheckForQuerystring();
+
         await SelectedPage();
         await GetCategories();
 
@@ -207,5 +212,27 @@ else
     {
         ClearSearch = true;
         await SearchChanged();
+    }
+
+    public void CheckForQuerystring()
+    {
+        var queryStringParams = navigationManager.GetQueryStringCollection();
+
+        // categoryId (expects int)
+        if (queryStringParams["categoryId"] != null)
+        {
+            int number;
+            bool convertible = Int32.TryParse(queryStringParams["categoryId"], out number);
+
+            if (convertible)
+            {
+                itemParams.CategoryId = Convert.ToInt32(queryStringParams["categoryId"]);
+            }
+
+            // provide the BreadcrumbHeader component with specific elements to display,
+            // because the URL will now have a querystring appended
+            string[] elements = {"Books", "Category"};
+            BreadcrumbElements.AddRange(elements);
+        }
     }
 }
