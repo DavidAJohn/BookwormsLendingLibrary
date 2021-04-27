@@ -1,7 +1,101 @@
 @page "/"
 
-<h3>Welcome!</h3>
+@inject NavigationManager navigationManager
 
-The Bookworms Lending Library will be launching soon...
+<div class="container mb-5">
+    <div class="mb-3 row heading-row">
+        <h3>Latest Additions:</h3>
+        <button class="btn btn-outline-dark">See More</button>
+    </div>
+    <div class="mb-4 row">
+        <div class="col-md-3">
+          <div class="text-center text-dark card bg-light">
+            <div class="card-body shadow-sm">
+              <img src="images/BookCover.png" class="book-cover">
+              <div class="mt-2 book-title">Book Title</div>
+              <div class="mt-2 book-author">A Longer Author Name</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="text-center text-dark card bg-light">
+            <div class="card-body shadow-sm">
+              <img src="images/BookCover.png" class="book-cover">
+              <div class="mt-2 book-title">A Longer Book Title</div>
+              <div class="mt-2 book-author">Author Name</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="text-center text-dark card bg-light">
+            <div class="card-body shadow-sm">
+              <img src="images/BookCover.png" class="book-cover">
+              <div class="mt-2 book-title">A Really Rather Convoluted Book Title</div>
+              <div class="mt-2 book-author">Author Name</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="text-center text-dark card bg-light">
+            <div class="card-body shadow-sm">
+              <img src="images/BookCover.png" class="book-cover">
+              <div class="mt-2 book-title">Book Title</div>
+              <div class="mt-2 book-author">Author Name</div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
 
+<div class="container mb-5">
+    <div class="mb-3 row heading-row">
+        <h3>Popular in Science Fiction:</h3>
+        <button class="btn btn-outline-dark" type="button" @onclick="SeeMore">See More</button>
+    </div>
+    <div class="mb-4 row">
+        <div class="col-md-3">
+          <div class="text-center text-dark card bg-light">
+            <div class="card-body">
+              <img src="images/BookCover.png" class="book-cover">
+              <div class="mt-2 book-title">Book Title</div>
+              <div class="mt-2 book-author">Author Name</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="text-center text-dark card bg-light">
+            <div class="card-body">
+              <img src="images/BookCover.png" class="book-cover">
+              <div class="mt-2 book-title">A Longer Book Title</div>
+              <div class="mt-2 book-author">Author Name</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="text-center text-dark card bg-light">
+            <div class="card-body">
+              <img src="images/BookCover.png" class="book-cover">
+              <div class="mt-2 book-title">A Really Rather Convoluted Book Title That Would Extend to a Third Row</div>
+              <div class="mt-2 book-author">Author Name</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="text-center text-dark card bg-light">
+            <div class="card-body">
+              <img src="images/BookCover.png" class="book-cover">
+              <div class="mt-2 book-title">Book Title</div>
+              <div class="mt-2 book-author">A Stupidly Long Name That Would Extend to a Second Row</div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
 
+@code {
+
+  private void SeeMore()
+  {
+    navigationManager.NavigateTo("/books?categoryId=3");
+  }
+}
