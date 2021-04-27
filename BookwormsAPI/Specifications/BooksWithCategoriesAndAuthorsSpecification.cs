@@ -39,6 +39,9 @@ namespace BookwormsAPI.Specifications
                     case "yearPublishedDesc":
                         ApplyOrderByDescending(b => b.YearPublished);
                         break;
+                    case "recentlyAddedDesc":
+                        ApplyOrderByDescending(b => b.Id);
+                        break;
                     default:
                         ApplyOrderBy(b => b.Title);
                         break;
