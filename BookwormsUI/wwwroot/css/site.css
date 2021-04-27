@@ -191,6 +191,7 @@ img.book-cover {
     height: 2rem;
     background-color:rgba(255, 255, 255, 0.7);
     color: rgba(0, 0, 0, 0.5);
+    border: rgba(0, 0, 0, 0.3) solid 1px;
 }
 
 .book-button-layout {

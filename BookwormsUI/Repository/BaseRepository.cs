@@ -53,6 +53,12 @@ namespace BookwormsUI.Repository
                     ["pageIndex"] = itemParams.PageIndex < 1  ? "1" : itemParams.PageIndex.ToString(),
                 };
 
+                // conditionally add a page size param (number of items to return)
+                if (itemParams.PageSize != 0)
+                {
+                    queryStringParams.Add("pageSize", itemParams.PageSize.ToString());
+                };
+
                 // conditionally add a search term
                 if (!String.IsNullOrEmpty(itemParams.Search))
                 {

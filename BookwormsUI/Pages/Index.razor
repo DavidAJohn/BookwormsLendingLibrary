@@ -2,129 +2,16 @@
 
 @inject NavigationManager navigationManager
 
-<div class="container mb-5">
-    <div class="mb-3 row heading-row">
-        <h3>Latest Additions:</h3>
-        <button class="btn btn-outline-dark">See More</button>
-    </div>
-    <div class="mb-4 row">
-        <div class="col-md-3">
-          <div class="text-center text-dark card bg-light">
-            <div class="card-body shadow-sm image">
-              <img src="images/BookCover.png" class="book-cover">
-              <div class="book-button-layout hover-overlay">
-                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
-              </div>
-              <div class="mt-2 book-title">Book Title</div>
-              <div class="mt-2 book-author">A Longer Author Name</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="text-center text-dark card bg-light">
-            <div class="card-body shadow-sm image">
-              <img src="images/BookCover.png" class="book-cover">
-              <div class="book-button-layout hover-overlay">
-                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
-              </div>
-              <div class="mt-2 book-title">A Longer Book Title</div>
-              <div class="mt-2 book-author">Author Name</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="text-center text-dark card bg-light">
-            <div class="card-body shadow-sm image">
-              <img src="images/BookCover.png" class="book-cover">
-              <div class="book-button-layout hover-overlay">
-                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
-              </div>
-              <div class="mt-2 book-title">A Really Rather Convoluted Book Title</div>
-              <div class="mt-2 book-author">Author Name</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="text-center text-dark card bg-light">
-            <div class="card-body shadow-sm image">
-              <img src="images/BookCover.png" class="book-cover">
-              <div class="book-button-layout hover-overlay">
-                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
-              </div>
-              <div class="mt-2 book-title">Book Title</div>
-              <div class="mt-2 book-author">Author Name</div>
-            </div>
-          </div>
-        </div>
-    </div>
-</div>
+<BookShelf
+  ShelfTitle="Latest Additions"
+  DataSortBy="titleDesc"
+/>
 
-<div class="container mb-5">
-    <div class="mb-3 row heading-row">
-        <h3>Popular in Science Fiction:</h3>
-        <button class="btn btn-outline-dark" @onclick="() => SeeMoreInCategory(3)">See More</button>
-    </div>
-    <div class="mb-4 row">
-        <div class="col-md-3">
-          <div class="text-center text-dark card bg-light">
-            <div class="card-body shadow-sm image">
-              <img src="images/BookCover.png" class="book-cover">
-              <div class="book-button-layout hover-overlay">
-                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
-              </div>
-              <div class="mt-2 book-title">Book Title</div>
-              <div class="mt-2 book-author">A Longer Author Name</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="text-center text-dark card bg-light">
-            <div class="card-body shadow-sm image">
-              <img src="images/BookCover.png" class="book-cover">
-              <div class="book-button-layout hover-overlay">
-                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
-              </div>
-              <div class="mt-2 book-title">A Longer Book Title</div>
-              <div class="mt-2 book-author">Author Name</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="text-center text-dark card bg-light">
-            <div class="card-body shadow-sm image">
-              <img src="images/BookCover.png" class="book-cover">
-              <div class="book-button-layout hover-overlay">
-                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
-              </div>
-              <div class="mt-2 book-title">A Really Rather Convoluted Book Title That Would Extend to a Third Row</div>
-              <div class="mt-2 book-author">Author Name</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="text-center text-dark card bg-light">
-            <div class="card-body shadow-sm image">
-              <img src="images/BookCover.png" class="book-cover">
-              <div class="book-button-layout hover-overlay">
-                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
-              </div>
-              <div class="mt-2 book-title">Book Title</div>
-              <div class="mt-2 book-author">A Stupidly Long Name That Would Extend to a Second Row</div>
-            </div>
-          </div>
-        </div>
-    </div>
-</div>
-
-@code {
-
-  private void SeeMoreInCategory(int categoryId)
-  {
-    navigationManager.NavigateTo($"/books?categoryId={categoryId}");
-  }
-
-  private void ViewBook(int bookId)
-  {
-    navigationManager.NavigateTo($"/books/details/{bookId}");
-  }
-}
+<BookShelf
+  ShelfTitle="Popular in Science Fiction"
+  SeeMoreMethod="Category"
+  SeeMoreValue="3"
+  DataMethod="Category"
+  DataId=3
+  DataSortBy="titleAsc"
+/>

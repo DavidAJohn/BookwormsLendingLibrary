@@ -1,0 +1,64 @@
+﻿@inject NavigationManager navigationManager
+@inject IBookRepository bookRepository
+@inject BookService bookService
+
+<div class="container mb-5">
+    <div class="mb-3 row heading-row">
+        <h3>@ShelfTitle:</h3>
+        @if (@SeeMoreMethod != "" && @SeeMoreValue != "")
+        {
+            <button class="btn btn-outline-dark" @onclick='(() => SeeMore(SeeMoreMethod, SeeMoreValue))'>See More</button>
+        }
+    </div>
+    <div class="mb-4 row">
+        @foreach (var book in books)
+        {
+            <BookShelfItem book=book />
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string ShelfTitle { get; set; } = "";
+    [Parameter]
+    public string SeeMoreMethod { get; set; } = "";
+    [Parameter]
+    public string SeeMoreValue { get; set; } = "";
+    [Parameter]
+    public string DataMethod { get; set; } = "";
+    [Parameter]
+    public int DataItems { get; set; } = 4;
+    [Parameter]
+    public string DataSortBy { get; set; } = "titleAsc";
+    [Parameter]
+    public int DataId { get; set; } = 0;
+    private List<Book> books = new List<Book>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ItemParameters bookParams = new ItemParameters();
+
+        bookParams.PageIndex = 1;
+        bookParams.PageSize = DataItems;
+        bookParams.SortBy = DataSortBy;
+
+        if (DataMethod == "Category")
+        {
+            bookParams.CategoryId = DataId != 0 ? DataId : 0;
+        }
+
+        var url = bookService.GetBooksApiEndpoint();
+        var response = await bookRepository.GetAsync(url, bookParams);
+
+        books = response.Items;
+    }
+
+    private void SeeMore(string methodName, string methodValue)
+    {
+        if (methodName == "Category")
+        {
+            navigationManager.NavigateTo($"/books?categoryId={methodValue}");
+        }
+    }
+}
