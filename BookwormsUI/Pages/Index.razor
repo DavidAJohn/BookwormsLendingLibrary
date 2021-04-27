@@ -10,8 +10,11 @@
     <div class="mb-4 row">
         <div class="col-md-3">
           <div class="text-center text-dark card bg-light">
-            <div class="card-body shadow-sm">
+            <div class="card-body shadow-sm image">
               <img src="images/BookCover.png" class="book-cover">
+              <div class="book-button-layout hover-overlay">
+                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
+              </div>
               <div class="mt-2 book-title">Book Title</div>
               <div class="mt-2 book-author">A Longer Author Name</div>
             </div>
@@ -19,8 +22,11 @@
         </div>
         <div class="col-md-3">
           <div class="text-center text-dark card bg-light">
-            <div class="card-body shadow-sm">
+            <div class="card-body shadow-sm image">
               <img src="images/BookCover.png" class="book-cover">
+              <div class="book-button-layout hover-overlay">
+                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
+              </div>
               <div class="mt-2 book-title">A Longer Book Title</div>
               <div class="mt-2 book-author">Author Name</div>
             </div>
@@ -28,8 +34,11 @@
         </div>
         <div class="col-md-3">
           <div class="text-center text-dark card bg-light">
-            <div class="card-body shadow-sm">
+            <div class="card-body shadow-sm image">
               <img src="images/BookCover.png" class="book-cover">
+              <div class="book-button-layout hover-overlay">
+                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
+              </div>
               <div class="mt-2 book-title">A Really Rather Convoluted Book Title</div>
               <div class="mt-2 book-author">Author Name</div>
             </div>
@@ -37,8 +46,11 @@
         </div>
         <div class="col-md-3">
           <div class="text-center text-dark card bg-light">
-            <div class="card-body shadow-sm">
+            <div class="card-body shadow-sm image">
               <img src="images/BookCover.png" class="book-cover">
+              <div class="book-button-layout hover-overlay">
+                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
+              </div>
               <div class="mt-2 book-title">Book Title</div>
               <div class="mt-2 book-author">Author Name</div>
             </div>
@@ -50,22 +62,28 @@
 <div class="container mb-5">
     <div class="mb-3 row heading-row">
         <h3>Popular in Science Fiction:</h3>
-        <button class="btn btn-outline-dark" type="button" @onclick="SeeMore">See More</button>
+        <button class="btn btn-outline-dark" @onclick="() => SeeMoreInCategory(3)">See More</button>
     </div>
     <div class="mb-4 row">
         <div class="col-md-3">
           <div class="text-center text-dark card bg-light">
-            <div class="card-body">
+            <div class="card-body shadow-sm image">
               <img src="images/BookCover.png" class="book-cover">
+              <div class="book-button-layout hover-overlay">
+                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
+              </div>
               <div class="mt-2 book-title">Book Title</div>
-              <div class="mt-2 book-author">Author Name</div>
+              <div class="mt-2 book-author">A Longer Author Name</div>
             </div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="text-center text-dark card bg-light">
-            <div class="card-body">
+            <div class="card-body shadow-sm image">
               <img src="images/BookCover.png" class="book-cover">
+              <div class="book-button-layout hover-overlay">
+                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
+              </div>
               <div class="mt-2 book-title">A Longer Book Title</div>
               <div class="mt-2 book-author">Author Name</div>
             </div>
@@ -73,8 +91,11 @@
         </div>
         <div class="col-md-3">
           <div class="text-center text-dark card bg-light">
-            <div class="card-body">
+            <div class="card-body shadow-sm image">
               <img src="images/BookCover.png" class="book-cover">
+              <div class="book-button-layout hover-overlay">
+                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
+              </div>
               <div class="mt-2 book-title">A Really Rather Convoluted Book Title That Would Extend to a Third Row</div>
               <div class="mt-2 book-author">Author Name</div>
             </div>
@@ -82,8 +103,11 @@
         </div>
         <div class="col-md-3">
           <div class="text-center text-dark card bg-light">
-            <div class="card-body">
+            <div class="card-body shadow-sm image">
               <img src="images/BookCover.png" class="book-cover">
+              <div class="book-button-layout hover-overlay">
+                  <button type="button" class="btn btn-sm book-button shadow" @onclick="() => ViewBook(18)">View</button>
+              </div>
               <div class="mt-2 book-title">Book Title</div>
               <div class="mt-2 book-author">A Stupidly Long Name That Would Extend to a Second Row</div>
             </div>
@@ -94,8 +118,13 @@
 
 @code {
 
-  private void SeeMore()
+  private void SeeMoreInCategory(int categoryId)
   {
-    navigationManager.NavigateTo("/books?categoryId=3");
+    navigationManager.NavigateTo($"/books?categoryId={categoryId}");
+  }
+
+  private void ViewBook(int bookId)
+  {
+    navigationManager.NavigateTo($"/books/details/{bookId}");
   }
 }
