@@ -48,6 +48,11 @@ else
                                     Published (old to new)
                                 </NavLink>
                             </li>
+                            <li class="dropdown-item">
+                                <NavLink @onclick='async () => await AddSort("recentlyAddedDesc", "Recently Added")'>
+                                    Recently Added
+                                </NavLink>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -233,6 +238,30 @@ else
             // because the URL will now have a querystring appended
             string[] elements = {"Books", "Category"};
             BreadcrumbElements.AddRange(elements);
+        }
+
+        // sortBy (expects string)
+        if (queryStringParams["sortBy"] != "")
+        {
+            string sortByOption = queryStringParams["sortBy"];
+            itemParams.SortBy = sortByOption;
+
+            // show correct option on the 'sort by' dropdown
+            var sortByName = sortByOption switch
+            {  
+                "titleAsc" => "Title",
+                "authorAsc" => "Author Name",
+                "yearPublishedDesc" => "Published (new to old)",
+                "yearPublishedAsc" => "Published (old to new)",
+                "recentlyAddedDesc" => "Recently Added",
+                _ => "Title"
+            };
+
+            SortBySelected = sortByName;
+            
+            // provide the BreadcrumbHeader component with specific elements to display,
+            // because the URL will now have a querystring appended
+            BreadcrumbElements.Add("Books");
         }
     }
 }

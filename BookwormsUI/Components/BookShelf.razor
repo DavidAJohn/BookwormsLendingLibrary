@@ -5,7 +5,7 @@
 <div class="container mb-5">
     <div class="mb-3 row heading-row">
         <h3>@ShelfTitle:</h3>
-        @if (@SeeMoreMethod != "" && @SeeMoreValue != "")
+        @if (@ShowSeeMoreButton == true)
         {
             <button class="btn btn-outline-dark" @onclick='(() => SeeMore(SeeMoreMethod, SeeMoreValue))'>See More</button>
         }
@@ -34,6 +34,7 @@
     [Parameter]
     public int DataId { get; set; } = 0;
     private List<Book> books = new List<Book>();
+    private bool ShowSeeMoreButton = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -52,13 +53,29 @@
         var response = await bookRepository.GetAsync(url, bookParams);
 
         books = response.Items;
+
+        // should the See More button be shown?
+        if (SeeMoreMethod != "" && SeeMoreValue != "")
+        {
+            ShowSeeMoreButton = true;
+        }
     }
 
     private void SeeMore(string methodName, string methodValue)
     {
-        if (methodName == "Category")
+        var paramName = methodName switch 
         {
-            navigationManager.NavigateTo($"/books?categoryId={methodValue}");
+            "Category" => "categoryId",
+            "Sort" => "sortBy",
+            _ => null
+        };
+
+        if (paramName != null)
+        {
+            navigationManager.NavigateTo($"/books?{paramName}={methodValue}");
+        }
+        else {
+            ShowSeeMoreButton = false;
         }
     }
 }
