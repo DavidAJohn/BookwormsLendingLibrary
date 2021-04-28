@@ -20,34 +20,24 @@
             <div class="carousel-item carousel-image-2">
                 <img class="d-block" src="images/carousel-image-gibson.png" alt="">
                 <div class="carousel-caption d-none d-md-block text-light">
-                    <NavLink href="/authors/details/1">
+                    <NavLink href="/authors/details/13">
                         <button class="my-3 btn btn-outline-light">View Collection</button>
                     </NavLink>
                 </div>
             </div>
             <div class="carousel-item carousel-image-3">
                 <NavLink href="/books?categoryId=7">
-                    <img class="d-block" src="images/carousel-image2.png" alt="">
-                    <div class="carousel-caption d-none d-md-block text-dark">
-                        <h5>Link to the <strong>Horror</strong> category</h5>
-                        <p>Clicking anywhere on this slide will take you to the <strong>Horror</strong> category on the books page</p>
+                    <img class="d-block" src="images/carousel-image-horror.png" alt="">
+                    <div class="carousel-caption d-none d-md-block text-light">
+                        <button class="my-3 btn btn-outline-light">Click here if you dare!</button>
                     </div>
                 </NavLink>
             </div>
         </div>
-        <!-- next/prev controls -->
-        @* <a href="#promo-carousel" class="carousel-control-prev" data-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </a>
-        <a href="#promo-carousel" class="carousel-control-next" data-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </a> *@
     </div>
 }
 
 @code {
-
     [Parameter]
     public bool showCarousel { get; set; }
-
 }
