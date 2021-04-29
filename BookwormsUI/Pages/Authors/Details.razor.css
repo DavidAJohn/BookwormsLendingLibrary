@@ -1,0 +1,40 @@
+.author-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.author-name {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    margin-top: -0.5rem;
+}
+
+.author-biography {
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+h4 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem; 
+}
+
+ul.book-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+li.book-list-item {
+    margin-bottom: 1.5rem;
+}
+
+img.book-thumbnail {
+    width: 65px;
+    max-height: 100px;
+    margin-right: 1rem;
+}
