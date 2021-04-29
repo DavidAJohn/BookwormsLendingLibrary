@@ -27,7 +27,7 @@ else
         <div class="mt-4 row">
             <div class="col-3">
                 <img 
-                    src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) && book.CoverImageUrl != "cover.jpg" ? book.CoverImageUrl : "images/BookCover.png")}")"  
+                    src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? book.CoverImageUrl : "images/book_cover.png")}")"  
                     style="width: 250px;max-height: 375px;"
                 />
             </div>

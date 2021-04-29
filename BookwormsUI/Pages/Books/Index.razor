@@ -110,7 +110,7 @@ else
                                 <td>
                                     <a href="/books/details/@book.Id">
                                         <img 
-                                            src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) && book.CoverImageUrl != "cover.jpg" ? book.CoverImageUrl : "images/BookCover.png")}")" 
+                                            src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? book.CoverImageUrl : "images/book_cover.png")}")" 
                                             style="width:75px; max-height: 125px;" 
                                         />
                                     </a>
