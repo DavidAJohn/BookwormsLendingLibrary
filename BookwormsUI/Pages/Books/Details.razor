@@ -24,11 +24,11 @@ else
     }
     
     <div class="container">
-        <div class="row">
+        <div class="mt-4 row">
             <div class="col-3">
                 <img 
                     src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) && book.CoverImageUrl != "cover.jpg" ? book.CoverImageUrl : "images/BookCover.png")}")"  
-                    style="width: 200px;max-height: 300px;"
+                    style="width: 250px;max-height: 375px;"
                 />
             </div>
             <div class="col-9">
@@ -36,10 +36,6 @@ else
                     <tr>
                         <td>Title:</td>
                         <td>@book.Title</td>
-                    </tr>
-                    <tr>
-                        <td>Published:</td>
-                        <td>@book.YearPublished</td>
                     </tr>
                     <tr>
                         <td>Author:</td>
@@ -53,6 +49,14 @@ else
                                 <a href="/authors/details/@book.AuthorId">@book.Author</a>
                             }
                         </td>
+                    </tr>
+                    <tr>
+                        <td>Published:</td>
+                        <td>@book.YearPublished</td>
+                    </tr>
+                    <tr>
+                        <td>Category:</td>
+                        <td>@book.Category</td>
                     </tr>
                     <tr>
                         <td>Summary:</td>
@@ -70,7 +74,7 @@ else
                         else
                         {
                             <td colspan="2">
-                                <strong>You must be logged in to request this book. Log in <a href="/login">here</a>, or register <a href="/register">here</a>.</strong>
+                                <strong>You must be logged in to request this book. Log in <a href="/login"><u>here</u></a>, or register <a href="/register"><u>here</u></a>.</strong>
                             </td>
                         }
                     </tr>
@@ -93,13 +97,14 @@ else
                 <br />
             </div>
         </div>
+
+        <div class="mt-4">
+            <button class="btn btn-info" @onclick="BackToBooks">
+                Back to List of Books
+            </button>
+        </div>
     </div>
 
-    <div>
-        <button class="btn btn-info" @onclick="BackToBooks">
-            Back to List of Books
-        </button>
-    </div>
 }
 
 @code {
