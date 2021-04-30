@@ -14,54 +14,111 @@ else
     <div>
         <BreadcrumbHeader CurrentUrl=@CurrentUrl />
     </div>
-    <div>
-        <AutoSearch OnSearchChanged="SearchChanged" ClearSearch=@ClearSearch />
-    </div>
 
-    @if (authors.Count() < 1)
-    {
-        <div>
-            <h5>No authors found</h5>
-        </div>
-        <div>
-            <Button Color="Color.Info" @onclick="async () => await ResetSearch()">
-                Clear search
-            </Button>
-        </div>
-    }
-    else
-    {
-        <div>
-            <table class="table table-responsive">
-                <thead>
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var author in authors)
-                    {
-                        <tr>
-                            <td>@author.FirstName</td>
-                            <td>@author.LastName</td>
-                            <td>
-                                <a class="btn btn-primary" href="/authors/details/@author.Id" >
-                                    <i class="fa fa-pencil-alt"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+    <div class="container pt-3">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="mt-2 mb-5">
+                    <p class="sidebar-heading">Sort By</p>
+                    <div class="btn-group w-100">
+                        <button class="px-3 btn btn-light btn-sm dropdown-toggle dropdown-button" type="button" data-toggle="dropdown">
+                            @SortBySelected
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item">
+                                <NavLink @onclick='async () => await AddSort("nameAsc", "Surname (A-Z)")'>
+                                    Author Surname (A-Z)
+                                </NavLink>
+                            </li>
+                            <li class="dropdown-item">
+                                <NavLink @onclick='async () => await AddSort("nameDesc", "Surname (Z-A)")'>
+                                    Author Surname (Z-A)
+                                </NavLink>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="pl-5 col-md-10">
+                <div class="py-2">
+                    <AutoSearch OnSearchChanged="SearchChanged" ClearSearch=@ClearSearch />
+                </div>
+                @if (authors.Count() < 1)
+                {
+                    <div class="pt-3 no-results">
+                        <p>No authors found</p>
+                    </div>
+                    <div class="pt-3">
+                        <Button Color="Color.Light" @onclick="async () => await ResetSearch()">
+                            Clear search
+                        </Button>
+                    </div>
+                }
+                else
+                {
+                    <table class="table table-responsive">
+                        <tbody >
+                            @foreach (var author in authors)
+                            {
+                            <tr>
+                                <td>
+                                    <NavLink href="@($"/authors/details/{author.Id}")">
+                                        <img 
+                                            src="@($"{(!String.IsNullOrEmpty(author.AuthorImageUrl) ? author.AuthorImageUrl : "images/author_image.png")}")" 
+                                            class="author-image"
+                                        />
+                                    </NavLink>
+                                </td>
+                                <td>
+                                    <div class="author-name">
+                                        <NavLink href="@($"/authors/details/{author.Id}")">
+                                            @author.FirstName @author.LastName
+                                        </NavLink>
+                                    </div>
+                                    <div class="mt-4 author-biography">
+                                        @if (author.Biography.Length > 250)
+                                        {  
+                                            var biogLength = author.Biography.Length;
+                                            var biog = author.Biography.Substring(0, 248) + "...";
+                                            @biog
+                                        } else {
+                                            @author.Biography
+                                        }
+                                    </div>
+                                    <div class="mt-4">
+                                        <NavLink href="@($"/authors/details/{author.Id}")">
+                                            @if (author.Books.Count != 1) 
+                                            {
+                                                <span><strong>@author.Books.Count</strong> books available</span>
+                                            } 
+                                            else {
+                                                <span><strong>@author.Books.Count</strong> book available</span>
+                                            }
+                                        </NavLink>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
         </div>
         
-        <div>
-            <Paging metadata="metadata" Spread="2" SelectedPage="SelectedPage" />
-        </div>
-    }
+        @if (authors.Count() > 1)
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        <Paging metadata="metadata" Spread="2" SelectedPage="SelectedPage" />
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
 }
+
 
 @code {
     private List<Author> authors;
@@ -70,6 +127,7 @@ else
     private ItemParameters itemParams = new ItemParameters();
     private string CurrentUrl;
     private bool ClearSearch = false;
+    private string SortBySelected = "Surname (A-Z)";
 
     protected override async Task OnInitializedAsync()
     {
@@ -101,6 +159,14 @@ else
 
         authors = response.Items;
         metadata = response.Metadata;
+    }
+
+    private async Task AddSort(string SortBy, string SortByName) 
+    {
+        itemParams.SortBy = SortBy;
+        SortBySelected = SortByName;
+
+        await GetData();
     }
 
     private async Task ResetSearch()

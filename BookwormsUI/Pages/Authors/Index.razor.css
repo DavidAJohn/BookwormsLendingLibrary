@@ -1,0 +1,16 @@
+.author-image {
+    width:200px; 
+    max-height: 275px;
+}
+
+.author-name {
+    font-size: 1.25rem; 
+    font-weight: 700;
+}
+
+.author-biography {
+    height: 4rem; 
+    font-size:0.9rem;
+    text-align: justify;
+    text-justify: inter-word;
+}
