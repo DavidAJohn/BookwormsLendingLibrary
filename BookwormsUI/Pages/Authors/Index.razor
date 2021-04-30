@@ -41,7 +41,11 @@ else
             </div>
             <div class="pl-5 col-md-10">
                 <div class="py-2">
-                    <AutoSearch OnSearchChanged="SearchChanged" ClearSearch=@ClearSearch />
+                    <AutoSearch 
+                        OnSearchChanged="SearchChanged" 
+                        ClearSearch=@ClearSearch 
+                        Placeholder="Search author name"
+                    />
                 </div>
                 @if (authors.Count() < 1)
                 {

@@ -78,7 +78,11 @@ else
             </div>
             <div class="pl-5 col-md-10">
                 <div class="py-2">
-                    <AutoSearch OnSearchChanged="SearchChanged" ClearSearch=@ClearSearch />
+                    <AutoSearch 
+                        OnSearchChanged="SearchChanged" 
+                        ClearSearch=@ClearSearch 
+                        Placeholder="Search book title"
+                    />
                 </div>
                 @if (books.Count() < 1)
                 {

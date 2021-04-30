@@ -1,5 +1,5 @@
 ﻿<section style="margin-bottom: 10px">
-    <input type="text" class="form-control" placeholder="Search" 
+    <input type="text" class="form-control" placeholder="@Placeholder"
         @bind-value="@SearchTerm" 
         @bind-value:event="oninput" 
         @onkeyup="SearchChanged" />
@@ -13,6 +13,9 @@
 
     [Parameter]
     public bool ClearSearch { get; set; }
+
+    [Parameter]
+    public string Placeholder { get; set; } = "Search";
 
     protected override void OnParametersSet()
     {
