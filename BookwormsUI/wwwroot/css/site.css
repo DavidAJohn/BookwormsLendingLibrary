@@ -66,8 +66,9 @@ a:hover, .btn-link:hover {
     border-bottom:rgba(0, 0, 0, 0.1) solid 1px;
 }
 
-.no-padding {
-    padding: 0;
+.no-lr-padding {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 /* Blazored.Modal */
@@ -142,7 +143,7 @@ ul.list {
     font-weight: 500;
     font-style: italic;
     padding-top: 0.25rem;
-    margin-right: 12px;
+    margin-right: 1rem;
 }
 
 .no-results {

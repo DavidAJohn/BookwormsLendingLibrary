@@ -16,7 +16,7 @@
 
 <!-- navbar -->
 <nav class="navbar navbar-expand-sm navbar-light bg-light" id="upper-nav">
-    <div class="container">
+    <div class="container no-lr-padding">
         <a class="ml-2 navbar-brand" href="#"><i class="mr-3 fas fa-book-reader"></i>Bookworms Lending Library</a>
         <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -27,10 +27,10 @@
     </div>
 </nav>
 <nav class="navbar navbar-expand-sm navbar-light bg-light" id="lower-nav">
-    <div class="container">
+    <div class="container no-lr-padding">
         <div class="ml-auto collapse navbar-collapse d-none d-md-block" id="navbarNav2">
             <NavMenu />
-            <form class="ml-auto form-inline">
+            <form class="ml-auto mr-1 form-inline">
                 <ClickSearch />
             </form>
         </div>
@@ -42,7 +42,7 @@
 
     <PromoCarousel showCarousel=@showPromoCarousel />
 
-    <div class="container">
+    <div class="container no-lr-padding">
         <div class="py-5 body-content">
             @Body
         </div>
