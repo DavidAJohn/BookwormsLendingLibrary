@@ -1,0 +1,34 @@
+.book-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    border-bottom: rgba(0,0,0,0.1) solid 1px;
+    margin: 1rem 0 2rem 0;
+    padding: 0.5rem 0 2rem 0;
+}
+
+.book-image {
+    width: 100px; 
+    max-height: 150px;
+    margin-right: 2rem;
+}
+
+.book-title {
+    font-size: 1.25rem; 
+    font-weight: 700;
+}
+
+.book-author {
+    font-size: 1rem; 
+    font-weight: 500;
+    color: rgba(0,0,0,0.2);
+    margin-bottom: 1.5rem;
+}
+
+.book-summary {
+    height: 4rem; 
+    font-size:0.9rem;
+    text-align: justify;
+    text-justify: inter-word;
+}

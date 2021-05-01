@@ -18,7 +18,7 @@ else
         <BreadcrumbHeader CurrentUrl=@CurrentUrl BreadcrumbElements=@BreadcrumbElements />
     </div>
     
-    <div class="container pt-3">
+    <div class="container pt-3 no-padding">
         <div class="row">
             <div class="col-md-2">
                 <div class="mt-2 mb-5">
@@ -97,40 +97,43 @@ else
                 }
                 else
                 {
-                    <table class="table table-responsive">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>Year</th>
-                                <th>Category</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var book in books)
-                            {
-                            <tr>
-                                <td>
-                                    <a href="/books/details/@book.Id">
-                                        <img 
-                                            src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? book.CoverImageUrl : "images/book_cover.png")}")" 
-                                            style="width:75px; max-height: 125px;" 
-                                        />
-                                    </a>
-                                </td>
-                                <td>
+                    <div class="container">
+                        @foreach (var book in books)
+                        {
+                        <div class="book-row">
+                            <div class="book-row-item">
+                                <a href="/books/details/@book.Id">
+                                    <img 
+                                        src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? book.CoverImageUrl : "images/book_cover.png")}")"
+                                        class="book-image"
+                                    />
+                                </a>
+                            </div>
+                            <div class="book-row-item">
+                                <div class="book-title">
                                     <a href="/books/details/@book.Id">
                                         @book.Title
                                     </a>
-                                </td>
-                                <td>@book.Author</td>
-                                <td>@book.YearPublished</td>
-                                <td>@book.Category</td>
-                            </tr>
-                            }
-                        </tbody>
-                    </table>
+                                </div>
+                                <div class="book-author">
+                                    <a href="/authors/details/@book.AuthorId">
+                                        by @book.Author
+                                    </a>
+                                </div>
+                                <div class="book-summary">
+                                    @if (book.Summary.Length > 250)
+                                        {  
+                                            var summaryLength = book.Summary.Length;
+                                            var summary = book.Summary.Substring(0, 248) + "...";
+                                            @summary
+                                        } else {
+                                            @book.Summary
+                                        }
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
                 }
             </div>
         </div>
