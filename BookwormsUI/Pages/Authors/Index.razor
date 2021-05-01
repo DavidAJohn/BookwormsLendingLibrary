@@ -15,7 +15,7 @@ else
         <BreadcrumbHeader CurrentUrl=@CurrentUrl />
     </div>
 
-    <div class="container pt-3">
+    <div class="container pt-3 no-padding">
         <div class="row">
             <div class="col-md-2">
                 <div class="mt-2 mb-5">
@@ -60,20 +60,19 @@ else
                 }
                 else
                 {
-                    <table class="table table-responsive">
-                        <tbody >
+                    <div class="container">
                             @foreach (var author in authors)
                             {
-                            <tr>
-                                <td>
+                            <div class="author-row">
+                                <div >
                                     <NavLink href="@($"/authors/details/{author.Id}")">
                                         <img 
                                             src="@($"{(!String.IsNullOrEmpty(author.AuthorImageUrl) ? author.AuthorImageUrl : "images/author_image.png")}")" 
                                             class="author-image"
                                         />
                                     </NavLink>
-                                </td>
-                                <td>
+                                </div>
+                                <div >
                                     <div class="author-name">
                                         <NavLink href="@($"/authors/details/{author.Id}")">
                                             @author.FirstName @author.LastName
@@ -100,11 +99,10 @@ else
                                             }
                                         </NavLink>
                                     </div>
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
                             }
-                        </tbody>
-                    </table>
+                    </div>
                 }
             </div>
         </div>
