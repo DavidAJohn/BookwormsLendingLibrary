@@ -230,3 +230,20 @@ img.book-cover {
     .hover-overlay button {
         transform: translateY(-50px);
     }
+
+/* login & register screens */
+
+.title-text {
+    font-size: 1.6rem;
+}
+
+.link-text a {
+    font-size: 1rem;
+    color: rgba(71, 71, 105, 0.5);
+    text-decoration: none;
+}
+
+    .link-text a:hover {
+        color:slategray;
+        text-decoration: none;
+    }

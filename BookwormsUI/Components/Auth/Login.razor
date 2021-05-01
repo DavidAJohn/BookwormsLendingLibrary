@@ -1,38 +1,46 @@
 ﻿@page "/login"
-@inject IAuthenticationService AuthenticationService
-@inject NavigationManager NavigationManager
 
-<h1>Login</h1>
+@inject IAuthenticationService authenticationService
+@inject NavigationManager navigationManager
 
-@if (ShowErrors)
-{
-    <div class="alert alert-danger" role="alert">
-        <p>@Error</p>
-    </div>
-}
-
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Please enter your details</h5>
-        <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
-            <DataAnnotationsValidator />
-            <div class="form-group">
-                <label for="email">Email address</label>
-                <InputText Id="email" Class="form-control" @bind-Value="loginModel.Email" />
-                <ValidationMessage For="@(() => loginModel.Email)" />
+<div class="container">
+    <div class="p-3 row justify-content-center">
+        <div class="p-4 text-center shadow card col-md-6 col-lg-6">
+            <div class="px-5 card-body">
+                <i class="mb-4 fas fa-book-reader fa-3x"></i>
+                <div class="mb-4 title-text">Bookworms Lending Library</div>
+                <div class="mb-4 link-text">
+                    <a href="/register">Don't have an account yet?</a>
+                </div>
+                <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+                    <DataAnnotationsValidator />
+                    <div class="mb-4 form-group">
+                        <InputText Id="email" Class="form-control" @bind-Value="loginModel.Email" Placeholder="Email Address" />
+                        <ValidationMessage For="@(() => loginModel.Email)" />
+                    </div>
+                    <div class="mb-4 form-group">
+                        <InputText Id="password" type="password" Class="form-control" @bind-Value="loginModel.Password" Placeholder="Password" />
+                        <ValidationMessage For="@(() => loginModel.Password)" />
+                    </div>
+                    <div class="mb-4">
+                        <button type="submit" class="btn btn-secondary btn-block">Login</button>
+                    </div>
+                </EditForm>
+                <div class="mb-4 link-text">
+                    <a href="#">Forgotten your password?</a>
+                </div>
+                @if (ShowErrors)
+                {
+                    <div class="mt-4 alert alert-danger w-100" role="alert">
+                        @Error
+                    </div>
+                }
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <InputText Id="password" type="password" Class="form-control" @bind-Value="loginModel.Password" />
-                <ValidationMessage For="@(() => loginModel.Password)" />
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </EditForm>
+        </div>
     </div>
 </div>
 
 @code {
-
     private LoginModel loginModel = new LoginModel();
     private bool ShowErrors;
     private string Error = "";
@@ -41,11 +49,11 @@
     {
         ShowErrors = false;
 
-        var result = await AuthenticationService.Login(loginModel);
+        var result = await authenticationService.Login(loginModel);
 
         if (result.Successful)
         {
-            NavigationManager.NavigateTo("/", forceLoad: true);
+            navigationManager.NavigateTo("/", forceLoad: true);
         }
         else
         {
