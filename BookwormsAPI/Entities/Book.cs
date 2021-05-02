@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BookwormsAPI.Entities
@@ -19,5 +20,7 @@ namespace BookwormsAPI.Entities
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public int Copies { get; set; } = 1;
+        public int RequestCount { get; set; } = 0;
+        public DateTime AddedOn { get; set; } = DateTime.Now;
     }
 }
