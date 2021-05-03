@@ -53,6 +53,11 @@ else
                                     Recently Added
                                 </NavLink>
                             </li>
+                            <li class="dropdown-item">
+                                <NavLink @onclick='async () => await AddSort("nostPopularDesc", "Most Popular")'>
+                                    Most Popular
+                                </NavLink>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -261,6 +266,7 @@ else
                 "yearPublishedDesc" => "Published (new to old)",
                 "yearPublishedAsc" => "Published (old to new)",
                 "recentlyAddedDesc" => "Recently Added",
+                "mostPopularDesc" => "Most Popular",
                 _ => "Title"
             };
 
