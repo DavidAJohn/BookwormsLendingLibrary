@@ -40,7 +40,10 @@ namespace BookwormsAPI.Specifications
                         ApplyOrderByDescending(b => b.YearPublished);
                         break;
                     case "recentlyAddedDesc":
-                        ApplyOrderByDescending(b => b.Id);
+                        ApplyOrderByDescending(b => b.AddedOn);
+                        break;
+                    case "mostPopularDesc":
+                        ApplyOrderByDescending(b => b.RequestCount);
                         break;
                     default:
                         ApplyOrderBy(b => b.Title);
