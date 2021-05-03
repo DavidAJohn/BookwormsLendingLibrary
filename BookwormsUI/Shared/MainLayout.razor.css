@@ -16,6 +16,25 @@
     border-top: gray solid 2px;
 }
 
+/* footer */
+
+.footer-content {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.footer-title {
+    font-size: 1.3rem;
+}
+
+.footer-links-container {
+    width: 50%;
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-around;
+    padding-left: 3rem;
+}
+
 /* @media (max-width: 640.98px) {
     .top-row:not(.auth) {
         display: none;

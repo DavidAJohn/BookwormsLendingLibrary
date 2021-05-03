@@ -53,65 +53,68 @@
 <!-- footer -->
 <footer id="footer" class="text-white bg-dark">
     <div class="container p-4">
-      <div class="row">
-        <div class="mb-4 col-lg-6 col-md-12 mb-md-0">
-          <h5 class="mb-4">Bookworms Lending Library</h5>
-          <p>
-            This website was not actually built for a real library (as you've probably guessed!). 
-            It was created by David John as a way of exploring Microsoft's Blazor web development framework.
-            You can view the project's source code on GitHub from the link to the right.
-          </p>
+        <div class="row">
+            <div class="mb-4 col-lg-6 col-md-12 mb-md-0">
+                <div class="mb-4 footer-title">
+                    <i class="mr-3 fas fa-book-reader"></i>&nbsp;Bookworms Lending Library
+                </div>
+                <p class="footer-content">
+                    This website was not actually built for a real library (as you've probably guessed!). 
+                    It was created by <a href="https://github.com/DavidAJohn" class="text-white">David John</a> as a way of exploring Microsoft's Blazor web development framework.
+                    You can also view the project's source code on <a href="https://github.com/DavidAJohn/BookwormsLendingLibrary" class="text-white">GitHub</a>.
+                </p>
+            </div>
+            <div class="footer-links-container">
+                <div>
+                    <h5 class="mb-4 text-uppercase">Links</h5>
+                    <ul class="mb-0 list-unstyled">
+                        <li>
+                            <i class="mr-2 fab fa-github"></i> 
+                            <a href="https://github.com/DavidAJohn/BookwormsLendingLibrary" class="text-white">GitHub source</a>
+                        </li>
+                        <li>
+                            <i class="mr-2 fab fa-microsoft"></i> 
+                            <a href="https://blazor.net" class="text-white">Blazor.net</a>
+                        </li>
+                        <li>
+                            <i class="mr-2 fas fa-globe"></i>
+                            <a href="/about" class="text-white">About the Site</a>
+                        </li>
+                        <li>
+                            <i class="mr-2 fas fa-globe"></i>
+                            <a href="/contact" class="text-white">Contact Me</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="mb-4 text-uppercase">Social</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <i class="mr-2 fab fa-facebook"></i> 
+                            <a href="https://facebook.com" class="text-white">Facebook</a>
+                        </li>
+                        <li>
+                            <i class="mr-2 fab fa-twitter"></i> 
+                            <a href="https://twitter.com" class="text-white">Twitter</a>
+                        </li>
+                        <li>
+                            <i class="mr-2 fab fa-instagram"></i> 
+                            <a href="https://instagram.com" class="text-white">Instagram</a>
+                        </li>
+                        <li>
+                            <i class="mr-2 fab fa-pinterest"></i> 
+                            <a href="https://pinterest.com" class="text-white">Pinterest</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>    
         </div>
-        <div class="pl-5 mb-4 col-lg-3 col-md-6 mb-md-0">
-          <h5 class="mb-4 text-uppercase">Links</h5>
-          <ul class="mb-0 list-unstyled">
-            <li>
-                <i class="mr-2 fab fa-github"></i> 
-                <a href="https://github.com/DavidAJohn/BookwormsLendingLibrary" class="text-white">GitHub source</a>
-            </li>
-            <li>
-                <i class="mr-2 fab fa-microsoft"></i> 
-                <a href="https://blazor.net" class="text-white">Blazor.net</a>
-            </li>
-            <li>
-                <i class="mr-2 fas fa-globe"></i>
-                <a href="/about" class="text-white">About the Site</a>
-            </li>
-            <li>
-                <i class="mr-2 fas fa-globe"></i>
-                <a href="/contact" class="text-white">Contact Me</a>
-            </li>
-          </ul>
-        </div>
-        <div class="mb-4 col-lg-3 col-md-6 mb-md-0">
-          <h5 class="mb-4 text-uppercase">Social</h5>
-
-          <ul class="list-unstyled">
-            <li>
-                <i class="mr-2 fab fa-facebook"></i> 
-                <a href="https://facebook.com" class="text-white">Facebook</a>
-            </li>
-            <li>
-                <i class="mr-2 fab fa-twitter"></i> 
-                <a href="https://twitter.com" class="text-white">Twitter</a>
-            </li>
-            <li>
-                <i class="mr-2 fab fa-instagram"></i> 
-                <a href="https://instagram.com" class="text-white">Instagram</a>
-            </li>
-            <li>
-                <i class="mr-2 fab fa-pinterest"></i> 
-                <a href="https://pinterest.com" class="text-white">Pinterest</a>
-            </li>
-          </ul>
-        </div>
-      </div>
     </div>
 
     <div class="p-3 text-center" style="background-color: rgba(0, 0, 0, 0.2);">
-      &copy; @currentYear Copyright - Bookworms Lending Library
+        &copy; @currentYear Copyright - Bookworms Lending Library
     </div>
-  </footer>
+</footer>
 
 @code {
     private string currentUrl;
