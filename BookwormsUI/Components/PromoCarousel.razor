@@ -1,4 +1,6 @@
-﻿@if (@showCarousel) 
+﻿@inject SettingsService settings
+
+@if (@showCarousel) 
 {
     <div id="promo-carousel" class="carousel slide d-none d-md-block" data-ride="carousel">
         <!-- slide location indicators -->
@@ -10,7 +12,7 @@
         <!-- main carousel images -->
         <div class="carousel-inner">
             <div class="carousel-item carousel-image-1 active">
-                <img class="d-block" src="images/carousel-image-delillo.png" alt="">
+                <img class="d-block" src="@AssetBaseUrl/promo/carousel-image-delillo.png" alt="">
                 <div class="carousel-caption d-none d-md-block text-dark">
                     <NavLink href="/authors/details/5">
                         <button class="my-3 btn btn-outline-dark">View Collection</button>
@@ -18,7 +20,7 @@
                 </div>
             </div>
             <div class="carousel-item carousel-image-2">
-                <img class="d-block" src="images/carousel-image-gibson.png" alt="">
+                <img class="d-block" src="@AssetBaseUrl/promo/carousel-image-gibson.png" alt="">
                 <div class="carousel-caption d-none d-md-block text-light">
                     <NavLink href="/authors/details/13">
                         <button class="my-3 btn btn-outline-light">View Collection</button>
@@ -27,7 +29,7 @@
             </div>
             <div class="carousel-item carousel-image-3">
                 <NavLink href="/books?categoryId=7">
-                    <img class="d-block" src="images/carousel-image-horror.png" alt="">
+                    <img class="d-block" src="@AssetBaseUrl/promo/carousel-image-horror.png" alt="">
                     <div class="carousel-caption d-none d-md-block text-light">
                         <button class="my-3 btn btn-outline-light">Click here if you dare!</button>
                     </div>
@@ -40,4 +42,11 @@
 @code {
     [Parameter]
     public bool showCarousel { get; set; }
+
+    private string AssetBaseUrl { get; set; }
+
+    protected override void OnInitialized()
+    {
+        AssetBaseUrl = settings.GetAssetBaseUrl();
+    }
 }

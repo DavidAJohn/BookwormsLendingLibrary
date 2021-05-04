@@ -5,6 +5,7 @@
 @inject NavigationManager navigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService ToastService
+@inject SettingsService settings
 
 @if (int.Parse(Id) < 1 || string.IsNullOrWhiteSpace(Id))
 {
@@ -27,7 +28,7 @@ else
         <div class="mt-4 row">
             <div class="col-3">
                 <img 
-                    src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? book.CoverImageUrl : "images/book_cover.png")}")"  
+                    src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? AssetBaseUrl + book.CoverImageUrl : AssetBaseUrl + "/books/book_cover.png")}")"  
                     style="width: 250px;max-height: 375px;"
                 />
             </div>
@@ -120,6 +121,7 @@ else
     private bool ShowErrors;
     private string Error = "";
     private bool LoggedIn = false;
+    private string AssetBaseUrl;
 
     protected override async Task OnInitializedAsync()
     {
@@ -127,9 +129,11 @@ else
         var url = bookService.GetBooksApiEndpoint();
         book = await bookRepository.GetByIdAsync(url + "/", id);
 
+        await GetClaimsPrincipalData();
+
         CurrentUrl = navigationManager.Uri;
 
-        await GetClaimsPrincipalData();
+        AssetBaseUrl = settings.GetAssetBaseUrl();
     }
 
     private async Task GetClaimsPrincipalData()

@@ -6,6 +6,7 @@
 @inject ICategoryRepository categoryRepository
 @inject CategoryService categoryService
 @inject NavigationManager navigationManager
+@inject SettingsService settings
 @using BookwormsUI.Extensions
 
 @if (books == null)
@@ -109,7 +110,7 @@ else
                             <div class="book-row-item">
                                 <a href="/books/details/@book.Id">
                                     <img 
-                                        src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? book.CoverImageUrl : "images/book_cover.png")}")"
+                                        src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? AssetBaseUrl + book.CoverImageUrl : AssetBaseUrl + "/books/book_cover.png")}")"
                                         class="book-image"
                                     />
                                 </a>
@@ -167,6 +168,7 @@ else
     private List<string> BreadcrumbElements = new List<string>();
     private bool ClearSearch = false;
     private string SortBySelected = "Title";
+    private string AssetBaseUrl;
 
     protected override async Task OnInitializedAsync()
     {
@@ -178,6 +180,9 @@ else
 
         // pass current url to breadcrumb component
         CurrentUrl = navigationManager.Uri;
+
+        // get base url for image assets
+        AssetBaseUrl = settings.GetAssetBaseUrl();
     }
 
     private async Task SelectedPage(int page = 1)

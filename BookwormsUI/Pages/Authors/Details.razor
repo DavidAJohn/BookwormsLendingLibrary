@@ -3,6 +3,7 @@
 @inject IAuthorRepository authorRepo
 @inject AuthorService authorService
 @inject NavigationManager navigationManager
+@inject SettingsService settings
 
 @if (author == null)
 {
@@ -21,7 +22,7 @@ else
         <div class="row">
             <div class="col-md-4">
                 <img 
-                    src="@($"{(!String.IsNullOrEmpty(author.AuthorImageUrl) ? author.AuthorImageUrl : "images/author_image.png")}")"  
+                    src="@($"{(!String.IsNullOrEmpty(author.AuthorImageUrl) ? AssetBaseUrl + author.AuthorImageUrl : AssetBaseUrl + "/authors/author_image.png")}")"  
                     style="width:300px;max-height:500px;"
                 />
             </div>
@@ -56,7 +57,7 @@ else
                             {
                                 <li class="book-list-item">
                                     <NavLink href=@($"/books/details/{@book.Id}")>
-                                        <img src="@book.CoverImageUrl" class="book-thumbnail" />
+                                        <img src=@($"{@AssetBaseUrl}{@book.CoverImageUrl}") class="book-thumbnail" />
                                     </NavLink>
                                     <NavLink href=@($"/books/details/{@book.Id}")>
                                         @book.Title (@book.YearPublished)
@@ -82,6 +83,7 @@ else
     public string Id { get; set; }
     private Author author = new Author();
     private string CurrentUrl;
+    private string AssetBaseUrl;
 
     protected override async Task OnInitializedAsync()
     {
@@ -90,6 +92,8 @@ else
         author = await authorRepo.GetByIdAsync(url + "/", id);
 
         CurrentUrl = navigationManager.Uri;
+
+        AssetBaseUrl = settings.GetAssetBaseUrl();
     }
 
     private void BackToAuthors()

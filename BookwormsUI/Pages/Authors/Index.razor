@@ -4,6 +4,7 @@
 @inject IAuthorRepository authorRepository
 @inject AuthorService authorService
 @inject NavigationManager navigationManager
+@inject SettingsService settings
 
 @if (authors == null)
 {
@@ -67,7 +68,7 @@ else
                                 <div >
                                     <NavLink href="@($"/authors/details/{author.Id}")">
                                         <img 
-                                            src="@($"{(!String.IsNullOrEmpty(author.AuthorImageUrl) ? author.AuthorImageUrl : "images/author_image.png")}")" 
+                                            src="@($"{(!String.IsNullOrEmpty(author.AuthorImageUrl) ? AssetBaseUrl + author.AuthorImageUrl : AssetBaseUrl + "/authors/author_image.png")}")" 
                                             class="author-image"
                                         />
                                     </NavLink>
@@ -130,6 +131,7 @@ else
     private string CurrentUrl;
     private bool ClearSearch = false;
     private string SortBySelected = "Surname (A-Z)";
+    private string AssetBaseUrl;
 
     protected override async Task OnInitializedAsync()
     {
@@ -137,6 +139,9 @@ else
 
         // get current url from navigation manager to pass to breadcrumb component
         CurrentUrl = navigationManager.Uri;
+
+        // get the base url for image assets
+        AssetBaseUrl = settings.GetAssetBaseUrl();
     }
 
     private async Task SelectedPage(int page = 1)

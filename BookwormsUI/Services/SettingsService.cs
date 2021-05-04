@@ -15,5 +15,10 @@ namespace BookwormsUI.Services
         {
             return _config.GetSection("Endpoints").Get<ApiEndpoints>();
         }
+
+        public string GetAssetBaseUrl()
+        {
+            return _config.GetValue<string>("AssetBaseUrl");
+        }
     }
 }

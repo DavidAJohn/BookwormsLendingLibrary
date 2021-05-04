@@ -1,10 +1,11 @@
 ﻿@inject NavigationManager navigationManager
+@inject SettingsService settings
 
 <div class="col-md-3">
     <div class="text-center text-dark card bg-light">
     <div class="shadow-sm card-body image">
         <img 
-            src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? book.CoverImageUrl : "images/book_cover.png")}")"
+            src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? AssetBaseUrl + book.CoverImageUrl : AssetBaseUrl + "/books/book_cover.png")}")"
             class="book-cover"
         >
         <div class="book-button-layout hover-overlay">
@@ -19,6 +20,12 @@
 @code {
     [Parameter]
     public Book book { get; set; }
+    private string AssetBaseUrl;
+
+    protected override void OnInitialized()
+    {
+        AssetBaseUrl = settings.GetAssetBaseUrl();
+    }
 
     private void ViewBook(int bookId)
     {
