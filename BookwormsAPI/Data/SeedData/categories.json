@@ -1,32 +1,34 @@
 [
     {
+        "Id": 1,
         "Name": "Biography"
     },
     {
-        "Name": "Science Fiction"
-    },
-    {
-        "Name": "Classic"
-    },
-    {
-        "Name": "Food"
-    },
-    {
-        "Name": "Sports and Leisure"
-    },
-    {
+        "Id": 2,
         "Name": "Crime"
     },
     {
+        "Id": 3,
+        "Name": "Food"
+    },
+    {
+        "Id": 4,
         "Name": "Horror"
     },
     {
-        "Name": "Anthology"
+        "Id": 5,
+        "Name": "Literary Fiction"
     },
     {
-        "Name": "Short Story"
-    },
-    {
+        "Id": 6,
         "Name": "Poetry"
+    },
+    {
+        "Id": 7,
+        "Name": "Science Fiction"
+    },
+    {
+        "Id": 8,
+        "Name": "Sports and Leisure"
     }
 ]
