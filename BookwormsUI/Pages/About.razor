@@ -1,0 +1,97 @@
+﻿@page "/about"
+
+<div class="container text-justify">
+    <h3 class="mb-5">About the site</h3>
+    <p>
+        As you've no doubt guessed, this website was not created for a real library. It was created as a web development project by  
+        developer (and humble scribe of this document) <a href="https://github.com/DavidAJohn" target="_blank">David John</a>.
+    </p>
+    <p>
+        Given that fact, the rest of this page is largely going to describe how the site was built. If you're not interested in web development using Microsoft 
+        technologies like Blazor and Web API, then you might want to run away now, because it's going to get a bit technical. Thanks for stopping by though.
+        I appreciate your interest in the project.
+    </p>
+    <h5 class="my-4 font-italic">Development</h5>
+    <p>
+        Still here? Okay then, so the Bookworms Lending Library project was created as a way of putting into practice what I had 
+        learned about Microsoft's Blazor framework from reading numerous articles and following demo projects from Microsoft, 
+        completing courses on <a href="https://www.udemy.com" target="_blank">Udemy</a> and watching videos like Carl Franklin's 
+        excellent <a href="https://blazortrain.com/" target="_blank">Blazor Train</a> series.
+    </p>
+    <p>
+        Why did I choose to create a library website? Well, I'm old enough to remember when public libraries were magical places of 
+        learning and discovery. I thought it would be fun to recreate those ancient times using today's cutting-edge technology. 
+        It also helped to simplify things. Given that we're pretending that books will be posted out to borrowers, it removed the immediate need for 
+        basket and payment systems. Although, in reality I'm sure you'd want some payment details in place for late fees or book damage.
+    </p>
+    <p>
+        As you may know, Blazor currently comes in two flavours - Server and Web Assembly (WASM). I choose to use Blazor Server 
+        for this project, partly because Blazor WASM was the hot new thing that all the cool kids where talking about, and I like being a 
+        bit contrary, but mainly because I wanted to create an entirely separate Web API project that would extend beyond the fairly 
+        basic APIs I had built in my previous day job, where all of the code was added to the controllers and there was no little consideration given 
+        to maintainability (or even to the repository pattern). A Blazor Server project is self contained and doesn't care 
+        where its data comes from, so I could hook it up to the API project with standard HTTP methods like GET , POST and PUT.
+    </p>
+    <p>
+        So,the Bookworms Library application consists of two main projects, a Web API project called BookwormsAPI, which takes care of the 
+        application's data, and a Blazor Server project called BookwormsUI, which provides the client-side user interface. 
+        All of the source code for both projects is available to view in a single repository 
+        on <a href="https://github.com/DavidAJohn/BookwormsLendingLibrary" target="_blank">GitHub</a> if you're interested.
+    </p>
+    <h5 class="my-4 font-italic">Layout, styles and images</h5>
+    <p>
+        The UI project's layout uses <a href="https://getbootstrap.com" target="_blank">Bootstrap</a> with a healthy dose of Flexbox added to it. 
+        When I started building the application, the Microsoft template for a Blazor Server app came with Bootstrap 4.6 by default, 
+        but with v5 leaving beta on 6th May 2021 I will be starting work on converting it. 
+    </p>
+    <p>
+        I created the site layout myself from scratch, although the design may have been inspired by a certain large online 
+        bookstore you may be familiar with (if you're British anyway). No, not the obvious one you're thinking of.
+    </p>
+    <p>
+        My aim was to create something that wasn't instantly recognisable as a Blazor website. The trick is mostly to remove the 
+        sidebar with the red to blue faded background. You'll know what I mean if you've seen them.
+    </p>
+    <p>
+        I even got to use my Photoshop skills creating images for the promotional carousel that features on the home page. 
+        I created fictional promo images for two of my favourite fiction writers, Don DeLillo and William Gibson. I'm not a big horror fiction fan, but I 
+        thought it would be fun to do something with the horror category too. (If you're wondering, the font I used for the blood-dripping 
+        text is called 'Schlop').
+    </p>
+    <h5 class="my-4 font-italic">The Future of Blazor</h5>
+    <p>
+        I've had developer friends who aren't familiar with Blazor ask me what I think of it. 
+    </p>
+    <p>
+        At the time of writing (May 2021) Blazor is still relatively new, having only been formally adopted by Microsoft in (I think) 
+        2018, after Steve Sanderson and his team's earlier work on the project. As such, it still has a few quirks, but on the whole 
+        I've enjoyed using it. If you can get your head around the concept of single page applications and the way the Blazor framework 
+        expects you to work, there's a definite sense of familiarity if you already have a background in C#.
+    </p>
+    <p>
+        It still surpises me how much animosity there is towards JavaScript from C# developers. I seem to be part of a dying breed of 
+        .NET developers who don't have a pathological hatred of JavaScript. I enjoy moving between applications built using 
+        Angular or React or Vue or NextJs. People who discover Blazor are frequently evangelical about what it can do, ignoring the fact that 
+        those features had been available in Angular, React and Vue a number years prior to Blazor's creation.
+    </p>
+    <p>
+        Realistically, it's difficult to see Blazor winning over developers who aren't already familiar with the Microsoft ecosystem. 
+        Despite the effort being put into it, Blazor is years behind the other frameworks. It doesn't currently offer anything unique or 
+        compelling, unless you already know C#. I hope Blazor grows and succeeds, but I'm not sure it will ever be more than a lifeboat for .NET 
+        framework refugees who are now reluctantly having to abandon Web Forms as the earlier .NET frameworks are deprecated.
+    </p>
+    <p>
+        I still think that if you're a C# developer who hates JavaScript but kind of likes the sound of Blazor - and if you have the 
+        time to study - then I would learn TypeScript first, then use that as a bridge to Angular, which will then feel a lot less intimidating. 
+        Ultimately, C# and TypeScript where both commissioned by Microsoft and initially created by the same man - Anders Hejlsberg. TypeScript largely mitigates
+        the most frequent complaint I hear about JavaScript from C# developers - that it is chaotic or badly structured.
+    </p>
+    <p>
+        But that's getting a little off topic. This site is just a small demonstration of what can be done with Blazor in 2021.
+        If you have any questions about the site, or if you'd like more detailed information about how it was built, then please feel free to get in touch with me.
+    </p>
+    <p class="font-weight-bold my-4">
+        David John<br />
+        May 2021
+    </p>
+</div>

@@ -13,6 +13,10 @@ a:hover, .btn-link:hover {
     cursor: pointer;
 }
 
+.text-justify a {
+    text-decoration: underline;
+}
+
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;
@@ -147,10 +151,10 @@ ul.list {
 }
 
 .no-results {
-font-size: 1rem;
-font-weight: 500;
-font-style: italic;
-padding-left: 0.8rem;
+    font-size: 1rem;
+    font-weight: 500;
+    font-style: italic;
+    padding-left: 0.8rem;
 }
 
 /* home page bookshelves */
