@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
 using BookwormsUI.Contracts;
 using BookwormsUI.Models;
 
@@ -11,8 +12,10 @@ namespace BookwormsUI.Repository
     public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     {
         private readonly IHttpClientFactory _client;
-        public CategoryRepository(IHttpClientFactory client) : base(client)
+        private readonly ILocalStorageService _localStorage;
+        public CategoryRepository(IHttpClientFactory client, ILocalStorageService localStorage) : base(client, localStorage)
         {
+            _localStorage = localStorage;
             _client = client;
         }
 

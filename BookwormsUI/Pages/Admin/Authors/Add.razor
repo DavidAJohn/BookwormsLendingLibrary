@@ -1,0 +1,99 @@
+﻿@page "/admin/authors/add"
+
+@using BookwormsUI.Components.Auth
+@inject IAuthorRepository authorRepository
+@inject AuthorService authorService
+@inject NavigationManager navigationManager
+@inject IToastService toastService
+
+<AuthGuard RolesAllowed="Administrator" />
+
+@if (currentUrl != null)
+{
+<div>
+    <BreadcrumbHeader CurrentUrl=@currentUrl />
+</div>
+}
+
+<div class="container">
+    <div class="p-3 row justify-content-center">
+        <div class="p-4 text-center card col-md-6 col-lg-6">
+            <div class="px-5 card-body">
+                <div class="mb-4 title-text d-block">
+                    <i class="mb-4 fas fa-user-plus"></i>&nbsp; Add an Author
+                </div>
+                <EditForm Model="author" OnValidSubmit="CreateAuthor">
+                    <DataAnnotationsValidator />
+                    <div class="form-group">
+                        <label for="first-name">First Name</label>
+                        <InputText Id="first-name" Class="form-control" @bind-Value="author.FirstName" />
+                        <ValidationMessage For="@(() => author.FirstName)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last-name">Last Name</label>
+                        <InputText Id="last-name" Class="form-control" @bind-Value="author.LastName" />
+                        <ValidationMessage For="@(() => author.LastName)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="biography">Biography</label>
+                        <InputTextArea Id="biography" Class="form-control" Rows="4" @bind-Value="author.Biography" />
+                        <ValidationMessage For="@(() => author.Biography)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="author-image">Author Image</label>
+                        <InputText Id="author-image" Class="form-control" @bind-Value="author.AuthorImageUrl" />
+                        <ValidationMessage For="@(() => author.AuthorImageUrl)" />
+                    </div>
+
+                    <div class="form-group my-5">
+                        <button type="submit" class="btn btn-secondary btn-block">Submit</button>
+                    </div>
+                </EditForm>
+                @if (showErrors)
+                {
+                    <div class="mt-4 alert alert-danger w-100" role="alert">
+                        @error
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private Author author = new Author();
+    private string currentUrl;
+    private bool showErrors;
+    private string error = "";
+
+    protected override void OnInitialized()
+    {
+        currentUrl = navigationManager.Uri;
+    }
+
+    private async Task CreateAuthor()
+    {
+        var apiUri = authorService.GetAuthorsApiEndpoint();
+        var isSuccess = await authorRepository.CreateAsync(apiUri, author);
+
+        if (isSuccess)
+        {
+            showErrors = false;
+            toastService.ShowSuccess("The author was added successfully", "Author Added");
+            BackToAdminIndex();
+        } 
+        else 
+        {
+            showErrors = true;
+            error = "Sorry, there was a problem adding this author";
+        }
+    }
+
+    private void BackToAdminIndex()
+    {
+        navigationManager.NavigateTo("/admin/");
+    }
+}

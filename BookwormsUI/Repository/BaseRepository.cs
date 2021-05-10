@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
 using BookwormsUI.Contracts;
 using BookwormsUI.Models;
 using Microsoft.AspNetCore.WebUtilities;
@@ -15,8 +17,10 @@ namespace BookwormsUI.Repository
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         private readonly IHttpClientFactory _client;
-        public BaseRepository(IHttpClientFactory client)
+        private readonly ILocalStorageService _localStorage;
+        public BaseRepository(IHttpClientFactory client, ILocalStorageService localStorage)
         {
+            _localStorage = localStorage;
             _client = client;
         }
 
@@ -107,17 +111,25 @@ namespace BookwormsUI.Repository
 
         public async Task<bool> CreateAsync(string url, T obj)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, url);
-
             if (obj == null)
             {
                 return false;
             }
 
-            request.Content = new StringContent(JsonSerializer.Serialize(obj));
+            var storedToken = await GetLocalBearerToken();
 
-            var client = _client.CreateClient();
-            HttpResponseMessage response = await client.SendAsync(request);
+            if (string.IsNullOrWhiteSpace(storedToken))
+            {
+                return false;
+            }
+
+            HttpClient client = _client.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
+
+            HttpContent content = new StringContent(JsonSerializer.Serialize(obj));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            HttpResponseMessage response = await client.PostAsync(url, content);
 
             if (response.StatusCode == HttpStatusCode.Created)
             {
@@ -166,6 +178,11 @@ namespace BookwormsUI.Repository
             }
 
             return false;
+        }
+
+        private async Task<string> GetLocalBearerToken()
+        {
+            return await _localStorage.GetItemAsync<string>("authToken");
         }
     }
 }
