@@ -57,7 +57,10 @@ else
                             {
                                 <li class="book-list-item">
                                     <NavLink href=@($"/books/details/{@book.Id}")>
-                                        <img src=@($"{@AssetBaseUrl}{@book.CoverImageUrl}") class="book-thumbnail" />
+                                        <img 
+                                            src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? AssetBaseUrl + book.CoverImageUrl : AssetBaseUrl + "/books/book_cover.png")}")" 
+                                            class="book-thumbnail" 
+                                        />
                                     </NavLink>
                                     <NavLink href=@($"/books/details/{@book.Id}")>
                                         @book.Title (@book.YearPublished)
