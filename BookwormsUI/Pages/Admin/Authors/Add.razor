@@ -8,12 +8,9 @@
 
 <AuthGuard RolesAllowed="Administrator" />
 
-@if (currentUrl != null)
-{
 <div>
-    <BreadcrumbHeader CurrentUrl=@currentUrl />
+    <BreadcrumbHeader BreadcrumbElements=@breadcrumbElements />
 </div>
-}
 
 <div class="container">
     <div class="p-3 row justify-content-center">
@@ -65,13 +62,15 @@
 
 @code {
     private Author author = new Author();
-    private string currentUrl;
+    private List<string> breadcrumbElements = new List<string>();
     private bool showErrors;
     private string error = "";
 
     protected override void OnInitialized()
     {
-        currentUrl = navigationManager.Uri;
+        // provide the BreadcrumbHeader component with specific elements to display
+        string[] elements = {"Admin", "Add Author"};
+        breadcrumbElements.AddRange(elements);
     }
 
     private async Task CreateAuthor()
