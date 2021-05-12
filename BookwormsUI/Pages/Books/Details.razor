@@ -127,7 +127,7 @@ else
     {
         int id = int.Parse(Id);
         var url = bookService.GetBooksApiEndpoint();
-        book = await bookRepository.GetByIdAsync(url + "/", id);
+        book = await bookRepository.GetByIdAsync(url, id);
 
         await GetClaimsPrincipalData();
 

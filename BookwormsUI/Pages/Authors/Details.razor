@@ -92,7 +92,7 @@ else
     {
         int id = int.Parse(Id);
         var url = authorService.GetAuthorsApiEndpoint();
-        author = await authorRepo.GetByIdAsync(url + "/", id);
+        author = await authorRepo.GetByIdAsync(url, id);
 
         CurrentUrl = navigationManager.Uri;
 
