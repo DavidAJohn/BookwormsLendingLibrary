@@ -14,5 +14,6 @@ namespace BookwormsAPI.DTOs
         public string Author { get; set; }
         public int AuthorId { get; set; }
         public string Category { get; set; }
+        public int CategoryId { get; set; }
     }
 }
