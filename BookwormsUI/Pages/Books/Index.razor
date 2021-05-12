@@ -16,7 +16,7 @@
 else
 {
     <div>
-        <BreadcrumbHeader CurrentUrl=@CurrentUrl BreadcrumbElements=@BreadcrumbElements />
+        <BreadcrumbHeader BreadcrumbElements=@BreadcrumbElements />
     </div>
     
     <div class="container pt-3 no-lr-padding">
@@ -279,7 +279,10 @@ else
             
             // provide the BreadcrumbHeader component with specific elements to display,
             // because the URL will now have a querystring appended
-            BreadcrumbElements.Add("Books");
+            if (BreadcrumbElements.Count == 0)
+            {
+                BreadcrumbElements.Add("Books");
+            }
         }
     }
 }

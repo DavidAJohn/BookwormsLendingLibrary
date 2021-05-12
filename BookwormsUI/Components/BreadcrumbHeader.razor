@@ -28,21 +28,21 @@
     [Parameter]
     public string CurrentUrl { get; set; }
     [Parameter]
-    public List<string> BreadcrumbElements { get; set; } = new List<string>();
+    public List<string> BreadcrumbElements { get; set; }
     private string _CurrentUrl;
     private string[] pages = new string[] {};
     private string lastElement = "";
 
     protected override void OnInitialized()
     {
-        if (BreadcrumbElements.Count > 0) // has a specific list of breadcrumb elements been provided by the parent page?
+        if (BreadcrumbElements != null) // has a specific list of breadcrumb elements been provided by the parent page?
         {
             // if so, then use those
             pages = BreadcrumbElements.ToArray();
         }
         else // otherwise, work out the breadcrumb from the URL
         {
-            _CurrentUrl = CurrentUrl;
+            _CurrentUrl = NavigationManager.Uri;
 
             // split the current url passed from the parent component
             pages = _CurrentUrl.Split('/', StringSplitOptions.RemoveEmptyEntries);
