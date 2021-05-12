@@ -1,0 +1,127 @@
+﻿@page "/admin/authors/edit/{Id}"
+
+@using BookwormsUI.Components.Auth
+@inject IAuthorRepository authorRepository
+@inject AuthorService authorService
+@inject NavigationManager navigationManager
+@inject IToastService toastService
+
+<AuthGuard RolesAllowed="Administrator" />
+
+@if (author == null)
+{
+    <LoadingMessage Message="Loading author details..." />
+}
+else 
+{
+    <div>
+        <BreadcrumbHeader BreadcrumbElements=@breadcrumbElements />
+    </div>
+
+    <div class="container">
+        <div class="p-3 row justify-content-center">
+            <div class="p-4 text-center card col-md-6 col-lg-6">
+                <div class="px-5 card-body">
+                    <div class="mb-4 title-text d-block">
+                        <i class="mb-4 fas fa-user-plus"></i>&nbsp; Edit Author
+                    </div>
+                    <EditForm Model="author" OnValidSubmit="EditAuthor">
+                        <DataAnnotationsValidator />
+                        <div class="form-group">
+                            <label for="first-name">First Name</label>
+                            <InputText Id="first-name" Class="form-control" @bind-Value="author.FirstName" />
+                            <ValidationMessage For="@(() => author.FirstName)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="last-name">Last Name</label>
+                            <InputText Id="last-name" Class="form-control" @bind-Value="author.LastName" />
+                            <ValidationMessage For="@(() => author.LastName)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="biography">Biography</label>
+                            <InputTextArea Id="biography" Class="form-control" Rows="4" @bind-Value="author.Biography" />
+                            <ValidationMessage For="@(() => author.Biography)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="author-image">Author Image</label>
+                            <InputText Id="author-image" Class="form-control" @bind-Value="author.AuthorImageUrl" />
+                            <ValidationMessage For="@(() => author.AuthorImageUrl)" />
+                        </div>
+
+                        <div class="form-group my-5">
+                            <button type="submit" class="btn btn-secondary btn-block">Confirm</button>
+                            <button type="button" class="btn btn-outline-dark btn-block" @onclick=BackToAdminIndex>Cancel</button>
+                        </div>
+                    </EditForm>
+                    @if (showErrors)
+                    {
+                        <div class="mt-4 alert alert-danger w-100" role="alert">
+                            @error
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    private Author author = new Author();
+    private List<string> breadcrumbElements = new List<string>();
+    private bool showErrors;
+    private string error = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAuthorToEdit();
+    }
+
+    protected override void OnInitialized()
+    {
+        // provide the BreadcrumbHeader component with specific elements to display
+        string[] elements = {"Admin", "Edit Author"};
+        breadcrumbElements.AddRange(elements);
+    }
+
+    private async Task GetAuthorToEdit()
+    {
+        int id = int.Parse(Id);
+        var url = authorService.GetAuthorsApiEndpoint();
+        author = await authorRepository.GetByIdAsync(url, id);
+
+        if (author == null)
+        {
+            showErrors = true;
+            error = "Could not find the author requested";
+        } 
+    }
+
+    private async Task EditAuthor()
+    {
+        int id = int.Parse(Id);
+        var url = authorService.GetAuthorsApiEndpoint();
+        bool isSuccess = await authorRepository.UpdateAsync(url, author, id);
+
+        if (isSuccess)
+        {
+            toastService.ShowSuccess("Author updated successfully");
+            BackToAdminIndex();
+        }
+        else
+        {
+            showErrors = true;
+            error = "Could not update this author";
+        }
+    }
+
+    private void BackToAdminIndex()
+    {
+        navigationManager.NavigateTo("/admin/");
+    }
+}

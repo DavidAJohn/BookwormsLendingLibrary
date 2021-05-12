@@ -31,7 +31,7 @@ namespace BookwormsUI.Repository
                 return null;
             }
 
-            var request = new HttpRequestMessage(HttpMethod.Get, url + id);
+            var request = new HttpRequestMessage(HttpMethod.Get, url + "/" + id);
 
             var client = _client.CreateClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -146,7 +146,7 @@ namespace BookwormsUI.Repository
                 return false;
             }
 
-            var request = new HttpRequestMessage(HttpMethod.Delete, url + id);
+            var request = new HttpRequestMessage(HttpMethod.Delete, url + "/" + id);
 
             var client = _client.CreateClient();
             HttpResponseMessage response = await client.SendAsync(request);
@@ -159,17 +159,25 @@ namespace BookwormsUI.Repository
             return false;
         }
 
-        public async Task<bool> UpdateAsync(string url, T obj)
+        public async Task<bool> UpdateAsync(string url, T obj, int id)
         {
-            if (obj == null)
+            if (obj == null || id < 0)
             {
                 return false;
             }
 
-            var request = new HttpRequestMessage(HttpMethod.Put, url);
+            var storedToken = await GetLocalBearerToken();
+
+            if (string.IsNullOrWhiteSpace(storedToken))
+            {
+                return false;
+            }
+
+            var request = new HttpRequestMessage(HttpMethod.Put, url + "/" + id);
             request.Content = new StringContent(JsonSerializer.Serialize(obj), Encoding.UTF8, "application/json");
 
             var client = _client.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
             HttpResponseMessage response = await client.SendAsync(request);
 
             if (response.StatusCode == HttpStatusCode.NoContent)
