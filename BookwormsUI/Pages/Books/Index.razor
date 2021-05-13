@@ -7,6 +7,7 @@
 @inject CategoryService categoryService
 @inject NavigationManager navigationManager
 @inject SettingsService settings
+@inject AuthenticationStateProvider authenticationStateProvider
 @using BookwormsUI.Extensions
 
 @if (books == null)
@@ -120,6 +121,13 @@ else
                                     <a href="/books/details/@book.Id">
                                         @book.Title
                                     </a>
+                                    @if (@Role == "Administrator") // show an edit button for the admin user
+                                    {
+                                        <button type="button" @onclick="() => EditBook(book.Id)" class="btn btn-sm btn-outline-secondary ml-3">
+                                            <i class="fas fa-user-edit"></i>&nbsp;
+                                            Edit Book
+                                        </button>
+                                    }
                                 </div>
                                 <div class="book-author">
                                     <a href="/authors/details/@book.AuthorId">
@@ -169,6 +177,7 @@ else
     private bool ClearSearch = false;
     private string SortBySelected = "Title";
     private string AssetBaseUrl;
+    private string Role;
 
     protected override async Task OnInitializedAsync()
     {
@@ -183,6 +192,20 @@ else
 
         // get base url for image assets
         AssetBaseUrl = settings.GetAssetBaseUrl();
+
+        // get claims principal data to check for an admin user
+        await GetClaimsPrincipalData();
+    }
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            Role = user.GetRoleFromPrincipal();
+        }
     }
 
     private async Task SelectedPage(int page = 1)
@@ -236,6 +259,11 @@ else
         await SearchChanged();
     }
 
+    private void EditBook(int id = 0)
+    {
+        navigationManager.NavigateTo("/admin/books/edit/" + id);
+    }
+
     public void CheckForQuerystring()
     {
         var queryStringParams = navigationManager.GetQueryStringCollection();
@@ -285,4 +313,5 @@ else
             }
         }
     }
+
 }
