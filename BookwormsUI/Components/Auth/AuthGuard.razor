@@ -2,9 +2,11 @@
 @using BookwormsUI.Extensions
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
+@inject IToastService ToastService
 
 @if (UserRole != "" && IsAuthorised == false)
 {
+    ToastService.ShowError("You are not authorised to view the requested page", "Not Authorised");
     NavigationManager.NavigateTo("/");
 }
 
