@@ -5,6 +5,8 @@
 @inject AuthorService authorService
 @inject NavigationManager navigationManager
 @inject SettingsService settings
+@inject AuthenticationStateProvider authenticationStateProvider
+@using BookwormsUI.Extensions
 
 @if (authors == null)
 {
@@ -78,6 +80,13 @@ else
                                         <NavLink href="@($"/authors/details/{author.Id}")">
                                             @author.FirstName @author.LastName
                                         </NavLink>
+                                        @if (@Role == "Administrator") // show an edit button for the admin user
+                                        {
+                                            <button type="button" @onclick="() => EditAuthor(author.Id)" class="btn btn-sm btn-outline-secondary ml-3">
+                                                <i class="fas fa-user-edit"></i>&nbsp;
+                                                Edit Author
+                                            </button>
+                                        }
                                     </div>
                                     <div class="mt-4 author-biography">
                                         @if (author.Biography.Length > 250)
@@ -132,6 +141,7 @@ else
     private bool ClearSearch = false;
     private string SortBySelected = "Surname (A-Z)";
     private string AssetBaseUrl;
+    private string Role;
 
     protected override async Task OnInitializedAsync()
     {
@@ -142,6 +152,20 @@ else
 
         // get the base url for image assets
         AssetBaseUrl = settings.GetAssetBaseUrl();
+
+        // get claims principal data to check for an admin user
+        await GetClaimsPrincipalData();
+    }
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            Role = user.GetRoleFromPrincipal();
+        }
     }
 
     private async Task SelectedPage(int page = 1)
@@ -180,5 +204,10 @@ else
     {
         ClearSearch = true;
         await SearchChanged();
+    }
+
+    private void EditAuthor(int id = 0)
+    {
+        navigationManager.NavigateTo("/admin/authors/edit/" + id);
     }
 }
