@@ -32,3 +32,10 @@
     text-align: justify;
     text-justify: inter-word;
 }
+
+li.active {
+    list-style-type: square;
+    list-style-position: outside;
+    font-style: normal;
+    font-weight: 700;
+}

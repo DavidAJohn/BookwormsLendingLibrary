@@ -70,12 +70,12 @@ else
                     </div>
                     <div class="w-100">
                         <ul class="pt-3 list">
-                            <li class="list-items">
-                                <NavLink @onclick="async () => await CategorySearch(0)"><strong>All Categories</strong></NavLink>
+                            <li class="list-items @(activeCategory == 0 ? "active" : "")">
+                                <NavLink @onclick="async () => await CategorySearch(0)">All Categories</NavLink>
                             </li>
                         @foreach (var category in categories)
                         {
-                            <li class="list-items">
+                            <li class="list-items @(activeCategory == category.Id ? "active" : "")">
                                 <NavLink @onclick="async () => await CategorySearch(category.Id)">@category.Name</NavLink>
                             </li>
                         }
@@ -178,6 +178,7 @@ else
     private string SortBySelected = "Title";
     private string AssetBaseUrl;
     private string Role;
+    private int activeCategory = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -242,6 +243,9 @@ else
     {
         itemParams.CategoryId = categoryId;
 
+        // also highlight the active category in the sidebar
+        SetActiveCategory();
+
         await GetData();
     }
 
@@ -277,6 +281,9 @@ else
             if (convertible)
             {
                 itemParams.CategoryId = Convert.ToInt32(queryStringParams["categoryId"]);
+
+                // also highlight the active category in the sidebar
+                SetActiveCategory();
             }
 
             // provide the BreadcrumbHeader component with specific elements to display,
@@ -312,6 +319,12 @@ else
                 BreadcrumbElements.Add("Books");
             }
         }
+    }
+
+    private void SetActiveCategory()
+    {
+        // highlight the active category in the sidebar
+        activeCategory = itemParams.CategoryId;
     }
 
 }
