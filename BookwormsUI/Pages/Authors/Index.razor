@@ -70,7 +70,7 @@ else
                                 <div >
                                     <NavLink href="@($"/authors/details/{author.Id}")">
                                         <img 
-                                            src="@($"{(!String.IsNullOrEmpty(author.AuthorImageUrl) ? AssetBaseUrl + author.AuthorImageUrl : AssetBaseUrl + "/authors/author_image.png")}")" 
+                                            src="@($"{(!String.IsNullOrEmpty(author.AuthorImageUrl) ? author.AuthorImageUrl : AssetBaseUrl + "/authors/author_image.png")}")" 
                                             class="author-image"
                                         />
                                     </NavLink>

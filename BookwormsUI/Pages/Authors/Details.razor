@@ -22,7 +22,7 @@ else
         <div class="row">
             <div class="col-md-4">
                 <img 
-                    src="@($"{(!String.IsNullOrEmpty(author.AuthorImageUrl) ? AssetBaseUrl + author.AuthorImageUrl : AssetBaseUrl + "/authors/author_image.png")}")"  
+                    src="@($"{(!String.IsNullOrEmpty(author.AuthorImageUrl) ? author.AuthorImageUrl : AssetBaseUrl + "/authors/author_image.png")}")"  
                     style="width:300px;max-height:500px;"
                 />
             </div>
