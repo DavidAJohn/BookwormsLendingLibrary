@@ -16,6 +16,7 @@ namespace BookwormsAPI
 {
     public class Startup
     {
+        private string _azureConnectionString = null;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -53,6 +54,9 @@ namespace BookwormsAPI
             services.AddAutoMapper(typeof(MappingProfiles));
 
             services.AddHttpContextAccessor();
+
+            // application secrets
+            _azureConnectionString = Configuration["ConnectionStrings:AzureStorageConnectionString"];
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
