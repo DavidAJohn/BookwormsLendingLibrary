@@ -251,3 +251,22 @@ img.book-cover {
         color:slategray;
         text-decoration: none;
     }
+
+/* file uploads */
+
+input[type="file"] {
+    visibility: hidden;
+}
+
+button.image-picker {
+    margin-top: -3rem;
+}
+
+.image-preview {
+    width: 10rem;
+    margin: 1rem 0;
+}
+
+    .image-preview img {
+        width: 100%;
+    }

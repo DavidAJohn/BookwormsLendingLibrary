@@ -7,29 +7,45 @@
 
 <AuthGuard RolesAllowed="Administrator" />
 
-<h4>Bookworms Admin</h4>
+<h4>Bookworms Library Admin</h4>
 
 <div class="py-4">
-    <NavLink href="/admin/authors/add" role="button" class="mr-2">
-        <button class="btn btn-secondary" type="button">
-            Add an Author
-        </button>
-    </NavLink>
-    <NavLink href="/admin/books/add" role="button" class="mr-2">
-        <button class="btn btn-secondary" type="button">
-            Add a Book
-        </button>
-    </NavLink>
-    <NavLink href="/books/" role="button" class="mr-2">
-        <button class="btn btn-secondary" type="button">
-            Update a Book
-        </button>
-    </NavLink>
-    <NavLink href="/authors/" role="button" class="mr-2">
-        <button class="btn btn-secondary" type="button">
-            Update an Author
-        </button>
-    </NavLink>
+    <div class="mb-4">
+        <h5>Books</h5>
+        <NavLink href="/admin/books/add" role="button" class="mr-2">
+            <button class="btn btn-secondary btn-sm" type="button">
+                Add a Book
+            </button>
+        </NavLink>
+        <NavLink href="/books/" role="button" class="mr-2">
+            <button class="btn btn-secondary btn-sm" type="button">
+                Update a Book
+            </button>
+        </NavLink>
+    </div>
+    
+    <div class="mb-4">
+        <h5>Authors</h5>
+        <NavLink href="/admin/authors/add" role="button" class="mr-2">
+            <button class="btn btn-secondary btn-sm" type="button">
+                Add an Author
+            </button>
+        </NavLink>
+        <NavLink href="/authors/" role="button" class="mr-2">
+            <button class="btn btn-secondary btn-sm" type="button">
+                Update an Author
+            </button>
+        </NavLink>
+    </div>
+    
+    <div class="mb-4">
+        <h5>Image Upload Test</h5>
+        <NavLink href="/upload-test/" role="button" class="mr-2">
+            <button class="btn btn-secondary btn-sm" type="button">
+                Image Upload Test
+            </button>
+        </NavLink>
+    </div>
 </div>
 
 <div class="py-4">
@@ -73,7 +89,7 @@
                         <td>@request.Status</td>
                         <td>@request.DateRequested.ToUKStandardDate()</td>
                         <td>
-                            <button class="btn btn-success" 
+                            <button class="btn btn-success btn-sm" 
                                 @onclick="@(() => MarkAsSent(request.Id))">Mark as Sent
                             </button>
                         </td>
