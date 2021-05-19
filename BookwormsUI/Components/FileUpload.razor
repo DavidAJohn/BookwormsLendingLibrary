@@ -1,0 +1,133 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Headers
+@using Blazored.LocalStorage
+@using System.Text.Json
+
+<div>
+    <InputFile 
+        id="filePicker" 
+        OnChange="@HandleFileSelected"
+        @bind-Value="FileValue"
+    />
+    <br />
+    <button type="button" onclick="filePicker.click()" class="btn btn-secondary btn-sm image-picker">
+        @ButtonText
+    </button>
+
+    @if (ImgUrl != null)
+    {
+        <div class="image-preview">
+            <img src="@ImgUrl" />
+        </div>
+    }
+    
+    @if (Error != "")
+    {
+        <div class="mt-3 alert alert-danger" role="alert">
+            @Error
+        </div>
+    }
+</div>
+
+@code {
+    [Inject]
+    public ILocalStorageService localStorage { get; set; }
+    [Inject]
+    public HttpClient httpClient { get; set; }
+    [Inject]
+    public IConfiguration config { get; set; }
+    [Parameter]
+    public EventCallback<string> FileValueChanged { get; set; }
+    [Parameter]
+    public string FileValue { get; set; }
+    [Parameter]
+    public string ButtonText { get; set; } = "Choose Image";
+    [Parameter]
+    public string UploadContainer { get; set; }
+    [Parameter]
+    public int MaxImageWidth { get; set; } = 250;
+    [Parameter]
+    public int MaxImageHeight { get; set; } = 400;
+    public string ImgUrl { get; set; }
+    private string Error = "";
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var imageFile = e.File;
+
+        if (imageFile == null)
+        {
+            Console.WriteLine("No file");
+            return;
+        }
+
+        // check the file type
+        string permittedExtensions = config.GetValue<string>("FileUploadTypesAllowed");
+
+        if (!permittedExtensions.Contains(imageFile.ContentType.ToLowerInvariant()))
+        {
+            Error = "This file type is not allowed - images only please";
+            Console.WriteLine("This file type is not allowed - images only please");
+            return;
+        }
+
+        // check the file size
+        var fileSizeLimit = config.GetValue<long>("MaxFileUploadSize");
+
+        if (imageFile.Size > fileSizeLimit)
+        {
+            Error = "The file size is too large";
+            Console.WriteLine("The file size is too large");
+            return;
+        }
+
+        // resize the image
+        var resizedFile = await imageFile.RequestImageFileAsync("image/png", MaxImageWidth, MaxImageHeight);
+
+        // post it to the API
+        using (var stream = resizedFile.OpenReadStream(resizedFile.Size))
+        {
+            var content = new MultipartFormDataContent();
+            content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+
+            // add the file itself
+            content.Add(new StreamContent(stream, Convert.ToInt32(resizedFile.Size)), "image", imageFile.Name);
+
+            // also send the container to upload to
+            content.Add(new StringContent(UploadContainer != null ? UploadContainer : "default-container"), "container");
+            
+            // get jwt from local storage
+            var storedToken = await localStorage.GetItemAsync<string>("authToken");
+
+            if (string.IsNullOrWhiteSpace(storedToken))
+            {
+                Error = "You are not authorised to upload files";
+                Console.WriteLine("You are not authorised to upload files");
+                return;
+            }
+
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
+
+            var response = await client.PostAsync("https://localhost:5001/api/upload", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var uploadResponse = await response.Content.ReadAsStringAsync();
+                var uploadedImage = JsonSerializer.Deserialize<UploadResult>(uploadResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                ImgUrl = uploadedImage.Uri;
+
+                Console.WriteLine("Upload succeeded");
+                FileValue = uploadedImage.Uri;
+                await FileValueChanged.InvokeAsync(FileValue);
+                Console.WriteLine("FileValue: " + FileValue);
+                Error = "";
+            }
+            else {
+                Console.WriteLine("The file could not be uploaded");
+                Error = "The file could not be uploaded";
+            }
+            
+        }
+    }
+}
