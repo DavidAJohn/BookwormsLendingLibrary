@@ -40,13 +40,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="filePicker">Author Image</label><br />
+                        <label for="imageUrl">Author Image</label><br />
                         <FileUpload 
                             ButtonText="Choose author image"
                             UploadContainer="authors"
                             MaxImageWidth=250
                             MaxImageHeight=400
-                            @bind-FileValue="@FileValue"
+                            @bind-FileValue="author.AuthorImageUrl"
+                            @bind-FileValue:event="FileValueChanged"
                         />
                         <ValidationMessage For="@(() => author.AuthorImageUrl)" />
                     </div>

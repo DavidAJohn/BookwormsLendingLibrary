@@ -5,19 +5,19 @@
 
 <div>
     <InputFile 
-        id="filePicker" 
+        id="imageUrl" 
         OnChange="@HandleFileSelected"
-        @bind-Value="FileValue"
+        @bind-Value="@FileValue"
     />
     <br />
-    <button type="button" onclick="filePicker.click()" class="btn btn-secondary btn-sm image-picker">
+    <button type="button" onclick="imageUrl.click()" class="btn btn-secondary btn-sm image-picker">
         @ButtonText
     </button>
 
-    @if (ImgUrl != null)
+    @if (ImgPreviewUrl != null)
     {
         <div class="image-preview">
-            <img src="@ImgUrl" />
+            <img src="@ImgPreviewUrl" />
         </div>
     }
     
@@ -48,7 +48,7 @@
     public int MaxImageWidth { get; set; } = 250;
     [Parameter]
     public int MaxImageHeight { get; set; } = 400;
-    public string ImgUrl { get; set; }
+    public string ImgPreviewUrl { get; set; }
     private string Error = "";
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
@@ -115,12 +115,11 @@
             {
                 var uploadResponse = await response.Content.ReadAsStringAsync();
                 var uploadedImage = JsonSerializer.Deserialize<UploadResult>(uploadResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                ImgUrl = uploadedImage.Uri;
+                ImgPreviewUrl = uploadedImage.Uri;
 
                 Console.WriteLine("Upload succeeded");
                 FileValue = uploadedImage.Uri;
                 await FileValueChanged.InvokeAsync(FileValue);
-                Console.WriteLine("FileValue: " + FileValue);
                 Error = "";
             }
             else {
