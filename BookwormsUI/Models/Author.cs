@@ -18,9 +18,10 @@ namespace BookwormsUI.Models
         [StringLength(50)]
         public string LastName { get; set; }
         
-        [StringLength(250)]
+        [StringLength(500)]
         public string Biography { get; set; }
         public string AuthorImageUrl { get; set; }
         public ICollection<Book> Books { get; set; }
+        public bool isActive { get; set; }
     }
 }

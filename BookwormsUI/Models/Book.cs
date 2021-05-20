@@ -28,5 +28,7 @@ namespace BookwormsUI.Models
         public int CategoryId { get; set; }
         
         public string Category { get; set; }
+
+        public bool isActive { get; set; }
     }
 }

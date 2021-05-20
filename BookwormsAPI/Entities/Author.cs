@@ -13,5 +13,6 @@ namespace BookwormsAPI.Entities
         public string Biography { get; set; }
         public string AuthorImageUrl { get; set; }
         public ICollection<Book> Books { get; set; }
+        public bool isActive { get; set; } = true;
     }
 }

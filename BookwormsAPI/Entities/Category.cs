@@ -7,5 +7,6 @@ namespace BookwormsAPI.Entities
     {
         [Required]
         public string Name { get; set; }
+        public bool isActive { get; set; } = true;
     }
 }

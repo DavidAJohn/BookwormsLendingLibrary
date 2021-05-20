@@ -8,5 +8,6 @@ namespace BookwormsUI.Models
         
         [Required]
         public string Name { get; set; }
+        public bool isActive { get; set; }
     }
 }

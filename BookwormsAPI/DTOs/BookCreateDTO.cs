@@ -9,12 +9,18 @@ namespace BookwormsAPI.DTOs
 
         [Required]
         public int YearPublished { get; set; }
+
         public string ISBN { get; set; }
         
         [Required]
         public string Summary { get; set; }
+
         public string CoverImageUrl { get; set; }
+
+        [Required]
         public int AuthorId { get; set; }
+        
+        [Required]
         public int CategoryId { get; set; }
     }
 }

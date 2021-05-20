@@ -12,7 +12,7 @@ namespace BookwormsAPI.DTOs
         [MaxLength(50)]
         public string LastName { get; set; }
         
-        [MaxLength(250)]
+        [MaxLength(500)]
         public string Biography { get; set; }
         public string AuthorImageUrl { get; set; }
     }
