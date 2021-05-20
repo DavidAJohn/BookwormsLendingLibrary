@@ -81,7 +81,15 @@
 
                     <div class="form-group">
                         <label for="cover-image">Cover Image</label>
-                        <InputText Id="cover-image" Class="form-control" @bind-Value="book.CoverImageUrl" />
+                        <FileUpload 
+                            ButtonText=@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? "Choose new cover image" : "Choose cover image")}")
+                            UploadContainer="books"
+                            MaxImageWidth=250
+                            MaxImageHeight=400
+                            ImgPreviewUrl=@book.CoverImageUrl
+                            @bind-FileValue="book.CoverImageUrl"
+                            @bind-FileValue:event="FileValueChanged"
+                        />
                         <ValidationMessage For="@(() => book.CoverImageUrl)" />
                     </div>
 
@@ -110,6 +118,7 @@
     private List<Category> categories;
     private bool showErrors;
     private string error = "";
+    public string FileValue = "";
 
     protected override async Task OnInitializedAsync()
     {

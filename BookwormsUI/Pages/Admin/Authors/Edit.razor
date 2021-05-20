@@ -46,8 +46,15 @@ else
                         </div>
 
                         <div class="form-group">
-                            <label for="author-image">Author Image</label>
-                            <InputText Id="author-image" Class="form-control" @bind-Value="author.AuthorImageUrl" />
+                            <label for="imageUrl">Author Image</label>
+                            <FileUpload 
+                                ButtonText=@($"{(!String.IsNullOrEmpty(author.AuthorImageUrl) ? "Choose new author image" : "Choose author image")}")
+                                UploadContainer="authors"
+                                MaxImageWidth=300
+                                MaxImageHeight=500
+                                @bind-FileValue="author.AuthorImageUrl"
+                                @bind-FileValue:event="FileValueChanged"
+                            />
                             <ValidationMessage For="@(() => author.AuthorImageUrl)" />
                         </div>
 
@@ -68,7 +75,6 @@ else
     </div>
 }
 
-
 @code {
     [Parameter]
     public string Id { get; set; }
@@ -76,6 +82,7 @@ else
     private List<string> breadcrumbElements = new List<string>();
     private bool showErrors;
     private string error = "";
+    public string FileValue = "";
 
     protected override async Task OnInitializedAsync()
     {

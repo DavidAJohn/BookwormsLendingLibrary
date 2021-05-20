@@ -49,7 +49,8 @@
     public int MaxImageWidth { get; set; } = 250;
     [Parameter]
     public int MaxImageHeight { get; set; } = 400;
-    public string ImgPreviewUrl { get; set; }
+    [Parameter]
+    public string ImgPreviewUrl { get; set; } = "";
     private string Error = "";
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
