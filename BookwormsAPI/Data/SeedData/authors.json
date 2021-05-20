@@ -4,62 +4,62 @@
       "FirstName": "Wiley",
       "LastName": "Richards",
       "Biography": "Officia aute aute labore amet est ea minim voluptate consectetur. Eiusmod dolor ipsum officia eu sit ad ut ullamco reprehenderit magna consequat.",
-      "AuthorImageUrl": "/authors/wiley_richards.jpg"
+      "AuthorImageUrl": "https://bookwormslibrary.blob.core.windows.net/authors/wiley_richards.jpg"
     },
     {
       "Id": 2,
       "FirstName": "Preston",
       "LastName": "Hurley",
       "Biography": "Consectetur occaecat voluptate sint sunt incididunt. Mollit Lorem elit labore occaecat veniam incididunt amet dolore.",
-      "AuthorImageUrl": "/authors/preston_hurley.jpg"
+      "AuthorImageUrl": "https://bookwormslibrary.blob.core.windows.net/authors/preston_hurley.jpg"
     },
     {
       "Id": 3,
       "FirstName": "Rhoda",
       "LastName": "Hudson",
       "Biography": "Consectetur et proident id laborum laboris. Laborum occaecat dolore dolor mollit minim dolore fugiat consectetur dolor mollit aute adipisicing irure.",
-      "AuthorImageUrl": "/authors/rhoda_hudson.jpg"
+      "AuthorImageUrl": "https://bookwormslibrary.blob.core.windows.net/authors/rhoda_hudson.jpg"
     },
     {
       "Id": 4,
       "FirstName": "Misty",
       "LastName": "Rollins",
       "Biography": "Dolore ad mollit adipisicing ipsum cillum aliqua in magna. Reprehenderit tempor incididunt magna dolor excepteur dolor in.",
-      "AuthorImageUrl": "/authors/misty_rollins.jpg"
+      "AuthorImageUrl": "https://bookwormslibrary.blob.core.windows.net/authors/misty_rollins.jpg"
     },
     {
       "Id": 5,
       "FirstName": "Don",
       "LastName": "DeLillo",
       "Biography": "American novelist, short story writer, playwright, screenwriter and essayist. His works have covered subjects as diverse as television, nuclear war, sports, the complexities of language, performance art, the Cold War, mathematics, the advent of the digital age, politics, economics, and global terrorism.",
-      "AuthorImageUrl": "/authors/delillo_head.jpg"
+      "AuthorImageUrl": "https://bookwormslibrary.blob.core.windows.net/authors/delillo_head.jpg"
     },
     {
       "Id": 6,
       "FirstName": "William",
       "LastName": "Gibson",
       "Biography": "American-Canadian speculative fiction writer and essayist widely credited with pioneering the science fiction subgenre known as cyberpunk. Beginning his writing career in the late 1970s, his early works were noir, near-future stories that explored the effects of technology, cybernetics, and computer networks on humans — a 'combination of lowlife and high tech' — and helped to create an iconography for the information age before the ubiquity of the Internet in the 1990s. Gibson coined the term 'cyberspace' for 'widespread, interconnected digital technology' in his short story 'Burning Chrome' (1982), and later popularized the concept in his acclaimed debut novel Neuromancer (1984). These early works of Gibson's have been credited with 'renovating' science fiction literature in the 1980s.",
-      "AuthorImageUrl": "/authors/william_gibson_head.jpg"
+      "AuthorImageUrl": "https://bookwormslibrary.blob.core.windows.net/authors/william_gibson_head.jpg"
     },
     {
       "Id": 7,
       "FirstName": "Stephen",
       "LastName": "King",
       "Biography": "American author of horror, supernatural fiction, suspense, crime, science-fiction, and fantasy novels. His books have sold more than 350 million copies, and many have been adapted into films, television series, miniseries, and comic books. King has published 62 novels, including seven under the pen name Richard Bachman, and five non-fiction books. He has also written approximately 200 short stories, most of which have been published in book collections.",
-      "AuthorImageUrl": "/authors/stephen_king_head.jpg"
+      "AuthorImageUrl": "https://bookwormslibrary.blob.core.windows.net/authors/stephen_king_head.jpg"
     },
     {
       "Id": 8,
       "FirstName": "Bram",
       "LastName": "Stoker",
       "Biography": "Abraham 'Bram' Stoker was an Irish author, best known today for his 1897 Gothic novel Dracula. During his lifetime, he was better known as the personal assistant of actor Henry Irving and business manager of the Lyceum Theatre in London.",
-      "AuthorImageUrl": "/authors/bram_stoker_head.jpg"
+      "AuthorImageUrl": "https://bookwormslibrary.blob.core.windows.net/authors/bram_stoker_head.jpg"
     },
     {
       "Id": 9,
       "FirstName": "Mary",
       "LastName": "Shelley",
       "Biography": "Mary Wollstonecraft Shelley (30 August 1797 – 1 February 1851) was an English novelist who wrote the Gothic novel Frankenstein; or, The Modern Prometheus (1818), which is considered an early example of science fiction. She also edited and promoted the works of her husband, the Romantic poet and philosopher Percy Bysshe Shelley. Her father was the political philosopher William Godwin and her mother was the philosopher and feminist activist Mary Wollstonecraft.",
-      "AuthorImageUrl": "/authors/mary_shelley_head.jpg"
+      "AuthorImageUrl": "https://bookwormslibrary.blob.core.windows.net/authors/mary_shelley_head.jpg"
     }
 ]
