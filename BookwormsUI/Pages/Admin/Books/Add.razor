@@ -80,8 +80,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="cover-image">Cover Image</label>
-                        <InputText Id="cover-image" Class="form-control" @bind-Value="book.CoverImageUrl" />
+                        <label for="imageUrl">Cover Image</label>
+                        <FileUpload 
+                            ButtonText="Choose cover image"
+                            UploadContainer="books"
+                            MaxImageWidth=250
+                            MaxImageHeight=400
+                            @bind-FileValue="book.CoverImageUrl"
+                            @bind-FileValue:event="FileValueChanged"
+                        />
                         <ValidationMessage For="@(() => book.CoverImageUrl)" />
                     </div>
 
@@ -107,6 +114,7 @@
     private List<Category> categories;
     private bool showErrors;
     private string error = "";
+    public string FileValue = "";
 
     protected override void OnInitialized()
     {

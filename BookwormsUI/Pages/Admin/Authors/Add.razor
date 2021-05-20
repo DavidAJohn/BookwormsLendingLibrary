@@ -44,8 +44,8 @@
                         <FileUpload 
                             ButtonText="Choose author image"
                             UploadContainer="authors"
-                            MaxImageWidth=250
-                            MaxImageHeight=400
+                            MaxImageWidth=300
+                            MaxImageHeight=500
                             @bind-FileValue="author.AuthorImageUrl"
                             @bind-FileValue:event="FileValueChanged"
                         />
@@ -72,9 +72,6 @@
     private List<string> breadcrumbElements = new List<string>();
     private bool showErrors;
     private string error = "";
-
-    [Parameter]
-    public string ImgUrl { get; set; }
     public string FileValue = "";
 
     protected override void OnInitialized()
