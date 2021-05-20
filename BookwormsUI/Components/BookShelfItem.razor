@@ -5,7 +5,7 @@
     <div class="text-center text-dark card bg-light">
     <div class="shadow-sm card-body image">
         <img 
-            src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? AssetBaseUrl + book.CoverImageUrl : AssetBaseUrl + "/books/book_cover.png")}")"
+            src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? book.CoverImageUrl : AssetBaseUrl + "/books/book_cover.png")}")"
             class="book-cover"
         >
         <div class="book-button-layout hover-overlay">
