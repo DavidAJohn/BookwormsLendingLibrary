@@ -111,7 +111,7 @@ else
                             <div class="book-row-item">
                                 <a href="/books/details/@book.Id">
                                     <img 
-                                        src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? AssetBaseUrl + book.CoverImageUrl : AssetBaseUrl + "/books/book_cover.png")}")"
+                                        src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? book.CoverImageUrl : AssetBaseUrl + "/books/book_cover.png")}")"
                                         class="book-image"
                                     />
                                 </a>
