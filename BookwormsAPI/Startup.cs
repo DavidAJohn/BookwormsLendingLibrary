@@ -28,11 +28,11 @@ namespace BookwormsAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options => {
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
             services.AddDbContext<AppIdentityDbContext>(options => {
-                options.UseSqlite(Configuration.GetConnectionString("IdentityConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"));
             });
 
             services.AddControllers();
