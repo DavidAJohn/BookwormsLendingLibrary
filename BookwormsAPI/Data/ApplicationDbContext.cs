@@ -24,6 +24,10 @@ namespace BookwormsAPI.Data
                 .HasOne(b => b.Author)
                 .WithMany(a => a.Books)
                 .HasForeignKey(b => b.AuthorId);
+                
+            modelBuilder.Entity<Author>()
+                .Property(a => a.Id)
+                .ValueGeneratedOnAdd();
 
             // creates a relationship between Request and Address without needing a navigation property
             modelBuilder.Entity<Request>()
@@ -38,7 +42,7 @@ namespace BookwormsAPI.Data
                     rs => rs.ToString(),
                     rs => (RequestStatus) Enum.Parse(typeof(RequestStatus), rs)
                 );
-
+            
             // via https://blog.dangl.me/archive/handling-datetimeoffset-in-sqlite-with-entity-framework-core/
             if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
             {

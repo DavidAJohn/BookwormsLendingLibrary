@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using BookwormsAPI.Entities;
@@ -19,12 +16,18 @@ namespace BookwormsAPI.Data
             var authorsData = await File.ReadAllTextAsync("./Data/SeedData/authors.json");
             var authors = JsonSerializer.Deserialize<List<Author>>(authorsData);
 
-            foreach (var author in authors)
+            using (var transaction = context.Database.BeginTransaction())
             {
-                context.Authors.Add(author);
-            }
+                foreach (var author in authors)
+                {
+                    context.Authors.Add(author);
+                }
 
-            await context.SaveChangesAsync();
+                context.Database.ExecuteSqlInterpolated($"SET IDENTITY_INSERT Authors ON;");
+                context.SaveChanges();
+                context.Database.ExecuteSqlInterpolated($"SET IDENTITY_INSERT Authors OFF");
+                transaction.Commit();
+            }
         }
 
         public static async Task SeedCategoriesDataAsync(ApplicationDbContext context)
@@ -34,12 +37,18 @@ namespace BookwormsAPI.Data
             var categoriesData = await File.ReadAllTextAsync("./Data/SeedData/categories.json");
             var categories = JsonSerializer.Deserialize<List<Category>>(categoriesData);
 
-            foreach (var category in categories)
+            using (var transaction = context.Database.BeginTransaction())
             {
-                context.Categories.Add(category);
-            }
+                foreach (var category in categories)
+                {
+                    context.Categories.Add(category);
+                }
 
-            await context.SaveChangesAsync();
+                context.Database.ExecuteSqlInterpolated($"SET IDENTITY_INSERT Categories ON;");
+                context.SaveChanges();
+                context.Database.ExecuteSqlInterpolated($"SET IDENTITY_INSERT Categories OFF");
+                transaction.Commit();
+            }
         }
 
         public static async Task SeedBooksDataAsync(ApplicationDbContext context)
