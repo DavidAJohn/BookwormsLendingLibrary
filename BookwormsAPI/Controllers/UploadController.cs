@@ -20,7 +20,7 @@ namespace BookwormsAPI.Controllers
         private readonly long fileSizeLimit;
         public UploadController(IConfiguration configuration)
         {
-            azureConnectionString = configuration["ConnectionStrings:AzureStorageConnectionString"];
+            azureConnectionString = configuration["AzureStorageConnectionString"];
             azureContainersAllowed = configuration.GetValue<string>("AzureContainersAllowed");
             permittedFileExtensions = configuration.GetValue<string>("FileUploadTypesAllowed");
             fileSizeLimit = configuration.GetValue<long>("MaxFileUploadSize");
