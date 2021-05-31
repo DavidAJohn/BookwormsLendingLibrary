@@ -270,3 +270,12 @@ button.image-picker {
     .image-preview img {
         width: 100%;
     }
+
+/* pagination */
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #343a40 !important;
+    border-color: #343a40 !important;
+}
