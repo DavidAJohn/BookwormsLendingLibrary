@@ -62,6 +62,12 @@ namespace BookwormsAPI.Services
             return await _requestRepository.ListAsync(spec);
         }
 
+        public async Task<IEnumerable<Request>> GetRequestsOverdueAsync()
+        {
+            var spec = new RequestsOverdueSpecification();
+            return await _requestRepository.ListAsync(spec);
+        }
+
         public async Task<Request> UpdateRequestStatusAsync(Request request, RequestStatus newRequestStatus)
         {
             if (request == null) return null;

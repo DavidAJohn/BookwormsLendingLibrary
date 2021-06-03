@@ -1,16 +1,15 @@
 using System;
-using System.Linq.Expressions;
 using BookwormsAPI.Entities.Borrowing;
 
 namespace BookwormsAPI.Specifications
 {
-    public class RequestsByStatusWithBookDetailsSpecification : BaseSpecification<Request>
+    public class RequestsOverdueSpecification : BaseSpecification<Request>
     {
-        public RequestsByStatusWithBookDetailsSpecification(RequestStatus requestStatus) 
+        public RequestsOverdueSpecification() 
             : base(r => 
-                r.Status == requestStatus
+                r.DateDue != null 
+                && DateTime.Now > r.DateDue
                 && r.DateReturned == null
-                && DateTime.Now < r.DateDue
             )
         {
             AddInclude(r => r.Book);

@@ -72,6 +72,14 @@ namespace BookwormsAPI.Controllers
         }
 
         [Authorize(Policy = "RequireAdminRole")]
+        [HttpGet("overdue")]
+        public async Task<ActionResult<IEnumerable<RequestToReturnDTO>>> GetRequestsOverdueAsync()
+        {
+            var requests = await _requestService.GetRequestsOverdueAsync();
+            return Ok(_mapper.Map<IEnumerable<Request>, IEnumerable<RequestToReturnDTO>>(requests));
+        }
+
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateRequestStatus(int id, [FromBody] NewStatus status)
         {
