@@ -1,0 +1,15 @@
+a.nav-link {
+    color: rgba(0,0,0,0.4);
+    background-color: whitesmoke;
+}
+
+    a.nav-link:hover {
+        color: rgba(0,0,0,0.8);
+    }
+
+a.nav-link.active {
+    /* fix for border-bottom appearing on active tab */
+    border-bottom: 1px solid white;
+    margin-bottom: -1.1px;
+    font-weight: 600;
+}
