@@ -24,6 +24,7 @@ namespace BookwormsAPI.Controllers
 
         // GET api/categories
         [HttpGet]
+        [ResponseCache(Duration = 60)]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
             var spec = new CategoriesOrderedByNameSpecification();
@@ -34,6 +35,7 @@ namespace BookwormsAPI.Controllers
 
         // GET api/categories/{id}
         [HttpGet("{id}", Name="GetCategoryById")]
+        [ResponseCache(Duration = 60, VaryByQueryKeys = new[] {"id"})]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> GetCategoryById(int id)

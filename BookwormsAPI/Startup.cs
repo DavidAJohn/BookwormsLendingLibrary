@@ -53,6 +53,8 @@ namespace BookwormsAPI
             services.AddAutoMapper(typeof(MappingProfiles));
 
             services.AddHttpContextAccessor();
+
+            services.AddResponseCaching();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +71,8 @@ namespace BookwormsAPI
             app.UseHttpsRedirection();
 
             app.UseCors("CorsPolicy");
+
+            app.UseResponseCaching();
 
             app.UseRouting();
 
