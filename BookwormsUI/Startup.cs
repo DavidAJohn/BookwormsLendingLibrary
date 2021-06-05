@@ -45,6 +45,7 @@ namespace BookwormsUI
 
             services.AddHttpClient<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<ApiAuthenticationStateProvider>();
             services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 
