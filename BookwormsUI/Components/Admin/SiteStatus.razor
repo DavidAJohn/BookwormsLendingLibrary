@@ -1,0 +1,39 @@
+﻿@using BookwormsUI.Models
+@inject IAdminService adminService
+
+@if (siteStatus != null)
+{
+    <div>
+        <i class="fas fa-book fa-2x"></i>
+        <div>Books Listed: </div>
+        <div>@siteStatus.BookTotal</div>
+    </div>
+    <div>
+        <i class="fas fa-user fa-2x"></i>
+        <div>Authors Listed: </div>
+        <div>@siteStatus.AuthorTotal</div>
+    </div>
+    <div class="text-success">
+        <i class="fas fa-book-reader fa-2x"></i>
+        <div>Outstanding Loans: </div>
+        <div>@siteStatus.RequestsOutstanding</div>
+    </div>
+    <div class="text-danger">
+        <i class="fas fa-book-reader fa-2x"></i>
+        <div>Overdue Loans: </div>
+        <div>@siteStatus.RequestsOverdue</div>
+    </div>
+}
+
+@code {
+    SiteStatusTotals siteStatus { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            siteStatus = await adminService.GetSiteStatusAsync();
+            StateHasChanged();
+        }
+    }
+}

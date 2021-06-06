@@ -279,15 +279,3 @@ button.image-picker {
     background-color: #343a40 !important;
     border-color: #343a40 !important;
 }
-
-/* admin section */
-
-.admin-section {
-    font-size: 1rem;
-    margin-bottom: 2rem;
-}
-
-.admin-heading-text {
-    font-size: 1.4rem;
-    font-weight: 700;
-}

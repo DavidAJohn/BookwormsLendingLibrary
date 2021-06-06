@@ -40,7 +40,6 @@ namespace BookwormsUI.Services
                     await response.Content.ReadAsStringAsync()
                 );
 
-                Console.WriteLine("BookTotal: " + status.BookTotal);
                 return status;
             }
 

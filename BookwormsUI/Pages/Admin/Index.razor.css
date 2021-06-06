@@ -1,6 +1,17 @@
+.admin-section {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+.admin-heading-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
 a.nav-link {
     color: rgba(0,0,0,0.4);
     background-color: whitesmoke;
+    border-color: rgba(0,0,0,0.1);
 }
 
     a.nav-link:hover {
@@ -12,4 +23,15 @@ a.nav-link.active {
     border-bottom: 1px solid white;
     margin-bottom: -1.1px;
     font-weight: 600;
+}
+
+.maintenance-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 50px;
+    grid-row-gap: 50px;
+}
+
+.maintenance-subsection {
+    border: 1px solid rgba(0,0,0,0.1);
 }
