@@ -10,7 +10,7 @@ namespace BookwormsAPI.Specifications
             : base(r => 
                 r.Status == requestStatus
                 && r.DateReturned == null
-                && DateTime.Now < r.DateDue
+                && (DateTime.Now < r.DateDue || r.DateDue == null)
             )
         {
             AddInclude(r => r.Book);
