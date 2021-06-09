@@ -221,5 +221,29 @@ namespace BookwormsUI.Services
             }
             
         }
+
+        public async Task<List<Request>> GetOverdueRequestsAsync() 
+        {
+            var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+
+            if (string.IsNullOrWhiteSpace(savedToken))
+            {
+                return null;
+            }
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
+
+            var response = await _httpClient.GetAsync(GetApiEndpoint("requests") + "/overdue");
+            if (response.IsSuccessStatusCode)
+            {
+                var requests = JsonConvert.DeserializeObject<List<Request>>(
+                    await response.Content.ReadAsStringAsync()
+                );
+
+                return requests;
+            }
+
+            return null;
+        }
     }
 }

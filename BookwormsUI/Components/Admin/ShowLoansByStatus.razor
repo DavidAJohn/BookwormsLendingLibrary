@@ -1,0 +1,186 @@
+﻿@using BookwormsUI.Extensions
+@inject RequestService requestService
+@inject IToastService toastService
+
+@if (ShowErrors)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>@Error</p>
+    </div>
+}
+
+@if (bookLoans.Count == 0)
+{
+    <div class="p-5">
+        <h5>@NoResultsText</h5>
+    </div>
+}
+else
+{
+    <div class="mt-3">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>Borrower</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                    <th>Date @(Status == "pending" ? "Requested" : "Sent")</th>
+                    <th>Date Due</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var loan in bookLoans)
+                {
+                <tr>
+                    <td>@loan.BorrowerEmail</td>
+                    <td>@loan.BookTitle</td>
+                    <td>@loan.BookAuthor</td>
+                    <td>@loan.Status</td>
+                    @if (Status == "pending")
+                    {
+                        <td>@loan.DateRequested.ToUKStandardDate()</td>
+                    }
+                    else
+                    {
+                        <td>@(loan.DateSent != null ? String.Format("{0:dd/MM/yyyy}", loan.DateSent) : "")</td>
+                    }
+                    <td>@(loan.DateDue != null ? String.Format("{0:dd/MM/yyyy}", loan.DateDue) : "")</td>
+                    <td>
+                        @if (ShowActionButton)
+                        {
+                            <button class="btn btn-success btn-sm" @onclick="@(() => UpdateRequest(loan.Id, Status))">
+                                @ActionButtonText
+                            </button>
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Status {get; set;}
+
+    [CascadingParameter] 
+    public IModalService Modal { get; set; }
+    private bool ShowErrors = false;
+    private string Error = "";
+    private List<Request> bookLoans = new List<Request>();
+    private string NoResultsText = "No results found";
+    private string ActionButtonText;
+    private bool ShowActionButton;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            switch (Status.ToLower())
+            {
+                case "pending": 
+                    await SetStatusPending();
+                    break;
+                case "outstanding": 
+                    await SetStatusOutstanding();
+                    break;
+                case "overdue": 
+                    await SetStatusOverdue();
+                    break;
+                default: 
+                    await SetStatusPending();
+                    break;
+            };
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task SetStatusPending()
+    {
+        NoResultsText = "No pending loans found";
+        ActionButtonText = "Mark as Sent";
+        ShowActionButton = true;
+        bookLoans = await requestService.GetRequestsByStatusAsync(RequestStatus.Pending);
+    }
+
+    private async Task SetStatusOutstanding()
+    {
+        NoResultsText = "No outstanding loans found";
+        ActionButtonText = "Mark as Returned";
+        ShowActionButton = true;
+        bookLoans = await requestService.GetRequestsByStatusAsync(RequestStatus.Sent);
+    }
+
+    private async Task SetStatusOverdue()
+    {
+        NoResultsText = "No overdue loans found";
+        ShowActionButton = false;
+        bookLoans = await requestService.GetOverdueRequestsAsync();
+    }
+
+    private async Task UpdateRequest(int requestId, string status)
+    {
+        var borrowStartEnd = "";
+        var borrowToastAction = "";
+        RequestStatus updatedStatus = RequestStatus.Sent;
+
+        switch (status)
+        {
+            case "pending": 
+                borrowStartEnd = "start";
+                updatedStatus = RequestStatus.Sent;
+                borrowToastAction = "sent";
+                break;
+            case "outstanding": 
+                borrowStartEnd = "end";
+                updatedStatus = RequestStatus.Returned;
+                borrowToastAction = "returned";
+                break;
+            default:
+                break;
+        };
+
+        if (borrowStartEnd != "" && borrowToastAction != "")
+        {
+            // first, get confirmation via a modal
+            var modalParameters = new ModalParameters();
+            modalParameters.Add(nameof(ConfirmModal.Message), "This will " + borrowStartEnd + " the borrower's lending period");
+
+            modalParameters.Add(nameof(ConfirmModal.ConfirmButtonText), "Yes, confirm");
+            modalParameters.Add(nameof(ConfirmModal.CancelButtonText), "No, cancel");
+
+            var confirmModal = Modal.Show<ConfirmModal>("Are you sure?", modalParameters);
+            var result = await confirmModal.Result;
+
+            // user confirmed, proceed with the update
+            if (!result.Cancelled) // user must have clicked confirm button
+            {
+                var updateResponse = await requestService.UpdateRequestStatusAsync(requestId, updatedStatus);
+
+                if (updateResponse.Successful)
+                {
+                    ShowErrors = false;
+                    toastService.ShowSuccess("This book request has been marked as " + borrowToastAction, "Book " + borrowToastAction);
+                    await SetStatusPending();
+                    await SetStatusOutstanding();
+                    await SetStatusOverdue();
+                }
+                else 
+                {
+                    ShowErrors = true;
+                    Error = updateResponse.Error;
+                }
+            }
+        }
+        else 
+        {
+            ShowErrors = true;
+            Error = "Unable to update request - please reload the page and try again";
+        }
+    }
+
+}
