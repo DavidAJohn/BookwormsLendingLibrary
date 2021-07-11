@@ -22,5 +22,7 @@ namespace BookwormsAPI.Specifications
             get => _search; 
             set => _search = value.ToLower(); 
         }
+
+        public bool IsActive { get; set; }
     }
 }

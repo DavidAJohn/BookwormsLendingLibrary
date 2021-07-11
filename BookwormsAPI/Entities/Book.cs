@@ -34,6 +34,6 @@ namespace BookwormsAPI.Entities
 
         public DateTime AddedOn { get; set; } = DateTime.Now;
 
-        public bool isActive { get; set; } = true;
+        public bool IsActive { get; set; } = true;
     }
 }

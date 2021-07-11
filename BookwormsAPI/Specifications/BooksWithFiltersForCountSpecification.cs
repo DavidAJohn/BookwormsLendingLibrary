@@ -8,7 +8,8 @@ namespace BookwormsAPI.Specifications
             : base(b =>
                 (string.IsNullOrEmpty(bookParams.Search) || b.Title.ToLower().Contains(bookParams.Search)) &&
                 (!bookParams.AuthorId.HasValue || b.AuthorId == bookParams.AuthorId) &&
-                (!bookParams.CategoryId.HasValue || b.CategoryId == bookParams.CategoryId)
+                (!bookParams.CategoryId.HasValue || b.CategoryId == bookParams.CategoryId) &&
+                b.IsActive == true
             )
         {
         }
