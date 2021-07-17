@@ -63,16 +63,16 @@
 
     private void SeeMore(string methodName, string methodValue)
     {
-        var paramName = methodName switch 
+        var url = methodName switch 
         {
-            "Category" => "categoryId",
-            "Sort" => "sortBy",
+            "Category" => $"/books/category/{methodValue}",
+            "Sort" => $"/books/{methodValue}",
             _ => null
         };
 
-        if (paramName != null)
+        if (url != null)
         {
-            navigationManager.NavigateTo($"/books?{paramName}={methodValue}");
+            navigationManager.NavigateTo(url);
         }
         else {
             ShowSeeMoreButton = false;

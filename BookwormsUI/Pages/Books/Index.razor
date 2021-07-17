@@ -1,4 +1,6 @@
 ﻿@page "/books/"
+@page "/books/{sortBy}"
+@page "/books/category/{categoryId:int}"
 
 @using BookwormsUI.Components.Paging
 @inject IBookRepository bookRepository
@@ -167,6 +169,12 @@ else
 }
 
 @code {
+    [Parameter]
+    public string SortBy { get; set; }
+
+    [Parameter]
+    public int CategoryId { get; set; }
+
     private List<Book> books;
     private List<Category> categories;
     private string url;
@@ -180,10 +188,17 @@ else
     private string Role;
     private int activeCategory = 0;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        // check for any parameters in the querystring
-        CheckForQuerystring();
+        if (CategoryId > 0)
+        {
+            DisplayCategory();
+        }
+
+        if (!string.IsNullOrEmpty(SortBy))
+        {
+            DisplaySorted();
+        }
 
         await SelectedPage();
         await GetCategories();
@@ -268,56 +283,43 @@ else
         navigationManager.NavigateTo("/admin/books/edit/" + id);
     }
 
-    public void CheckForQuerystring()
+    public void DisplayCategory()
     {
-        var queryStringParams = navigationManager.GetQueryStringCollection();
+        itemParams.CategoryId = CategoryId;
 
-        // categoryId (expects int)
-        if (queryStringParams["categoryId"] != null)
+        // also highlight the active category in the sidebar
+        SetActiveCategory();
+        
+        // provide the BreadcrumbHeader component with specific elements to display,
+        // because the URL will now have a querystring appended
+        string[] elements = {"Books", "Category"};
+        BreadcrumbElements.AddRange(elements);
+    }
+
+    private void DisplaySorted()
+    {
+        string sortByOption = SortBy;
+        itemParams.SortBy = sortByOption;
+
+        // show correct option on the 'sort by' dropdown
+        var sortByName = sortByOption switch
+        {  
+            "titleAsc" => "Title",
+            "authorAsc" => "Author Name",
+            "yearPublishedDesc" => "Published (new to old)",
+            "yearPublishedAsc" => "Published (old to new)",
+            "recentlyAddedDesc" => "Recently Added",
+            "mostPopularDesc" => "Most Popular",
+            _ => "Title"
+        };
+
+        SortBySelected = sortByName;
+        
+        // provide the BreadcrumbHeader component with specific elements to display,
+        // because the URL will now have a querystring appended
+        if (BreadcrumbElements.Count == 0)
         {
-            int number;
-            bool convertible = Int32.TryParse(queryStringParams["categoryId"], out number);
-
-            if (convertible)
-            {
-                itemParams.CategoryId = Convert.ToInt32(queryStringParams["categoryId"]);
-
-                // also highlight the active category in the sidebar
-                SetActiveCategory();
-            }
-
-            // provide the BreadcrumbHeader component with specific elements to display,
-            // because the URL will now have a querystring appended
-            string[] elements = {"Books", "Category"};
-            BreadcrumbElements.AddRange(elements);
-        }
-
-        // sortBy (expects string)
-        if (queryStringParams["sortBy"] != "")
-        {
-            string sortByOption = queryStringParams["sortBy"];
-            itemParams.SortBy = sortByOption;
-
-            // show correct option on the 'sort by' dropdown
-            var sortByName = sortByOption switch
-            {  
-                "titleAsc" => "Title",
-                "authorAsc" => "Author Name",
-                "yearPublishedDesc" => "Published (new to old)",
-                "yearPublishedAsc" => "Published (old to new)",
-                "recentlyAddedDesc" => "Recently Added",
-                "mostPopularDesc" => "Most Popular",
-                _ => "Title"
-            };
-
-            SortBySelected = sortByName;
-            
-            // provide the BreadcrumbHeader component with specific elements to display,
-            // because the URL will now have a querystring appended
-            if (BreadcrumbElements.Count == 0)
-            {
-                BreadcrumbElements.Add("Books");
-            }
+            BreadcrumbElements.Add("Books");
         }
     }
 
