@@ -6,9 +6,7 @@
         @bind-value:event="oninput"
         @onkeydown:preventDefault
     >
-    <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" @onclick="SearchSubmitted">Search</button>
-    </div>
+    <button class="btn btn-outline-secondary" type="button" @onclick="SearchSubmitted">Search</button>
 </div>
 
 @code {
@@ -21,7 +19,7 @@
     private async Task SearchSubmitted()
     {
         await OnSearchSubmitted.InvokeAsync(SearchTerm);
-        navigationManager.NavigateTo("/searchresults?searchTerm=" + SearchTerm);
+        navigationManager.NavigateTo("/searchresults/" + SearchTerm);
     }
 
 }

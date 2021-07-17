@@ -1,7 +1,6 @@
-﻿@page "/searchresults/"
+﻿@page "/searchresults/{searchTerm}"
 
 @inject NavigationManager navigationManager
-@using BookwormsUI.Extensions
 @inject IBookRepository bookRepository
 @inject BookService bookService
 @inject IAuthorRepository authorRepository
@@ -66,13 +65,8 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        var queryStringParams = navigationManager.GetQueryStringCollection();
-        SearchTerm = queryStringParams["searchTerm"];
-
         await GetBookResults();
         await GetAuthorResults();
-
-        
     }
 
     private async Task GetBookResults()
