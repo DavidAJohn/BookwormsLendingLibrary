@@ -24,23 +24,22 @@ else
         </div>
     }
     
-    <div class="container">
-        <div class="mt-4 row">
-            <div class="col-3">
+    <div class="container mt-4">
+        <div class="book-container">
+            <div class="book-image">
                 <img 
                     src="@($"{(!String.IsNullOrEmpty(book.CoverImageUrl) ? book.CoverImageUrl : AssetBaseUrl + "/books/book_cover.png")}")"  
-                    style="width: 250px;max-height: 375px;"
                 />
             </div>
-            <div class="col-9">
-                <table class="table table-responsive">
-                    <tr>
-                        <td>Title:</td>
-                        <td>@book.Title</td>
-                    </tr>
-                    <tr>
-                        <td>Author:</td>
-                        <td>
+            <div class="book-details">
+                <div >
+                    <div class="details-row">
+                        <div>Title:</div>
+                        <div>@book.Title</div>
+                    </div>
+                    <div class="details-row">
+                        <div>Author:</div>
+                        <div>
                             @if (book.Author == null)
                             {
                                 <span class="text-muted">No author listed</span>
@@ -49,52 +48,52 @@ else
                             {
                                 <a href="/authors/details/@book.AuthorId">@book.Author</a>
                             }
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Published:</td>
-                        <td>@book.YearPublished</td>
-                    </tr>
-                    <tr>
-                        <td>Category:</td>
-                        <td>@book.Category</td>
-                    </tr>
-                    <tr>
-                        <td>Summary:</td>
-                        <td>@book.Summary</td>
-                    </tr>
-                    <tr>
+                        </div>
+                    </div>
+                    <div class="details-row">
+                        <div>Published:</div>
+                        <div>@book.YearPublished</div>
+                    </div>
+                    <div class="details-row">
+                        <div>Category:</div>
+                        <div>@book.Category</div>
+                    </div>
+                    <div class="details-row summary-row">
+                        <div>Summary:</div>
+                        <div class="book-summary">@book.Summary</div>
+                    </div>
+                    <div>
                         @if (LoggedIn)
                         {
-                            <td colspan="2">
+                            <div class="mb-4 mt-2">
                                 <button class="btn btn-success" @onclick="@(() => ShowConfirmAddress(book.Id))">
                                     Request This Book
                                 </button>
-                            </td>
+                            </div>
                         }
                         else
                         {
-                            <td colspan="2">
+                            <div class="mb-4">
                                 <strong>You must be logged in to request this book. Log in <a href="/login"><u>here</u></a>, or register <a href="/register"><u>here</u></a>.</strong>
-                            </td>
+                            </div>
                         }
-                    </tr>
-                    <tr>
-                        <td colspan="2">
+                    </div>
+                    <div>
+                        <div>
                             There is currently <strong>1</strong> copy of this book available to borrow
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
                     @if (ShowErrors)
                     {
-                        <tr>
-                            <td colspan="2">
+                        <div>
+                            <div class="mb-5">
                                 <div class="alert alert-danger" role="alert">
                                     <p>@Error</p>
                                 </div>
-                            </td>
-                        </tr>
+                            </div>
+                        </div>
                     }
-                </table>
+                </div>
                 <br />
             </div>
         </div>

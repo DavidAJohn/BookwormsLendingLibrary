@@ -1,0 +1,33 @@
+.book-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-column-gap: 3rem;
+}
+
+.book-image img {
+    width: 250px;
+    max-height: 375px;
+}
+
+div.details-row {
+    padding-bottom: 1.25rem;
+}
+
+div.details-row div {
+    display: inline-block;
+}
+
+.details-row div:first-child {
+    padding-right: 1.5rem;
+    font-weight: bold;
+    width: 6rem;
+}
+
+.summary-row div:first-child {
+    padding-bottom: 1rem;
+}
+
+.book-summary {
+    padding-right: 1rem;
+    text-align: justify;
+}
