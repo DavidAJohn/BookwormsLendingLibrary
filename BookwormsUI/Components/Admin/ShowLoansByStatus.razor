@@ -9,7 +9,7 @@
     </div>
 }
 
-@if (bookLoans.Count == 0)
+@if (bookLoans == null)
 {
     <div class="p-5">
         <h5>@NoResultsText</h5>
@@ -70,7 +70,7 @@ else
     public IModalService Modal { get; set; }
     private bool ShowErrors = false;
     private string Error = "";
-    private List<Request> bookLoans = new List<Request>();
+    private List<Request> bookLoans;
     private string NoResultsText = "No results found";
     private string ActionButtonText;
     private bool ShowActionButton;
