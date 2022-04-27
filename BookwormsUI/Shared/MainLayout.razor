@@ -15,25 +15,23 @@
                 ErrorIcon="fas fa-exclamation-circle" />
 
 <!-- navbar -->
-<nav class="navbar navbar-expand-sm navbar-light bg-light" id="upper-nav">
-    <div class="container no-lr-padding">
-        <a class="ml-2 navbar-brand" href="#"><i class="mr-3 fas fa-book-reader"></i>Bookworms Lending Library</a>
-        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+<nav class="navbar navbar-expand-md navbar-light bg-light" id="upper-nav">
+    <div class="container mx-auto ps-3">
+        <a class="ms-2 navbar-brand" href="#">
+            <i class="me-3 fas fa-book-reader"></i>
+            <span>Bookworms Lending Library</span>
+        </a>
+        <div class="nav-elements" id="navbarNav">
             <LoginDisplay />
         </div>
     </div>
 </nav>
-<nav class="navbar navbar-expand-sm navbar-light bg-light" id="lower-nav">
-    <div class="container no-lr-padding">
-        <div class="ml-auto collapse navbar-collapse d-none d-md-block" id="navbarNav2">
-            <NavMenu />
-            <form class="ml-auto mr-1 form-inline">
-                <ClickSearch />
-            </form>
-        </div>
+<nav class="navbar navbar-expand-md navbar-light bg-light" id="lower-nav">
+    <div class="container mx-auto ps-3">
+        <NavMenu />
+        <form class="ms-auto form-inline">
+            <ClickSearch />
+        </form>
     </div>
 </nav>
 
@@ -42,7 +40,7 @@
 
     <PromoCarousel showCarousel=@showPromoCarousel />
 
-    <div class="container no-lr-padding">
+    <div class="container mx-auto no-lr-padding">
         <div class="py-5 body-content">
             @Body
         </div>
@@ -56,7 +54,7 @@
         <div class="row">
             <div class="mb-4 col-lg-6 col-md-12 mb-md-0">
                 <div class="mb-4 footer-title">
-                    <i class="mr-3 fas fa-book-reader"></i>&nbsp;Bookworms Lending Library
+                    <i class="me-3 fas fa-book-reader"></i>&nbsp;Bookworms Lending Library
                 </div>
                 <p class="footer-content">
                     This website was not actually built for a real library (as you've probably guessed!). 
@@ -69,19 +67,19 @@
                     <h5 class="mb-4 text-uppercase">Links</h5>
                     <ul class="mb-0 list-unstyled">
                         <li>
-                            <i class="mr-2 fab fa-github"></i> 
+                            <i class="me-2 fab fa-github"></i> 
                             <a href="https://github.com/DavidAJohn/BookwormsLendingLibrary" class="text-white">GitHub source</a>
                         </li>
                         <li>
-                            <i class="mr-2 fab fa-microsoft"></i> 
+                            <i class="me-2 fab fa-microsoft"></i> 
                             <a href="https://blazor.net" class="text-white">Blazor.net</a>
                         </li>
                         <li>
-                            <i class="mr-2 fas fa-globe"></i>
+                            <i class="me-2 fas fa-globe"></i>
                             <a href="/about" class="text-white">About the Site</a>
                         </li>
                         <li>
-                            <i class="mr-2 fas fa-globe"></i>
+                            <i class="me-2 fas fa-globe"></i>
                             <a href="/contact" class="text-white">Contact Me</a>
                         </li>
                     </ul>
@@ -90,19 +88,19 @@
                     <h5 class="mb-4 text-uppercase">Social</h5>
                     <ul class="list-unstyled">
                         <li>
-                            <i class="mr-2 fab fa-facebook"></i> 
+                            <i class="me-2 fab fa-facebook"></i> 
                             <a href="https://facebook.com" class="text-white">Facebook</a>
                         </li>
                         <li>
-                            <i class="mr-2 fab fa-twitter"></i> 
+                            <i class="me-2 fab fa-twitter"></i> 
                             <a href="https://twitter.com" class="text-white">Twitter</a>
                         </li>
                         <li>
-                            <i class="mr-2 fab fa-instagram"></i> 
+                            <i class="me-2 fab fa-instagram"></i> 
                             <a href="https://instagram.com" class="text-white">Instagram</a>
                         </li>
                         <li>
-                            <i class="mr-2 fab fa-pinterest"></i> 
+                            <i class="me-2 fab fa-pinterest"></i> 
                             <a href="https://pinterest.com" class="text-white">Pinterest</a>
                         </li>
                     </ul>

@@ -18,13 +18,13 @@ else
         <BreadcrumbHeader CurrentUrl=@CurrentUrl />
     </div>
 
-    <div class="container pt-3 no-lr-padding">
+    <div class="container pt-3">
         <div class="row">
             <div class="col-md-2">
                 <div class="mt-2 mb-5">
                     <p class="sidebar-heading">Sort By</p>
-                    <div class="btn-group w-100">
-                        <button class="px-3 btn btn-light btn-sm dropdown-toggle dropdown-button" type="button" data-toggle="dropdown">
+                    <div class="btn-group w-100 dropdown">
+                        <button class="px-3 btn btn-light btn-sm dropdown-toggle dropdown-button" type="button" data-bs-toggle="dropdown">
                             @SortBySelected
                         </button>
                         <ul class="dropdown-menu">
@@ -42,7 +42,7 @@ else
                     </div>
                 </div>
             </div>
-            <div class="pl-5 col-md-10">
+            <div class="ps-5 col-md-10">
                 <div class="py-2">
                     <AutoSearch 
                         OnSearchChanged="SearchChanged" 
@@ -63,7 +63,7 @@ else
                 }
                 else
                 {
-                    <div class="container">
+                    <div>
                             @foreach (var author in authors)
                             {
                             <div class="author-row">
@@ -75,14 +75,14 @@ else
                                         />
                                     </NavLink>
                                 </div>
-                                <div >
+                                <div class="w-100">
                                     <div class="author-name">
                                         <NavLink href="@($"/authors/details/{author.Id}")">
                                             @author.FirstName @author.LastName
                                         </NavLink>
                                         @if (@Role == "Administrator") // show an edit button for the admin user
                                         {
-                                            <button type="button" @onclick="() => EditAuthor(author.Id)" class="btn btn-sm btn-outline-secondary ml-3">
+                                            <button type="button" @onclick="() => EditAuthor(author.Id)" class="btn btn-sm btn-outline-secondary ms-3">
                                                 <i class="fas fa-user-edit"></i>&nbsp;
                                                 Edit Author
                                             </button>

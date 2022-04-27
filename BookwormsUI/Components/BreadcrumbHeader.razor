@@ -1,28 +1,30 @@
 ﻿@inject NavigationManager NavigationManager
 @using BookwormsUI.Extensions
 
-<Breadcrumb>
-    <BreadcrumbItem>
-        <BreadcrumbLink To="">Home</BreadcrumbLink>
-    </BreadcrumbItem>
+<div class="container">
+    <Breadcrumb>
+        <BreadcrumbItem>
+            <BreadcrumbLink To="">Home</BreadcrumbLink>
+        </BreadcrumbItem>
 
-    @if (pages.Count() > 1)
-    {
-        @foreach (var item in pages)
+        @if (pages.Count() > 1)
         {
-            @if (@item != @lastElement)
+            @foreach (var item in pages)
             {
-                <BreadcrumbItem>
-                    <BreadcrumbLink To="@item">@item.ToTitleCase()</BreadcrumbLink>
-                </BreadcrumbItem>
+                @if (@item != @lastElement)
+                {
+                    <BreadcrumbItem>
+                        <BreadcrumbLink To="@item">@item.ToTitleCase()</BreadcrumbLink>
+                    </BreadcrumbItem>
+                }
             }
         }
-    }
 
-    <BreadcrumbItem Active="true">
-        <BreadcrumbLink To="#">@lastElement.ToTitleCase()</BreadcrumbLink>
-    </BreadcrumbItem>
-</Breadcrumb>
+        <BreadcrumbItem Active="true">
+            <BreadcrumbLink To="#">@lastElement.ToTitleCase()</BreadcrumbLink>
+        </BreadcrumbItem>
+    </Breadcrumb>
+</div>
 
 @code {
     [Parameter]

@@ -6,6 +6,7 @@ html, body {
 
 a, .btn-link {
     color: #000000;
+    text-decoration: none;
 }
 
 a:hover, .btn-link:hover {
@@ -57,6 +58,13 @@ a:hover, .btn-link:hover {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+.breadcrumb {
+    background-color: #e9ecef;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+}
 
 .breadcrumb-item a {
     text-decoration: none;
@@ -141,6 +149,13 @@ ul.list {
     margin-top: 0.5rem;
     border: rgba(0, 0, 0, 0.1) solid 1px;
 }
+    .dropdown-button:hover {
+        font-size: 0.8rem !important;
+        margin-right: -30px;
+        margin-top: 0.5rem;
+        border: rgba(0, 0, 0, 0.1) solid 1px;
+        background-color: #f0f0f0;
+    }
 
 .dropdown-item {
     font-size: 0.8rem;
@@ -148,6 +163,10 @@ ul.list {
     font-style: italic;
     padding-top: 0.25rem;
     margin-right: 1rem;
+}
+
+.dropdown-menu {
+    min-width: 198px;
 }
 
 .no-results {
@@ -275,7 +294,26 @@ button.image-picker {
 
 .page-item.active .page-link {
     z-index: 3;
-    color: #fff;
+    color: #fff !important;
     background-color: #343a40 !important;
     border-color: #343a40 !important;
+}
+
+.page-link {
+    color: #000;
+}
+
+.page-item.disabled .page-link {
+    color: rgba(0,0,0, 0.4);
+}
+
+.page-item:not(.disabled) .page-link {
+    color: rgba(0,0,0, 0.8);
+}
+
+/* container width control */
+@media (min-width: 1200px) {
+    .container {
+      width: 1150px;
+    }
 }

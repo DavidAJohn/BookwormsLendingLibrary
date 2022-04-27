@@ -1,3 +1,11 @@
 .paging-showing {
     padding: .5rem .75rem;
 }
+
+.pagination-link {
+    color: #000 !important
+}
+
+.pagination-link:active {
+    color: #fff !important
+}

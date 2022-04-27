@@ -17,7 +17,7 @@
     @foreach (var link in _links)
     {
         <PaginationItem class=@($"{(link.Enabled ? "" : "disabled")} {(link.Active ? "active" : "")}")>
-            <PaginationLink @onclick="() => OnSelectedPage(link)">
+            <PaginationLink class="pagination-link" @onclick="() => OnSelectedPage(link)">
                 @link.Text
             </PaginationLink>
         </PaginationItem>
