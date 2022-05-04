@@ -43,7 +43,7 @@ namespace BookwormsAPI.Tests.UnitTests.Entities
 
             // Assert
             Assert.NotNull(testBook);
-            Assert.True(testBook.isActive);
+            Assert.True(testBook.IsActive);
         }
     }
 }
