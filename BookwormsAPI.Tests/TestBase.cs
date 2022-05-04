@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Security.Claims;
 using AutoMapper;
 using BookwormsAPI.Data;
+using BookwormsAPI.Entities;
 using BookwormsAPI.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +12,7 @@ namespace BookwormsAPI.Tests
 {
     public class TestBase
     {
-        protected ApplicationDbContext BuildContext(string databaseName)
+        protected static ApplicationDbContext BuildContext(string databaseName)
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName).Options;
@@ -19,7 +21,7 @@ namespace BookwormsAPI.Tests
             return dbContext;
         }
 
-        protected IMapper BuildMap()
+        protected static IMapper BuildMap()
         {
             var config = new MapperConfiguration(options =>
             {
@@ -29,7 +31,7 @@ namespace BookwormsAPI.Tests
             return config.CreateMapper();
         }
 
-        protected ControllerContext BuildControllerContextWithDefaultUser()
+        protected static ControllerContext BuildControllerContextWithDefaultUser()
         {
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                {
@@ -43,7 +45,7 @@ namespace BookwormsAPI.Tests
             };
         }
 
-        protected ControllerContext BuildControllerContextWithAdminUser()
+        protected static ControllerContext BuildControllerContextWithAdminUser()
         {
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                {
@@ -55,6 +57,57 @@ namespace BookwormsAPI.Tests
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
+        }
+
+        protected static Book CreateFakeBook(string title)
+        {
+            var testAuthor = new Author() { FirstName = "John", LastName = "Testman" };
+            var testCategory = new Category() { Name = "Category 1" };
+
+            // Act
+            var testBook = new Book()
+            {
+                Title = title,
+                YearPublished = 2022,
+                ISBN = "ISBN9999",
+                Summary = "Summary",
+                CoverImageUrl = "https://image.url",
+                AuthorId = 1,
+                Author = testAuthor,
+                CategoryId = 1,
+                Category = testCategory
+            };
+
+            return testBook;
+        }
+
+        protected static Author CreateFakeAuthor(string firstName, string lastName)
+        {
+            var books = new List<Book>();
+
+            var book1 = new Book()
+            {
+                Title = "Title 1"
+            };
+
+            var book2 = new Book()
+            {
+                Title = "Title 2"
+            };
+
+            books.Add(book1);
+            books.Add(book2);
+
+            var testAuthor = new Author()
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Biography = "John's Biography",
+                AuthorImageUrl = "https://image.url",
+                Books = books
+            };
+
+            return testAuthor;
         }
     }
 }
