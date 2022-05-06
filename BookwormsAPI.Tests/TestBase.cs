@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using AutoMapper;
 using BookwormsAPI.Data;
+using BookwormsAPI.Data.Identity;
 using BookwormsAPI.Entities;
 using BookwormsAPI.Helpers;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +19,16 @@ namespace BookwormsAPI.Tests
                 .UseInMemoryDatabase(databaseName).Options;
 
             var dbContext = new ApplicationDbContext(options);
+            return dbContext;
+        }
+
+        protected static AppIdentityDbContext BuildIdentityContext(string databaseName)
+        {
+            var options = new DbContextOptionsBuilder<AppIdentityDbContext>()
+                .UseInMemoryDatabase(databaseName).Options;
+
+            var dbContext = new AppIdentityDbContext(options);
+
             return dbContext;
         }
 
