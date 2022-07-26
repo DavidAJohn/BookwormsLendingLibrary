@@ -98,12 +98,14 @@ namespace BookwormsAPI.Tests
 
             var book1 = new Book()
             {
-                Title = "Title 1"
+                Title = "Title 1",
+                Summary = "Summary"
             };
 
             var book2 = new Book()
             {
-                Title = "Title 2"
+                Title = "Title 2",
+                Summary = "Summary"
             };
 
             books.Add(book1);
