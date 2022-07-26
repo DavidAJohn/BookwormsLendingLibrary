@@ -1,9 +1,11 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace BookwormsAPI.Data.Migrations
 {
-    public partial class SqlServerInitial : Migration
+    public partial class InitialCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -54,7 +56,7 @@ namespace BookwormsAPI.Data.Migrations
                     Copies = table.Column<int>(type: "int", nullable: false),
                     RequestCount = table.Column<int>(type: "int", nullable: false),
                     AddedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    isActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -118,22 +120,6 @@ namespace BookwormsAPI.Data.Migrations
                 name: "IX_Requests_BookId",
                 table: "Requests",
                 column: "BookId");
-
-            // Custom T-SQL to create a trigger on the Requests table
-            migrationBuilder.Sql(@"
-                CREATE TRIGGER tgr_Increment_Books_RequestCount
-                    ON Requests
-                    AFTER INSERT
-                AS 
-                BEGIN
-                    SET NOCOUNT ON;
-
-                    UPDATE Books
-                    SET RequestCount = RequestCount + 1
-                    WHERE Books.Id = (SELECT BookId FROM inserted)
-                END
-                "
-            );
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

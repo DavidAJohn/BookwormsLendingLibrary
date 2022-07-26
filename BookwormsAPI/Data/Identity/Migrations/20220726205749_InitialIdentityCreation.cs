@@ -1,9 +1,11 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace BookwormsAPI.Data.Identity.Migrations
 {
-    public partial class SqlServerInitialIdentity : Migration
+    public partial class InitialIdentityCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

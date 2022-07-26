@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace BookwormsAPI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
@@ -15,16 +17,18 @@ namespace BookwormsAPI.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.6");
+                .HasAnnotation("ProductVersion", "6.0.7")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("BookwormsAPI.Entities.Author", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("AuthorImageUrl")
                         .HasColumnType("nvarchar(max)");
@@ -52,8 +56,9 @@ namespace BookwormsAPI.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("AddedOn")
                         .HasColumnType("datetime2");
@@ -73,6 +78,9 @@ namespace BookwormsAPI.Data.Migrations
                     b.Property<string>("ISBN")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<int>("RequestCount")
                         .HasColumnType("int");
 
@@ -87,9 +95,6 @@ namespace BookwormsAPI.Data.Migrations
                     b.Property<int>("YearPublished")
                         .HasColumnType("int");
 
-                    b.Property<bool>("isActive")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
@@ -103,8 +108,9 @@ namespace BookwormsAPI.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("BookId")
                         .HasColumnType("int");
@@ -140,8 +146,9 @@ namespace BookwormsAPI.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -185,9 +192,7 @@ namespace BookwormsAPI.Data.Migrations
                     b.OwnsOne("BookwormsAPI.Entities.Borrowing.Address", "SendToAddress", b1 =>
                         {
                             b1.Property<int>("RequestId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int")
-                                .UseIdentityColumn();
+                                .HasColumnType("int");
 
                             b1.Property<string>("City")
                                 .HasColumnType("nvarchar(max)");
