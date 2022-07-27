@@ -1,4 +1,5 @@
-﻿@inject RequestService RequestService
+﻿@using BookwormsUI.Models
+@inject RequestService RequestService
 
 @if (!String.IsNullOrWhiteSpace(Message))
 {
@@ -63,12 +64,12 @@
     [Parameter] 
     public int BookId { get; set; }
 
-    private Address Address;
+    private Models.Address Address;
 
     protected override async Task OnInitializedAsync()
     {
         // set a default empty address initially
-        Address = new Address{};
+        Address = new Models.Address{};
 
         // check if the user has an existing address saved
         var address = await RequestService.GetBorrowerAddressAsync();
@@ -102,7 +103,7 @@
         }
     }
 
-    private async Task CreateBookRequest(Address savedAddress)
+    private async Task CreateBookRequest(Models.Address savedAddress)
     {
         var request = await RequestService.CreateBookRequestAsync(BookId, savedAddress);
 
