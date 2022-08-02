@@ -1,0 +1,27 @@
+﻿@using BookwormsUI.Components
+
+@inherits TestContext
+
+@code {
+    [Fact]
+    public void AutoSearch_Correctly_Renders_Placeholder()
+    {
+        var cut = Render(@<AutoSearch Placeholder="Search..." />);
+
+        cut.MarkupMatches(@<section style:ignore="">
+                                <input type="text" class="form-control" placeholder="Search..." />
+                           </section>
+        );
+    }
+
+    [Fact]
+    public void AutoSearch_Correctly_Renders_Empty_Input_Value_From_ClearSearch_param()
+    {
+        var cut = Render(@<AutoSearch Placeholder="Search..." ClearSearch="true" />);
+
+        cut.MarkupMatches(@<section style:ignore="">
+                                <input type="text" class="form-control" placeholder="Search..." value="" />
+                           </section>
+        );
+    }
+}

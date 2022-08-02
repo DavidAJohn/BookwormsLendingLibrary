@@ -1,5 +1,3 @@
-using Xunit;
-using Bunit;
 using BookwormsUI.Components;
 
 namespace BookwormsUI.Tests.Components

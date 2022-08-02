@@ -1,0 +1,18 @@
+﻿@using BookwormsUI.Tests.Components
+
+@inherits TestContext
+
+@code {
+    [Fact]
+    public void ClickSearch_Correctly_Renders_Input_Value_From_SearchTerm_param()
+    {
+        var cut = Render(@<ClickSearch SearchTerm="test" />);
+
+        cut.MarkupMatches(
+                @<div class:ignore="">
+                    <input type="text" class:ignore="" placeholder="Search for a book or author" value="test">
+                    <button class:ignore="" type="button">Search</button>
+                </div>
+        );
+    }
+}
