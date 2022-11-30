@@ -1,5 +1,7 @@
 ﻿@page "/books/details/{Id}"
 
+@using Blazored = Blazored.Modal.Services
+
 @inject IBookRepository bookRepository
 @inject BookService bookService
 @inject NavigationManager navigationManager
@@ -109,7 +111,7 @@ else
 
 @code {
     [CascadingParameter] 
-    public IModalService Modal { get; set; }
+    public Blazored.IModalService Modal { get; set; }
 
     [Parameter]
     public string Id { get; set; }
