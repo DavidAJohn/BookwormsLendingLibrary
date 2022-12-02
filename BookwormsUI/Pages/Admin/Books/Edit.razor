@@ -1,9 +1,9 @@
 ﻿@page "/admin/books/edit/{Id}"
 
 @using BookwormsUI.Components.Auth
+
 @inject IBookService bookService
-@inject IAuthorRepository authorRepository
-@inject AuthorService authorService
+@inject IAuthorService authorService
 @inject ICategoryRepository categoryRepository
 @inject CategoryService categoryService
 @inject NavigationManager navigationManager
@@ -140,7 +140,7 @@
         };
 
         var apiUri = authorService.GetAuthorsApiEndpoint();
-        var response = await authorRepository.GetAsync(apiUri, authorParams);
+        var response = await authorService.GetAsync(apiUri, authorParams);
 
         authors = response.Items;
     }

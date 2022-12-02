@@ -2,8 +2,7 @@
 
 @inject NavigationManager navigationManager
 @inject IBookService bookService
-@inject IAuthorRepository authorRepository
-@inject AuthorService authorService
+@inject IAuthorService authorService
 
 <div class="container">
     <h4 class="mb-4">Search Results</h4>
@@ -93,7 +92,7 @@
         };
         
         string url = authorService.GetAuthorsApiEndpoint();
-        var response = await authorRepository.GetAsync(url, itemParams);
+        var response = await authorService.GetAsync(url, itemParams);
 
         authors = response.Items;
     }

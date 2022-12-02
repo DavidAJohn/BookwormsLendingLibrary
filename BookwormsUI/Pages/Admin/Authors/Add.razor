@@ -1,8 +1,8 @@
 ﻿@page "/admin/authors/add"
 
 @using BookwormsUI.Components.Auth
-@inject IAuthorRepository authorRepository
-@inject AuthorService authorService
+
+@inject IAuthorService authorService
 @inject NavigationManager navigationManager
 @inject IToastService toastService
 
@@ -84,7 +84,7 @@
     private async Task CreateAuthor()
     {
         var apiUri = authorService.GetAuthorsApiEndpoint();
-        var isSuccess = await authorRepository.CreateAsync(apiUri, author);
+        var isSuccess = await authorService.CreateAsync(apiUri, author);
 
         if (isSuccess)
         {

@@ -18,11 +18,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-builder.Services.AddTransient<IAuthorRepository, AuthorRepository>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddSingleton<SettingsService>();
-builder.Services.AddSingleton<AuthorService>();
 builder.Services.AddTransient<IBookService, BookService>();
+builder.Services.AddTransient<IAuthorService, AuthorService>();
 builder.Services.AddSingleton<CategoryService>();
 builder.Services.AddScoped<RequestService>();
 

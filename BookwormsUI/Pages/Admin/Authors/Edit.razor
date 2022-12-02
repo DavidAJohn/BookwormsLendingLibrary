@@ -1,8 +1,8 @@
 ﻿@page "/admin/authors/edit/{Id}"
 
 @using BookwormsUI.Components.Auth
-@inject IAuthorRepository authorRepository
-@inject AuthorService authorService
+
+@inject IAuthorService authorService
 @inject NavigationManager navigationManager
 @inject IToastService toastService
 
@@ -100,7 +100,7 @@ else
     {
         int id = int.Parse(Id);
         var url = authorService.GetAuthorsApiEndpoint();
-        author = await authorRepository.GetByIdAsync(url, id);
+        author = await authorService.GetByIdAsync(url, id);
 
         if (author == null)
         {
@@ -113,7 +113,7 @@ else
     {
         int id = int.Parse(Id);
         var url = authorService.GetAuthorsApiEndpoint();
-        bool isSuccess = await authorRepository.UpdateAsync(url, author, id);
+        bool isSuccess = await authorService.UpdateAsync(url, author, id);
 
         if (isSuccess)
         {

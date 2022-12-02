@@ -1,22 +1,27 @@
-namespace BookwormsUI.Services
+using Blazored.LocalStorage;
+using BookwormsUI.Contracts;
+using BookwormsUI.Models;
+
+namespace BookwormsUI.Services;
+
+public class AuthorService : BaseService<Author>, IAuthorService
 {
-    public class AuthorService
+    private readonly SettingsService _settings;
+
+    public AuthorService(IHttpClientFactory client, ILocalStorageService localStorage, SettingsService settings) 
+        : base(client, localStorage)
     {
-        private readonly SettingsService _settings;
-        public AuthorService(SettingsService settings)
-        {
-            _settings = settings;
-        }
+        _settings = settings;
+    }
 
-        public string GetAuthorsApiEndpoint()
-        {
-            var settings = _settings.GetAppSettingsApiEndpoints();
+    public string GetAuthorsApiEndpoint()
+    {
+        var settings = _settings.GetAppSettingsApiEndpoints();
 
-            var baseUrl = settings.BaseUrl;
-            var authorsEndpoint = settings.AuthorsEndpoint;
-            var url = baseUrl + authorsEndpoint;
+        var baseUrl = settings.BaseUrl;
+        var authorsEndpoint = settings.AuthorsEndpoint;
+        var url = baseUrl + authorsEndpoint;
 
-            return url;
-        }
+        return url;
     }
 }

@@ -1,12 +1,12 @@
 ﻿@page "/authors/"
 
 @using BookwormsUI.Components.Paging
-@inject IAuthorRepository authorRepository
-@inject AuthorService authorService
+@using BookwormsUI.Extensions
+
+@inject IAuthorService authorService
 @inject NavigationManager navigationManager
 @inject SettingsService settings
 @inject AuthenticationStateProvider authenticationStateProvider
-@using BookwormsUI.Extensions
 
 @if (authors == null)
 {
@@ -186,7 +186,7 @@ else
     private async Task GetData()
     {
         url = authorService.GetAuthorsApiEndpoint();
-        var response = await authorRepository.GetAsync(url, itemParams);
+        var response = await authorService.GetAsync(url, itemParams);
 
         authors = response.Items;
         metadata = response.Metadata;
