@@ -2,8 +2,7 @@
 
 @using Blazored = Blazored.Modal.Services
 
-@inject IBookRepository bookRepository
-@inject BookService bookService
+@inject IBookService bookService
 @inject NavigationManager navigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService ToastService
@@ -128,7 +127,7 @@ else
     {
         int id = int.Parse(Id);
         var url = bookService.GetBooksApiEndpoint();
-        book = await bookRepository.GetByIdAsync(url, id);
+        book = await bookService.GetByIdAsync(url, id);
 
         await GetClaimsPrincipalData();
 

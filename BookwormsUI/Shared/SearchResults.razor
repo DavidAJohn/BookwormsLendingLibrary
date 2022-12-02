@@ -1,8 +1,7 @@
 ﻿@page "/searchresults/{searchTerm}"
 
 @inject NavigationManager navigationManager
-@inject IBookRepository bookRepository
-@inject BookService bookService
+@inject IBookService bookService
 @inject IAuthorRepository authorRepository
 @inject AuthorService authorService
 
@@ -79,7 +78,7 @@
         };
         
         string url = bookService.GetBooksApiEndpoint();
-        var response = await bookRepository.GetAsync(url, itemParams);
+        var response = await bookService.GetAsync(url, itemParams);
 
         books = response.Items;
     }

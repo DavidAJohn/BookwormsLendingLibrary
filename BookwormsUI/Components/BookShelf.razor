@@ -1,6 +1,5 @@
 ﻿@inject NavigationManager navigationManager
-@inject IBookRepository bookRepository
-@inject BookService bookService
+@inject IBookService bookService
 
 <div class="container mb-5">
     <div class="mb-3 heading-row">
@@ -50,7 +49,7 @@
         }
 
         var url = bookService.GetBooksApiEndpoint();
-        var response = await bookRepository.GetAsync(url, bookParams);
+        var response = await bookService.GetAsync(url, bookParams);
 
         books = response.Items;
 

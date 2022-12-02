@@ -3,8 +3,7 @@
 @page "/books/category/{categoryId:int}"
 
 @using BookwormsUI.Components.Paging
-@inject IBookRepository bookRepository
-@inject BookService bookService
+@inject IBookService bookService
 @inject ICategoryRepository categoryRepository
 @inject CategoryService categoryService
 @inject NavigationManager navigationManager
@@ -242,7 +241,7 @@ else
     private async Task GetData()
     {
         url = bookService.GetBooksApiEndpoint();
-        var response = await bookRepository.GetAsync(url, itemParams);
+        var response = await bookService.GetAsync(url, itemParams);
 
         books = response.Items;
         metadata = response.Metadata;

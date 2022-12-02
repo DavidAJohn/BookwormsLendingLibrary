@@ -1,9 +1,15 @@
+using Blazored.LocalStorage;
+using BookwormsUI.Contracts;
+using BookwormsUI.Models;
+
 namespace BookwormsUI.Services
 {
-    public class BookService
+    public class BookService : BaseService<Book>, IBookService
     {
         private readonly SettingsService _settings;
-        public BookService(SettingsService settings)
+
+        public BookService(IHttpClientFactory client, ILocalStorageService localStorage, SettingsService settings) 
+            : base(client, localStorage)
         {
             _settings = settings;
         }

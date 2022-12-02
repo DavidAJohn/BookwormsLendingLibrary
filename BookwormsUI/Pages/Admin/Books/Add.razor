@@ -1,8 +1,7 @@
 ﻿@page "/admin/books/add"
 
 @using BookwormsUI.Components.Auth
-@inject IBookRepository bookRepository
-@inject BookService bookService
+@inject IBookService bookService
 @inject IAuthorRepository authorRepository
 @inject AuthorService authorService
 @inject ICategoryRepository categoryRepository
@@ -152,7 +151,7 @@
     private async Task CreateBook()
     {
         var apiUri = bookService.GetBooksApiEndpoint();
-        var isSuccess = await bookRepository.CreateAsync(apiUri, book);
+        var isSuccess = await bookService.CreateAsync(apiUri, book);
 
         if (isSuccess)
         {

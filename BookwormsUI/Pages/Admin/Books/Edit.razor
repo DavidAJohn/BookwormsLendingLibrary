@@ -1,8 +1,7 @@
 ﻿@page "/admin/books/edit/{Id}"
 
 @using BookwormsUI.Components.Auth
-@inject IBookRepository bookRepository
-@inject BookService bookService
+@inject IBookService bookService
 @inject IAuthorRepository authorRepository
 @inject AuthorService authorService
 @inject ICategoryRepository categoryRepository
@@ -156,7 +155,7 @@
     {
         int id = int.Parse(Id);
         var url = bookService.GetBooksApiEndpoint();
-        book = await bookRepository.GetByIdAsync(url, id);
+        book = await bookService.GetByIdAsync(url, id);
 
         if (book == null)
         {
@@ -169,7 +168,7 @@
     {
         int id = int.Parse(Id);
         var url = bookService.GetBooksApiEndpoint();
-        bool isSuccess = await bookRepository.UpdateAsync(url, book, id);
+        bool isSuccess = await bookService.UpdateAsync(url, book, id);
 
         if (isSuccess)
         {
