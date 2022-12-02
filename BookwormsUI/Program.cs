@@ -6,7 +6,6 @@ using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using BookwormsUI.Contracts;
 using BookwormsUI.Providers;
-using BookwormsUI.Repository;
 using BookwormsUI.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Text.Json;
@@ -18,11 +17,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddSingleton<SettingsService>();
 builder.Services.AddTransient<IBookService, BookService>();
 builder.Services.AddTransient<IAuthorService, AuthorService>();
-builder.Services.AddSingleton<CategoryService>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddScoped<RequestService>();
 
 builder.Services.AddAuthorizationCore();

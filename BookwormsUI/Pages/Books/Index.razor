@@ -3,13 +3,13 @@
 @page "/books/category/{categoryId:int}"
 
 @using BookwormsUI.Components.Paging
+@using BookwormsUI.Extensions
+
 @inject IBookService bookService
-@inject ICategoryRepository categoryRepository
-@inject CategoryService categoryService
+@inject ICategoryService categoryService
 @inject NavigationManager navigationManager
 @inject SettingsService settings
 @inject AuthenticationStateProvider authenticationStateProvider
-@using BookwormsUI.Extensions
 
 @if (books == null)
 {
@@ -250,7 +250,7 @@ else
     private async Task GetCategories() 
     {
         url = categoryService.GetCategoriesApiEndpoint();
-        categories = await categoryRepository.GetListAsync(url);
+        categories = await categoryService.GetListAsync(url);
     }
 
     private async Task CategorySearch(int categoryId = 0) 

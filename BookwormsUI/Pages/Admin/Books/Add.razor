@@ -4,8 +4,7 @@
 
 @inject IBookService bookService
 @inject IAuthorService authorService
-@inject ICategoryRepository categoryRepository
-@inject CategoryService categoryService
+@inject ICategoryService categoryService
 @inject NavigationManager navigationManager
 @inject IToastService toastService
 
@@ -145,7 +144,7 @@
     private async Task PopulateCategoriesList() 
     {
         var apiUri = categoryService.GetCategoriesApiEndpoint();
-        categories = await categoryRepository.GetListAsync(apiUri);
+        categories = await categoryService.GetListAsync(apiUri);
     }
 
     private async Task CreateBook()
