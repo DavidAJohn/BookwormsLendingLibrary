@@ -1,5 +1,5 @@
 ﻿@using BookwormsUI.Models
-@inject RequestService RequestService
+@inject IRequestService requestService
 
 @if (!String.IsNullOrWhiteSpace(Message))
 {
@@ -72,7 +72,7 @@
         Address = new Models.Address{};
 
         // check if the user has an existing address saved
-        var address = await RequestService.GetBorrowerAddressAsync();
+        var address = await requestService.GetBorrowerAddressAsync();
 
         if (address != null)
         {
@@ -84,7 +84,7 @@
     private async Task SaveAddress()
     {
         // save the address on the form
-        var savedAddress = await RequestService.SaveBorrowerAddressAsync(Address);
+        var savedAddress = await requestService.SaveBorrowerAddressAsync(Address);
 
         if (savedAddress != null)
         {
@@ -105,7 +105,7 @@
 
     private async Task CreateBookRequest(Models.Address savedAddress)
     {
-        var request = await RequestService.CreateBookRequestAsync(BookId, savedAddress);
+        var request = await requestService.CreateBookRequestAsync(BookId, savedAddress);
 
         if (request != null)
         {

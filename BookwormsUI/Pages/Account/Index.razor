@@ -2,7 +2,7 @@
 
 @using BookwormsUI.Components.Auth
 @using BookwormsUI.Extensions
-@inject RequestService requestService
+@inject IRequestService requestService
 
 <AuthGuard RolesAllowed="Borrower, Administrator" />
 
