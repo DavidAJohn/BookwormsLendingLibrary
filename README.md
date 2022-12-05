@@ -22,6 +22,7 @@ You can see a demo version of the site running on Microsoft's Azure cloud servic
 - Allows pagination, sorting and filtering of data
 - CRUD methods for each repository (including PATCH)
 - Response caching
+- Unit tests using bUnit
 
 - Search pages for books and authors with search, sorting and pagination
 - Image uploads to Azure Storage containers
@@ -36,13 +37,13 @@ You can see a demo version of the site running on Microsoft's Azure cloud servic
 
 To run the application on your local machine, after cloning or downloading it from GitHub, you'll need the following:
 
-- The .NET 6 SDK installed locally
+- The .NET 7 SDK installed locally
 - SQL Server installed locally, or in a Docker container (see below)
 - An Azure account with a storage container (if you want to enable image uploads in the admin section)
 
 If you're using Visual Studio (not VS Code) as your code editor, you will need to be running the 2022 version (or higher). The free Community Edition is sufficient to run this application.
 
-Assuming that you have Docker Desktop installed and running, to create a container using the official **Microsoft SQL Server Docker image**, either enter the following from a terminal:
+Assuming that you have Docker Desktop installed and running, to create a container using the official **Microsoft SQL Server 2017 Docker image**, either enter the following from a terminal (all on one line):
 
 `docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=P@ssw0rd1234" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest`
 
@@ -52,7 +53,7 @@ you can make use of the **docker-compose.yml** file in the root directory of the
 
 `docker-compose up -d`
 
-The official Microsoft SQL Server image is 1.4Gb, so if you don't already have it downloaded in Docker this could take a few minutes, depending on the speed of your connection.
+The official Microsoft SQL Server 2017 image is 1.4Gb, so if you don't already have it downloaded in Docker this could take a few minutes, depending on the speed of your internet connection.
 
 The application is set up to use this Docker container to provide its database, so if you use a local installation of SQL Server instead, you'll need to adjust the database connection strings in the **appsettings.Development.json** file in the **BookwormsAPI** folder accordingly.
 
