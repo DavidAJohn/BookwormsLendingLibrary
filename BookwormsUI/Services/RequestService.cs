@@ -41,7 +41,7 @@ public class RequestService : IRequestService
             return new Address {};
         }
 
-        var client = _httpClient.CreateClient();
+        var client = _httpClient.CreateClient("BookwormsAPI");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         HttpResponseMessage response = await client.GetAsync(GetApiEndpoint("address"));
@@ -68,7 +68,7 @@ public class RequestService : IRequestService
             return null;
         }
 
-        var client = _httpClient.CreateClient();
+        var client = _httpClient.CreateClient("BookwormsAPI");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         string json = JsonConvert.SerializeObject(address);
@@ -97,7 +97,7 @@ public class RequestService : IRequestService
             return null;
         }
 
-        var client = _httpClient.CreateClient();
+        var client = _httpClient.CreateClient("BookwormsAPI");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         var bookRequest = new RequestCreate {
@@ -144,7 +144,7 @@ public class RequestService : IRequestService
             return null;
         }
 
-        var client = _httpClient.CreateClient();
+        var client = _httpClient.CreateClient("BookwormsAPI");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         var response = await client.GetAsync(GetApiEndpoint("requests"));
@@ -170,7 +170,7 @@ public class RequestService : IRequestService
             return null;
         }
 
-        var client = _httpClient.CreateClient();
+        var client = _httpClient.CreateClient("BookwormsAPI");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         var response = await client.GetAsync(GetApiEndpoint("requests") + "/status?status=" + status);
@@ -196,7 +196,7 @@ public class RequestService : IRequestService
             return null;
         }
 
-        var client = _httpClient.CreateClient();
+        var client = _httpClient.CreateClient("BookwormsAPI");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         var requestUpdate = new RequestUpdate {
@@ -235,7 +235,7 @@ public class RequestService : IRequestService
             return null;
         }
 
-        var client = _httpClient.CreateClient();
+        var client = _httpClient.CreateClient("BookwormsAPI");
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         var response = await client.GetAsync(GetApiEndpoint("requests") + "/overdue");

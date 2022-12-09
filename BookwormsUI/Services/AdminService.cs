@@ -30,7 +30,7 @@ namespace BookwormsUI.Services
                 return null;
             }
 
-            var client = _httpClient.CreateClient();
+            var client = _httpClient.CreateClient("BookwormsAPI");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
 
             var response = await client.GetAsync(_settings.GetApiBaseUrl() + "/admin/status");

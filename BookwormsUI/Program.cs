@@ -10,6 +10,8 @@ using BookwormsUI.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Polly;
+using Polly.Extensions.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +27,11 @@ builder.Services.AddTransient<IRequestService, RequestService>();
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddHttpClient();
+
+builder.Services.AddHttpClient("BookwormsAPI", client => client.BaseAddress =
+    new Uri(builder.Configuration.GetValue<string>("Endpoints:BaseUrl")))
+        .AddPolicyHandler(GetRetryPolicy())
+        .AddPolicyHandler(GetCircuitBreakerPolicy());
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
@@ -74,3 +80,25 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
+
+// Polly policies: https://github.com/App-vNext/Polly
+IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+{
+    return HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .WaitAndRetryAsync(
+            retryCount: 5,
+            sleepDurationProvider: retryAttempt =>
+                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))  // exponential backoff (2, 4, 8, 16, 32 secs)   
+            );
+}
+
+IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+{
+    return HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .CircuitBreakerAsync(
+            handledEventsAllowedBeforeBreaking: 5,
+            durationOfBreak: TimeSpan.FromSeconds(30)
+        );
+}

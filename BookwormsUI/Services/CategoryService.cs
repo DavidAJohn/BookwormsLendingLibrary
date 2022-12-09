@@ -37,7 +37,7 @@ public class CategoryService : BaseService<Category>, ICategoryService
 
         var request = new HttpRequestMessage(HttpMethod.Get, url);
 
-        var client = _client.CreateClient();
+        var client = _client.CreateClient("BookwormsAPI");
         HttpResponseMessage response = await client.SendAsync(request);
 
         if (response.StatusCode == HttpStatusCode.OK)
