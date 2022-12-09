@@ -1,15 +1,9 @@
-using AutoMapper;
 using BookwormsAPI.Data;
 using BookwormsAPI.Data.Identity;
 using BookwormsAPI.Extensions;
 using BookwormsAPI.Helpers;
 using BookwormsAPI.Middleware;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 
 namespace BookwormsAPI
@@ -23,15 +17,28 @@ namespace BookwormsAPI
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options => {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                    sqlServerOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(15),
+                        errorNumbersToAdd: null);
+                    });
             });
 
             services.AddDbContext<AppIdentityDbContext>(options => {
-                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),
+                    sqlServerOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(15),
+                        errorNumbersToAdd: null);
+                    });
             });
 
             services.AddControllers();
@@ -57,7 +64,6 @@ namespace BookwormsAPI
             services.AddResponseCaching();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMiddleware<ExceptionMiddleware>(); // custom exception middleware
