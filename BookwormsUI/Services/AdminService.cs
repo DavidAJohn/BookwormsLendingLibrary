@@ -12,9 +12,9 @@ namespace BookwormsUI.Services
     public class AdminService : IAdminService
     {
         private readonly ILocalStorageService _localStorage;
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClient;
         private readonly SettingsService _settings;
-        public AdminService(HttpClient httpClient, ILocalStorageService localStorage, SettingsService settings)
+        public AdminService(IHttpClientFactory httpClient, ILocalStorageService localStorage, SettingsService settings)
         {
             _settings = settings;
             _httpClient = httpClient;
@@ -30,9 +30,10 @@ namespace BookwormsUI.Services
                 return null;
             }
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
+            var client = _httpClient.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
 
-            var response = await _httpClient.GetAsync(_settings.GetApiBaseUrl() + "/admin/status");
+            var response = await client.GetAsync(_settings.GetApiBaseUrl() + "/admin/status");
 
             if (response.IsSuccessStatusCode)
             {

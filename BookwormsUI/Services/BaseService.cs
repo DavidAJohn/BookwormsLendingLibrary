@@ -11,12 +11,12 @@ namespace BookwormsUI.Services;
 
 public class BaseService<T> : IBaseService<T> where T : class
 {
-    private readonly IHttpClientFactory _client;
+    private readonly IHttpClientFactory _httpClient;
     private readonly ILocalStorageService _localStorage;
 
-    public BaseService(IHttpClientFactory client, ILocalStorageService localStorage)
+    public BaseService(IHttpClientFactory httpClient, ILocalStorageService localStorage)
     {
-        _client = client;
+        _httpClient = httpClient;
         _localStorage = localStorage;
     }
 
@@ -62,7 +62,7 @@ public class BaseService<T> : IBaseService<T> where T : class
             request = new HttpRequestMessage(HttpMethod.Get, url);
         }
 
-        var client = _client.CreateClient();
+        var client = _httpClient.CreateClient();
         HttpResponseMessage response = await client.SendAsync(request);
 
         if (response.StatusCode == HttpStatusCode.OK)
@@ -92,7 +92,7 @@ public class BaseService<T> : IBaseService<T> where T : class
 
         var request = new HttpRequestMessage(HttpMethod.Get, url + "/" + id);
 
-        var client = _client.CreateClient();
+        var client = _httpClient.CreateClient();
         HttpResponseMessage response = await client.SendAsync(request);
 
         if (response.StatusCode == HttpStatusCode.OK)
@@ -119,7 +119,7 @@ public class BaseService<T> : IBaseService<T> where T : class
             return false;
         }
 
-        HttpClient client = _client.CreateClient();
+        HttpClient client = _httpClient.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
 
         HttpContent content = new StringContent(JsonSerializer.Serialize(obj));
@@ -154,7 +154,7 @@ public class BaseService<T> : IBaseService<T> where T : class
             Content = new StringContent(JsonSerializer.Serialize(obj), Encoding.UTF8, "application/json")
         };
 
-        var client = _client.CreateClient();
+        var client = _httpClient.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
         HttpResponseMessage response = await client.SendAsync(request);
 
@@ -175,7 +175,7 @@ public class BaseService<T> : IBaseService<T> where T : class
 
         var request = new HttpRequestMessage(HttpMethod.Delete, url + "/" + id);
 
-        var client = _client.CreateClient();
+        var client = _httpClient.CreateClient();
         HttpResponseMessage response = await client.SendAsync(request);
 
         if (response.StatusCode == HttpStatusCode.NoContent)

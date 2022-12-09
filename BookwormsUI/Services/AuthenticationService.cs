@@ -15,11 +15,11 @@ namespace BookwormsUI.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClient;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly ILocalStorageService _localStorage;
         private readonly SettingsService _settings;
-        public AuthenticationService(HttpClient httpClient, 
+        public AuthenticationService(IHttpClientFactory httpClient, 
                             AuthenticationStateProvider authenticationStateProvider, 
                             ILocalStorageService localStorage,
                             SettingsService settings)
@@ -33,7 +33,8 @@ namespace BookwormsUI.Services
         public async Task<RegisterResult> Register(RegisterModel registerModel)
         {
             JsonContent content = JsonContent.Create(registerModel);
-            var response = await _httpClient.PostAsync(GetApiEndpoint("register"), content);
+            var client = _httpClient.CreateClient();
+            var response = await client.PostAsync(GetApiEndpoint("register"), content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -58,7 +59,8 @@ namespace BookwormsUI.Services
         public async Task<LoginResult> Login(LoginModel loginModel)
         {
             JsonContent content = JsonContent.Create(loginModel);
-            var response = await _httpClient.PostAsync(GetApiEndpoint("login"), content);
+            var client = _httpClient.CreateClient();
+            var response = await client.PostAsync(GetApiEndpoint("login"), content);
 
             var loginResult = System.Text.Json.JsonSerializer.Deserialize<LoginResult>(
                 await response.Content.ReadAsStringAsync(), 
@@ -77,7 +79,7 @@ namespace BookwormsUI.Services
 
             ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginModel.Email);
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
 
             return loginResult;
         }
@@ -88,7 +90,8 @@ namespace BookwormsUI.Services
 
             ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
 
-            _httpClient.DefaultRequestHeaders.Authorization = null;
+            var client = _httpClient.CreateClient();
+            client.DefaultRequestHeaders.Authorization = null;
         }
 
         private string GetApiEndpoint(string endpoint)

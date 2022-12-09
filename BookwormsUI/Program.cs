@@ -25,8 +25,8 @@ builder.Services.AddTransient<IRequestService, RequestService>();
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
 
-builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ApiAuthenticationStateProvider>();

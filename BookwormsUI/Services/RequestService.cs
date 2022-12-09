@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using BookwormsUI.Contracts;
 using BookwormsUI.Models;
 using Newtonsoft.Json;
+using System.Net.Http;
 using System.Net.Http.Headers;
 
 namespace BookwormsUI.Services;
@@ -9,12 +10,12 @@ namespace BookwormsUI.Services;
 public class RequestService : IRequestService
 {
     private readonly SettingsService _settings;
-    private readonly IHttpClientFactory _client;
+    private readonly IHttpClientFactory _httpClient;
     private readonly ILocalStorageService _localStorage;
-    public RequestService(SettingsService settings, IHttpClientFactory client, ILocalStorageService localStorage)
+    public RequestService(SettingsService settings, IHttpClientFactory httpClient, ILocalStorageService localStorage)
     {
         _localStorage = localStorage;
-        _client = client;
+        _httpClient = httpClient;
         _settings = settings;
     }
 
@@ -40,7 +41,7 @@ public class RequestService : IRequestService
             return new Address {};
         }
 
-        var client = _client.CreateClient();
+        var client = _httpClient.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         HttpResponseMessage response = await client.GetAsync(GetApiEndpoint("address"));
@@ -67,7 +68,7 @@ public class RequestService : IRequestService
             return null;
         }
 
-        var client = _client.CreateClient();
+        var client = _httpClient.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         string json = JsonConvert.SerializeObject(address);
@@ -96,7 +97,7 @@ public class RequestService : IRequestService
             return null;
         }
 
-        var client = _client.CreateClient();
+        var client = _httpClient.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         var bookRequest = new RequestCreate {
@@ -143,7 +144,7 @@ public class RequestService : IRequestService
             return null;
         }
 
-        var client = _client.CreateClient();
+        var client = _httpClient.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         var response = await client.GetAsync(GetApiEndpoint("requests"));
@@ -169,7 +170,7 @@ public class RequestService : IRequestService
             return null;
         }
 
-        var client = _client.CreateClient();
+        var client = _httpClient.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         var response = await client.GetAsync(GetApiEndpoint("requests") + "/status?status=" + status);
@@ -195,7 +196,7 @@ public class RequestService : IRequestService
             return null;
         }
 
-        var client = _client.CreateClient();
+        var client = _httpClient.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         var requestUpdate = new RequestUpdate {
@@ -234,7 +235,7 @@ public class RequestService : IRequestService
             return null;
         }
 
-        var client = _client.CreateClient();
+        var client = _httpClient.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
         var response = await client.GetAsync(GetApiEndpoint("requests") + "/overdue");
