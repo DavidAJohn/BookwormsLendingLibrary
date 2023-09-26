@@ -1,156 +1,218 @@
 ﻿using AutoMapper;
-using BookwormsAPI.Contracts;
-using BookwormsAPI.Controllers;
-using BookwormsAPI.DTOs;
-using BookwormsAPI.Specifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace BookwormsAPI.Tests.UnitTests.Controllers
 {
     public class BooksControllerTests : TestBase
     {
-        private readonly Mock<IBookRepository> _bookRepositoryMock;
-        private readonly Mock<IMapper> _mapperMock;
-        private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock;
+        private readonly IBookRepository _bookRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly DefaultHttpContext _context;
+        private readonly IMapper _mapper;
+        private BooksController _sut;
 
         public BooksControllerTests()
         {
-            _bookRepositoryMock = new Mock<IBookRepository>();
-            _mapperMock = new Mock<IMapper>();
-            _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+            _bookRepository = Substitute.For<IBookRepository>();
+            _context = new DefaultHttpContext();
+            _httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+            _httpContextAccessor.HttpContext = _context;
+            _mapper = BuildMap();
+
+            _sut = new BooksController(_bookRepository, _mapper, _httpContextAccessor);
         }
 
         [Fact]
-        public async Task GetBooks_ReturnsOkResult()
+        public async Task GetBooks_ReturnsListOfBooks_WhenCalled()
         {
             // Arrange
-            var context = new DefaultHttpContext();
-            _httpContextAccessorMock.Setup(_ => _.HttpContext).Returns(context);
-
-            var controller = new BooksController(_bookRepositoryMock.Object, _mapperMock.Object, _httpContextAccessorMock.Object);
             var bookParams = new BookSpecificationParams()
             {
                 PageIndex = 1,
                 PageSize = 5
             };
 
+            var spec = new BooksWithCategoriesAndAuthorsSpecification(bookParams);
+            _bookRepository
+                .ListAsync(spec)
+                .Returns(new List<Book>());
+
             // Act
-            var response = await controller.GetBooks(bookParams);
+            var result = (OkObjectResult)await _sut.GetBooks(bookParams);
 
             // Assert
-            Assert.IsType<OkObjectResult>(response.Result);
+            result.StatusCode.Should().Be(StatusCodes.Status200OK);
+            result.Value.Should().BeOfType<List<BookDTO>>();
         }
 
         [Fact]
-        public async Task GetBookById_Id_NonExistent_ReturnsNotFound()
+        public async Task GetBookById_ReturnsBook_WhenBookExists()
         {
             // Arrange
-            var httpContext = new DefaultHttpContext();
-            _httpContextAccessorMock.Setup(_ => _.HttpContext).Returns(httpContext);
+            var book = CreateFakeBook("Book 1");
 
-            var controller = new BooksController(_bookRepositoryMock.Object, _mapperMock.Object, _httpContextAccessorMock.Object);
+            _bookRepository
+                .GetEntityWithSpec(Arg.Any<BooksWithCategoriesAndAuthorsSpecification>())
+                .Returns(book);
 
             // Act
-            var response = await controller.GetBookById(9999);
+            var result = (OkObjectResult)await _sut.GetBookById(book.Id);
 
             // Assert
-            Assert.IsType<NotFoundObjectResult>(response.Result);
+            result.StatusCode.Should().Be(StatusCodes.Status200OK);
+            result.Value.Should().BeOfType<BookDTO>();
+
+            var returnedBook = (BookDTO)result.Value;
+            returnedBook.Id.Should().Be(book.Id);
         }
 
         [Fact]
-        public async Task CreateBook_WhenInputIsNull_ReturnsBadRequest()
+        public async Task GetBookById_ReturnsNotFound_WhenBookDoesNotExist()
         {
             // Arrange
-            var httpContext = new DefaultHttpContext();
-            _httpContextAccessorMock.Setup(_ => _.HttpContext).Returns(httpContext);
-
-            var controller = new BooksController(_bookRepositoryMock.Object, _mapperMock.Object, _httpContextAccessorMock.Object);
-
-            BookCreateDTO bookDTO = null;
+            _bookRepository
+                .GetEntityWithSpec(Arg.Any<BooksWithCategoriesAndAuthorsSpecification>())
+                .ReturnsNull();
 
             // Act
-            var response = await controller.CreateBook(bookDTO);
+            var result = (NotFoundObjectResult)await _sut.GetBookById(int.MaxValue);
 
             // Assert
-            Assert.IsType<BadRequestObjectResult>(response.Result);
+            result.StatusCode.Should().Be(StatusCodes.Status404NotFound);
         }
 
         [Fact]
-        public async Task DeleteBook_ReturnsActionResult()
+        public async Task CreateBook_ReturnsCreatedResponse_WhenInputIsValid()
         {
             // Arrange
-            var httpContext = new DefaultHttpContext();
-            _httpContextAccessorMock.Setup(_ => _.HttpContext).Returns(httpContext);
-
-            var controller = new BooksController(_bookRepositoryMock.Object, _mapperMock.Object, _httpContextAccessorMock.Object);
-
-            // Act
-            var response = await controller.DeleteBook(1);
-
-            // Assert
-            Assert.IsAssignableFrom<ActionResult>(response);
-        }
-
-        [Fact]
-        public async Task DeleteBook_Id_NonExistent_ReturnsNotFound()
-        {
-            // Arrange
-            var httpContext = new DefaultHttpContext();
-            _httpContextAccessorMock.Setup(_ => _.HttpContext).Returns(httpContext);
-
-            var controller = new BooksController(_bookRepositoryMock.Object, _mapperMock.Object, _httpContextAccessorMock.Object);
-
-            // Act
-            var response = await controller.DeleteBook(9999);
-
-            // Assert
-            Assert.IsType<NotFoundObjectResult>(response);
-        }
-
-        [Fact]
-        public async Task UpdateBook_ReturnsActionResult()
-        {
-            // Arrange
-            var httpContext = new DefaultHttpContext();
-            _httpContextAccessorMock.Setup(_ => _.HttpContext).Returns(httpContext);
-
-            var controller = new BooksController(_bookRepositoryMock.Object, _mapperMock.Object, _httpContextAccessorMock.Object);
-
-            var bookDTO = new BookUpdateDTO
+            var bookDTO = new BookCreateDTO
             {
                 Title = "Book 1"
             };
 
             // Act
-            var response = await controller.UpdateBook(1, bookDTO);
+            var result = (CreatedAtRouteResult)await _sut.CreateBook(bookDTO);
 
             // Assert
-            Assert.IsAssignableFrom<ActionResult>(response);
+            result.StatusCode.Should().Be(StatusCodes.Status201Created);
+            result.RouteName.Should().Be("GetBookById");
+            result.Value.Should().BeOfType<BookForAuthorDTO>();
         }
 
         [Fact]
-        public async Task UpdateBook_Id_NonExistent_ReturnsNotFound()
+        public async Task CreateBook_ReturnsBadRequest_WhenInputIsNull()
+        {
+            // Act
+            var result = (BadRequestObjectResult)await _sut.CreateBook(null);
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        }
+
+        [Fact]
+        public async Task DeleteBook_ReturnsNoContent_WhenBookIsDeleted()
         {
             // Arrange
-            var httpContext = new DefaultHttpContext();
-            _httpContextAccessorMock.Setup(_ => _.HttpContext).Returns(httpContext);
+            var book = CreateFakeBook("Book 1");
+            _bookRepository.GetByIdAsync(book.Id).Returns(book);
 
-            var controller = new BooksController(_bookRepositoryMock.Object, _mapperMock.Object, _httpContextAccessorMock.Object);
+            _bookRepository.Delete(book).Returns(true);
 
+            // Act
+            var result = (NoContentResult)await _sut.DeleteBook(book.Id);
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+        }
+
+        [Fact]
+        public async Task DeleteBook_ReturnsNotFound_WhenIdDoesNotExist()
+        {
+            // Arrange
+            _bookRepository.GetByIdAsync(Arg.Any<int>()).ReturnsNull();
+
+            // Act
+            var result = (NotFoundObjectResult)await _sut.DeleteBook(int.MaxValue);
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        }
+
+        [Fact]
+        public async Task DeleteBook_ReturnsBadRequest_WhenBookIsNotDeleted()
+        {
+            // Arrange
+            var book = CreateFakeBook("Book 1");
+            _bookRepository.GetByIdAsync(book.Id).Returns(book);
+
+            _bookRepository.Delete(Arg.Any<Book>()).Returns(false);
+
+            // Act
+            var result = (BadRequestObjectResult)await _sut.DeleteBook(book.Id);
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        }
+
+        [Fact]
+        public async Task UpdateBook_ReturnsNoContent_WhenBookIsUpdated()
+        {
+            // Arrange
+            var book = CreateFakeBook("Book 1");
+            _bookRepository.GetByIdAsync(book.Id).Returns(book);
+
+            var bookDTO = new BookUpdateDTO
+            {
+                Title = "Updated 1"
+            };
+
+            _bookRepository.Update(Arg.Any<Book>()).Returns(true);
+
+            // Act
+            var result = (NoContentResult)await _sut.UpdateBook(book.Id, bookDTO);
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status204NoContent);
+        }
+
+        [Fact]
+        public async Task UpdateBook_ReturnsNotFound_WhenIdDoesNotExist()
+        {
+            // Arrange
             var bookDTO = new BookUpdateDTO
             {
                 Title = "Book 1"
             };
 
+            _bookRepository.GetByIdAsync(Arg.Any<int>()).ReturnsNull();
+
             // Act
-            var response = await controller.UpdateBook(9999, bookDTO);
+            var result = (NotFoundObjectResult)await _sut.UpdateBook(int.MaxValue, bookDTO);
 
             // Assert
-            Assert.IsType<NotFoundObjectResult>(response);
+            result.StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        }
+
+        [Fact]
+        public async Task UpdateBook_ReturnsBadRequest_WhenBookIsNotUpdated()
+        {
+            // Arrange
+            var book = CreateFakeBook("Book 1");
+            _bookRepository.GetByIdAsync(book.Id).Returns(book);
+
+            var bookDTO = new BookUpdateDTO
+            {
+                Title = "Updated 1"
+            };
+
+            _bookRepository.Update(Arg.Any<Book>()).Returns(false);
+
+            // Act
+            var result = (BadRequestObjectResult)await _sut.UpdateBook(book.Id, bookDTO);
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
     }
 }

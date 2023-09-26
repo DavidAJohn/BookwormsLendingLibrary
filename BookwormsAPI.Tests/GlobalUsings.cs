@@ -6,3 +6,4 @@ global using BookwormsAPI.Contracts;
 global using BookwormsAPI.Controllers;
 global using BookwormsAPI.DTOs;
 global using BookwormsAPI.Specifications;
+global using BookwormsAPI.Entities;
