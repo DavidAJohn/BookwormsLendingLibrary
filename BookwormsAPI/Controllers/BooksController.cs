@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using AutoMapper;
 using BookwormsAPI.Contracts;
 using BookwormsAPI.DTOs;
@@ -8,7 +6,6 @@ using BookwormsAPI.Errors;
 using BookwormsAPI.Extensions;
 using BookwormsAPI.Specifications;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +16,7 @@ namespace BookwormsAPI.Controllers
         private readonly IBookRepository _bookRepository;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
         public BooksController(IBookRepository bookRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _bookRepository = bookRepository;
@@ -28,7 +26,8 @@ namespace BookwormsAPI.Controllers
 
         // GET api/books
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks([FromQuery] BookSpecificationParams bookParams)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetBooks([FromQuery] BookSpecificationParams bookParams)
         {
             var spec = new BooksWithCategoriesAndAuthorsSpecification(bookParams);
 
@@ -48,7 +47,7 @@ namespace BookwormsAPI.Controllers
         [HttpGet("{id}", Name="GetBookById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<BookDTO>> GetBookById(int id)
+        public async Task<IActionResult> GetBookById(int id)
         {
             var spec = new BooksWithCategoriesAndAuthorsSpecification(id);
             var book = await _bookRepository.GetEntityWithSpec(spec);
@@ -58,7 +57,7 @@ namespace BookwormsAPI.Controllers
                 return NotFound(new ApiResponse(404));
             }
 
-            return _mapper.Map<Book, BookDTO>(book);
+            return Ok(_mapper.Map<Book, BookDTO>(book));
         }
 
         // POST api/books
@@ -66,8 +65,7 @@ namespace BookwormsAPI.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<BookDTO>> CreateBook([FromBody] BookCreateDTO bookCreateDTO)
+        public async Task<IActionResult> CreateBook([FromBody] BookCreateDTO bookCreateDTO)
         {
             if (bookCreateDTO == null)
             {
@@ -86,7 +84,7 @@ namespace BookwormsAPI.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteBook(int id)
         {
             var book = await _bookRepository.GetByIdAsync(id);
@@ -96,7 +94,13 @@ namespace BookwormsAPI.Controllers
                 return NotFound(new ApiResponse(404));
             }
 
-            await _bookRepository.Delete(book);
+            var deleted = await _bookRepository.Delete(book);
+
+            if (!deleted)
+            {
+                return BadRequest(new ApiResponse(400, "There was a problem deleting this book"));
+            }
+
             return NoContent();
         }
 
@@ -106,8 +110,7 @@ namespace BookwormsAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> UpdateBook(int id, [FromBody] BookUpdateDTO bookUpdateDTO)
+        public async Task<IActionResult> UpdateBook(int id, [FromBody] BookUpdateDTO bookUpdateDTO)
         {
             var book = await _bookRepository.GetByIdAsync(id);
 
@@ -117,7 +120,13 @@ namespace BookwormsAPI.Controllers
             }
 
             _mapper.Map(bookUpdateDTO, book);
-            await _bookRepository.Update(book);
+            
+            var updated = await _bookRepository.Update(book);
+
+            if (!updated)
+            {
+                return BadRequest(new ApiResponse(400, "There was a problem updating this book"));
+            }
 
             return NoContent();
         }
@@ -128,8 +137,7 @@ namespace BookwormsAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> PatchBook(int id, JsonPatchDocument<BookUpdateDTO> patchDocument)
+        public async Task<IActionResult> PatchBook(int id, JsonPatchDocument<BookUpdateDTO> patchDocument)
         {
             var book = await _bookRepository.GetByIdAsync(id);
 
@@ -147,8 +155,14 @@ namespace BookwormsAPI.Controllers
             }
 
             _mapper.Map(bookToPatch, book);
-            await _bookRepository.Update(book);
-            
+
+            var updated = await _bookRepository.Update(book);
+
+            if (!updated)
+            {
+                return BadRequest(new ApiResponse(400, "There was a problem updating this book"));
+            }
+
             return NoContent();
         }
     }
