@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using AutoMapper;
 using BookwormsAPI.Contracts;
 using BookwormsAPI.DTOs;
@@ -8,7 +6,6 @@ using BookwormsAPI.Errors;
 using BookwormsAPI.Extensions;
 using BookwormsAPI.Specifications;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +25,8 @@ namespace BookwormsAPI.Controllers
 
         // GET api/authors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AuthorDTO>>> GetAuthors([FromQuery] AuthorSpecificationParams authorParams)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAuthors([FromQuery] AuthorSpecificationParams authorParams)
         {
             var spec = new AuthorsWithBooksSpecification(authorParams);
 
@@ -48,7 +46,7 @@ namespace BookwormsAPI.Controllers
         [HttpGet("{id}", Name="GetAuthorById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> GetAuthorById(int id)
+        public async Task<IActionResult> GetAuthorById(int id)
         {
             var spec = new AuthorsWithBooksSpecification(id);
             var author = await _authorRepository.GetEntityWithSpec(spec);
@@ -66,8 +64,7 @@ namespace BookwormsAPI.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<AuthorDTO>> CreateAuthor([FromBody] AuthorCreateDTO authorCreateDTO)
+        public async Task<IActionResult> CreateAuthor([FromBody] AuthorCreateDTO authorCreateDTO)
         {
             if (authorCreateDTO == null)
             {
@@ -75,7 +72,14 @@ namespace BookwormsAPI.Controllers
             }
 
             var author = _mapper.Map<Author>(authorCreateDTO);
-            await _authorRepository.Create(author);
+
+            var created = await _authorRepository.Create(author);
+
+            if (created == null)
+            {
+                return BadRequest(new ApiResponse(400));
+            }
+
             var authorDTO = _mapper.Map<AuthorDTO>(author);
 
             return CreatedAtRoute(nameof(GetAuthorById), new {Id = authorDTO.Id}, authorDTO);
@@ -86,7 +90,6 @@ namespace BookwormsAPI.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
             var author = await _authorRepository.GetByIdAsync(id);
@@ -96,7 +99,13 @@ namespace BookwormsAPI.Controllers
                 return NotFound(new ApiResponse(404));
             }
 
-            await _authorRepository.Delete(author);
+            var deleted = await _authorRepository.Delete(author);
+
+            if (!deleted)
+            {
+                return BadRequest(new ApiResponse(400, "There was a problem deleting this author"));
+            }
+
             return NoContent();
         }
 
@@ -106,8 +115,7 @@ namespace BookwormsAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> UpdateAuthor(int id, [FromBody] AuthorUpdateDTO authorUpdateDTO)
+        public async Task<IActionResult> UpdateAuthor(int id, [FromBody] AuthorUpdateDTO authorUpdateDTO)
         {
             var author = await _authorRepository.GetByIdAsync(id);
 
@@ -117,7 +125,13 @@ namespace BookwormsAPI.Controllers
             }
 
             _mapper.Map(authorUpdateDTO, author);
-            await _authorRepository.Update(author);
+
+            var updated = await _authorRepository.Update(author);
+
+            if (!updated)
+            {
+                return BadRequest(new ApiResponse(400, "There was a problem updating this author"));
+            }
 
             return NoContent();
         }
@@ -128,7 +142,6 @@ namespace BookwormsAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> PatchAuthor(int id, JsonPatchDocument<AuthorUpdateDTO> patchDocument)
         {
             var author = await _authorRepository.GetByIdAsync(id);
@@ -147,8 +160,14 @@ namespace BookwormsAPI.Controllers
             }
 
             _mapper.Map(authorToPatch, author);
-            await _authorRepository.Update(author);
-            
+
+            var updated = await _authorRepository.Update(author);
+
+            if (!updated)
+            {
+                return BadRequest(new ApiResponse(400, "There was a problem updating this author"));
+            }
+
             return NoContent();
         }
     }
