@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using AutoMapper;
 using BookwormsAPI.Contracts;
 using BookwormsAPI.DTOs;
@@ -7,7 +5,6 @@ using BookwormsAPI.Entities;
 using BookwormsAPI.Errors;
 using BookwormsAPI.Specifications;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookwormsAPI.Controllers
@@ -16,6 +13,7 @@ namespace BookwormsAPI.Controllers
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
+
         public CategoriesController(ICategoryRepository categoryRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
@@ -25,7 +23,8 @@ namespace BookwormsAPI.Controllers
         // GET api/categories
         [HttpGet]
         [ResponseCache(Duration = 60)]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetCategories()
         {
             var spec = new CategoriesOrderedByNameSpecification();
             var categories = await _categoryRepository.ListAsync(spec);
@@ -55,9 +54,9 @@ namespace BookwormsAPI.Controllers
         [Authorize(Policy = "RequireAdminRole")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<CategoryDTO>> CreateCategory([FromBody] CategoryCreateDTO categoryCreateDTO)
+        public async Task<IActionResult> CreateCategory([FromBody] CategoryCreateDTO categoryCreateDTO)
         {
             if (categoryCreateDTO == null)
             {
@@ -65,7 +64,14 @@ namespace BookwormsAPI.Controllers
             }
 
             var category = _mapper.Map<Category>(categoryCreateDTO);
-            await _categoryRepository.Create(category);
+
+            var created = await _categoryRepository.Create(category);
+
+            if (created == null)
+            {
+                return BadRequest(new ApiResponse(400));
+            }
+
             var categoryDTO = _mapper.Map<CategoryDTO>(category);
 
             return CreatedAtRoute(nameof(GetCategoryById), new {Id = categoryDTO.Id}, categoryDTO);
@@ -75,9 +81,9 @@ namespace BookwormsAPI.Controllers
         [Authorize(Policy = "RequireAdminRole")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> DeleteCategory(int id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
 
@@ -86,7 +92,13 @@ namespace BookwormsAPI.Controllers
                 return NotFound(new ApiResponse(404));
             }
 
-            await _categoryRepository.Delete(category);
+            var deleted = await _categoryRepository.Delete(category);
+
+            if (!deleted)
+            {
+                return BadRequest(new ApiResponse(400, "There was a problem deleting this category"));
+            }
+
             return NoContent();
         }
 
@@ -94,8 +106,8 @@ namespace BookwormsAPI.Controllers
         [Authorize(Policy = "RequireAdminRole")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> UpdateCategory(int id, CategoryCreateDTO categoryUpdateDTO)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
@@ -106,7 +118,13 @@ namespace BookwormsAPI.Controllers
             }
 
             _mapper.Map(categoryUpdateDTO, category);
-            await _categoryRepository.Update(category);
+
+            var updated = await _categoryRepository.Update(category);
+
+            if (!updated)
+            {
+                return BadRequest(new ApiResponse(400, "There was a problem updating this category"));
+            }
 
             return NoContent();
         }
