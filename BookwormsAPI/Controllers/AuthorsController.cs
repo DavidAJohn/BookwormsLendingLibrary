@@ -16,11 +16,14 @@ namespace BookwormsAPI.Controllers
         private readonly IAuthorRepository _authorRepository;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public AuthorsController(IAuthorRepository authorRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        private readonly ILogger<AuthorsController> _logger;
+
+        public AuthorsController(IAuthorRepository authorRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor, ILogger<AuthorsController> logger)
         {
             _authorRepository = authorRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
 
         // GET api/authors
@@ -53,6 +56,7 @@ namespace BookwormsAPI.Controllers
 
             if (author == null)
             {
+                _logger.LogInformation("Authors Controller -> Author with id: {id} was not found during GET request", id);
                 return NotFound(new ApiResponse(404));
             }
 
@@ -68,6 +72,7 @@ namespace BookwormsAPI.Controllers
         {
             if (authorCreateDTO == null)
             {
+                _logger.LogInformation("Authors Controller -> AuthorCreateDTO was null");
                 return BadRequest(new ApiResponse(400));
             }
 
@@ -77,6 +82,7 @@ namespace BookwormsAPI.Controllers
 
             if (created == null)
             {
+                _logger.LogInformation("Authors Controller -> Author could not be created");
                 return BadRequest(new ApiResponse(400));
             }
 
@@ -96,6 +102,7 @@ namespace BookwormsAPI.Controllers
 
             if (author == null)
             {
+                _logger.LogInformation("Authors Controller -> Author with id: {id} was not found during DELETE request", id);
                 return NotFound(new ApiResponse(404));
             }
 
@@ -103,6 +110,7 @@ namespace BookwormsAPI.Controllers
 
             if (!deleted)
             {
+                _logger.LogInformation("Authors Controller -> Author with id: {id} could not be deleted", id);
                 return BadRequest(new ApiResponse(400, "There was a problem deleting this author"));
             }
 
@@ -121,6 +129,7 @@ namespace BookwormsAPI.Controllers
 
             if (author == null)
             {
+                _logger.LogInformation("Authors Controller -> Author with id: {id} was not found during PUT request", id);
                 return NotFound(new ApiResponse(404));
             }
 
@@ -130,6 +139,7 @@ namespace BookwormsAPI.Controllers
 
             if (!updated)
             {
+                _logger.LogInformation("Authors Controller -> Author with id: {id} could not be updated", id);
                 return BadRequest(new ApiResponse(400, "There was a problem updating this author"));
             }
 
@@ -148,6 +158,7 @@ namespace BookwormsAPI.Controllers
 
             if (author == null)
             {
+                _logger.LogInformation("Authors Controller -> Author with id: {id} was not found during PATCH request", id);
                 return NotFound(new ApiResponse(404));
             }
 
@@ -165,6 +176,7 @@ namespace BookwormsAPI.Controllers
 
             if (!updated)
             {
+                _logger.LogInformation("Authors Controller -> Author with id: {id} could not be updated", id);
                 return BadRequest(new ApiResponse(400, "There was a problem updating this author"));
             }
 

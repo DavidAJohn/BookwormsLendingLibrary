@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace BookwormsAPI.Tests.UnitTests.Controllers
 {
@@ -10,6 +11,7 @@ namespace BookwormsAPI.Tests.UnitTests.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly DefaultHttpContext _context;
         private readonly IMapper _mapper;
+        private readonly ILogger<AuthorsController> _logger;
         private AuthorsController _sut;
 
         public AuthorsControllerTests()
@@ -19,8 +21,9 @@ namespace BookwormsAPI.Tests.UnitTests.Controllers
             _httpContextAccessor = Substitute.For<IHttpContextAccessor>();
             _httpContextAccessor.HttpContext = _context;
             _mapper = BuildMap();
+            _logger = Substitute.For<ILogger<AuthorsController>>();
 
-            _sut = new AuthorsController(_authorRepository, _mapper, _httpContextAccessor);
+            _sut = new AuthorsController(_authorRepository, _mapper, _httpContextAccessor, _logger);
         }
 
         [Fact]
