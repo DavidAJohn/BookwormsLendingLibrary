@@ -16,12 +16,14 @@ namespace BookwormsAPI.Controllers
         private readonly IBookRepository _bookRepository;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger<BooksController> _logger;
 
-        public BooksController(IBookRepository bookRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public BooksController(IBookRepository bookRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor, ILogger<BooksController> logger)
         {
             _bookRepository = bookRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
 
         // GET api/books
@@ -54,6 +56,7 @@ namespace BookwormsAPI.Controllers
 
             if (book == null)
             {
+                _logger.LogInformation("Books Controller -> Book with id: {id} was not found during GET request", id);
                 return NotFound(new ApiResponse(404));
             }
 
@@ -69,11 +72,20 @@ namespace BookwormsAPI.Controllers
         {
             if (bookCreateDTO == null)
             {
+                _logger.LogInformation("Books Controller -> BookCreateDTO was null");
                 return BadRequest(new ApiResponse(400));
             }
 
             var book = _mapper.Map<Book>(bookCreateDTO);
-            await _bookRepository.Create(book);
+
+            var created = await _bookRepository.Create(book);
+
+            if (created == null)
+            {
+                _logger.LogInformation("Books Controller -> Book could not be created");
+                return BadRequest(new ApiResponse(400, "There was a problem creating this book"));
+            }
+
             var bookDTO = _mapper.Map<Book, BookForAuthorDTO>(book);
 
             return CreatedAtRoute(nameof(GetBookById), new {Id = bookDTO.Id}, bookDTO);
@@ -91,6 +103,7 @@ namespace BookwormsAPI.Controllers
 
             if (book == null)
             {
+                _logger.LogInformation("Books Controller -> Book with id: {id} was not found during DELETE request", id);
                 return NotFound(new ApiResponse(404));
             }
 
@@ -98,6 +111,7 @@ namespace BookwormsAPI.Controllers
 
             if (!deleted)
             {
+                _logger.LogInformation("Books Controller -> Book with id: {id} could not be deleted", id);
                 return BadRequest(new ApiResponse(400, "There was a problem deleting this book"));
             }
 
@@ -116,6 +130,7 @@ namespace BookwormsAPI.Controllers
 
             if (book == null)
             {
+                _logger.LogInformation("Books Controller -> Book with id: {id} was not found during UPDATE request", id);
                 return NotFound(new ApiResponse(404));
             }
 
@@ -125,6 +140,7 @@ namespace BookwormsAPI.Controllers
 
             if (!updated)
             {
+                _logger.LogInformation("Books Controller -> Book with id: {id} could not be updated", id);
                 return BadRequest(new ApiResponse(400, "There was a problem updating this book"));
             }
 
@@ -143,6 +159,7 @@ namespace BookwormsAPI.Controllers
 
             if (book == null)
             {
+                _logger.LogInformation("Books Controller -> Book with id: {id} was not found during PATCH request", id);
                 return NotFound(new ApiResponse(404));
             }
 
@@ -160,6 +177,7 @@ namespace BookwormsAPI.Controllers
 
             if (!updated)
             {
+                _logger.LogInformation("Books Controller -> Book with id: {id} could not be patched", id);
                 return BadRequest(new ApiResponse(400, "There was a problem updating this book"));
             }
 
