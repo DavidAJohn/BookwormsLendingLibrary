@@ -106,6 +106,24 @@ namespace BookwormsAPI.Tests.UnitTests.Controllers
         }
 
         [Fact]
+        public async Task CreateBook_ReturnsBadRequest_WhenBookCouldNotBeCreated()
+        {
+            // Arrange
+            var bookDTO = new BookCreateDTO
+            {
+                Title = "Book 1"
+            };
+
+            _bookRepository.Create(Arg.Any<Book>()).ReturnsNull();
+
+            // Act
+            var result = (BadRequestObjectResult)await _sut.CreateBook(bookDTO);
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        }
+
+        [Fact]
         public async Task CreateBook_ReturnsBadRequest_WhenInputIsNull()
         {
             // Act
