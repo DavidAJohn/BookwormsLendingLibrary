@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace BookwormsAPI.Tests.UnitTests.Controllers
 {
@@ -10,6 +11,7 @@ namespace BookwormsAPI.Tests.UnitTests.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly DefaultHttpContext _context;
         private readonly IMapper _mapper;
+        private readonly ILogger<BooksController> _logger;
         private BooksController _sut;
 
         public BooksControllerTests()
@@ -19,8 +21,9 @@ namespace BookwormsAPI.Tests.UnitTests.Controllers
             _httpContextAccessor = Substitute.For<IHttpContextAccessor>();
             _httpContextAccessor.HttpContext = _context;
             _mapper = BuildMap();
+            _logger = Substitute.For<ILogger<BooksController>>();
 
-            _sut = new BooksController(_bookRepository, _mapper, _httpContextAccessor);
+            _sut = new BooksController(_bookRepository, _mapper, _httpContextAccessor, _logger);
         }
 
         [Fact]
@@ -90,6 +93,8 @@ namespace BookwormsAPI.Tests.UnitTests.Controllers
             {
                 Title = "Book 1"
             };
+
+            _bookRepository.Create(Arg.Any<Book>()).Returns(new Book());
 
             // Act
             var result = (CreatedAtRouteResult)await _sut.CreateBook(bookDTO);
