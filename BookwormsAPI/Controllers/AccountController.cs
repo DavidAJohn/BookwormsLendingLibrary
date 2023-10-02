@@ -17,14 +17,17 @@ namespace BookwormsAPI.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AccountController(
             UserManager<AppUser> userManager, 
             SignInManager<AppUser> signInManager, 
             ITokenService tokenService, 
-            IMapper mapper)
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
             _tokenService = tokenService;
             _signInManager = signInManager;
             _userManager = userManager;
@@ -32,23 +35,27 @@ namespace BookwormsAPI.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<UserDTO>> GetCurrentUser()
+        public async Task<IActionResult> GetCurrentUser()
         {
-            var user = await _userManager.FindUserByEmailFromClaimsPrincipal(HttpContext.User);
+            var httpContext = _httpContextAccessor.HttpContext;
+            var user = await _userManager.FindUserByEmailFromClaimsPrincipal(httpContext.User);
 
-            return new UserDTO
+            var userDTO = new UserDTO
             {
                 Email = user.Email,
                 Token = await _tokenService.CreateToken(user),
                 DisplayName = user.DisplayName
             };
+
+            return Ok(userDTO);
         }
 
         [Authorize]
         [HttpGet("address")]
         public async Task<ActionResult<AddressDTO>> GetUserAddress()
         {
-            var user = await _userManager.FindUserByClaimsPrincipalWithAddressAsync(HttpContext.User);
+            var httpContext = _httpContextAccessor.HttpContext;
+            var user = await _userManager.FindUserByClaimsPrincipalWithAddressAsync(httpContext.User);
 
             return _mapper.Map<Address, AddressDTO>(user.Address);
         }
@@ -57,7 +64,8 @@ namespace BookwormsAPI.Controllers
         [HttpPut("address")]
         public async Task<ActionResult<AddressDTO>> UpdateUserAddress(AddressDTO addressDTO)
         {
-            var user = await _userManager.FindUserByClaimsPrincipalWithAddressAsync(HttpContext.User);
+            var httpContext = _httpContextAccessor.HttpContext;
+            var user = await _userManager.FindUserByClaimsPrincipalWithAddressAsync(httpContext.User);
             user.Address = _mapper.Map<AddressDTO, Address>(addressDTO);
             
             var result = await _userManager.UpdateAsync(user);
@@ -71,7 +79,7 @@ namespace BookwormsAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
+        public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
             var user = await _userManager.FindByEmailAsync(loginDTO.Email);
 
@@ -87,16 +95,18 @@ namespace BookwormsAPI.Controllers
                 return Unauthorized(new ApiResponse(401));
             }
 
-            return new UserDTO
+            var authenticatedUser = new UserDTO
             {
                 Email = user.Email,
                 Token = await _tokenService.CreateToken(user),
                 DisplayName = user.DisplayName
             };
+
+            return Ok(authenticatedUser);
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
+        public async Task<IActionResult> Register(RegisterDTO registerDTO)
         {
             if (CheckEmailExistsAsync(registerDTO.Email).Result)
             {
@@ -128,12 +138,14 @@ namespace BookwormsAPI.Controllers
                 return BadRequest(new ApiResponse(400));
             }
 
-            return new UserDTO
+            var userDTO = new UserDTO
             {
                 DisplayName = user.DisplayName,
                 Token = await _tokenService.CreateToken(user),
                 Email = user.Email
             };
+
+            return Ok(userDTO);
         }
 
         private async Task<bool> CheckEmailExistsAsync(string email)
