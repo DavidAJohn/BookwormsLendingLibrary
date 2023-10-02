@@ -1,7 +1,4 @@
-﻿using BookwormsAPI.Contracts;
-using BookwormsAPI.Controllers;
-using BookwormsAPI.DTOs;
-using BookwormsAPI.Entities.Identity;
+﻿using BookwormsAPI.Entities.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -11,11 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace BookwormsAPI.Tests.UnitTests.Controllers
 {
@@ -99,30 +91,6 @@ namespace BookwormsAPI.Tests.UnitTests.Controllers
             Assert.IsType<ActionResult<UserDTO>>(response);
 
             Assert.Equal("test@test.com", response.Value.Email);
-        }
-
-        [Fact]
-        public async Task CheckEmailExists_UnregisteredEmail_ReturnsFalse()
-        {
-            var databaseName = Guid.NewGuid().ToString();
-            await CreateRegisteredUser(databaseName);
-
-            var controller = await BuildAccountController(databaseName);
-            var response = await controller.CheckEmailExistsAsync("not_registered@test.com");
-
-            Assert.False(response.Value);
-        }
-
-        [Fact]
-        public async Task CheckEmailExists_RegisteredEmail_ReturnsTrue()
-        {
-            var databaseName = Guid.NewGuid().ToString();
-            await CreateRegisteredUser(databaseName);
-
-            var controller = await BuildAccountController(databaseName);
-            var response = await controller.CheckEmailExistsAsync("test@test.com");
-
-            Assert.True(response.Value);
         }
 
 

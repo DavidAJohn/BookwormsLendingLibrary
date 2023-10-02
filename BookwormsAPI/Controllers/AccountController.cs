@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using API.Errors;
 using AutoMapper;
 using BookwormsAPI.Contracts;
@@ -18,6 +17,7 @@ namespace BookwormsAPI.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
+
         public AccountController(
             UserManager<AppUser> userManager, 
             SignInManager<AppUser> signInManager, 
@@ -70,12 +70,6 @@ namespace BookwormsAPI.Controllers
             return BadRequest("There was a problem updating this user");
         }
 
-        [HttpGet("emailexists")]
-        public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email)
-        {
-            return await _userManager.FindByEmailAsync(email) != null;
-        }
-
         [HttpPost("login")]
         public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
         {
@@ -100,14 +94,15 @@ namespace BookwormsAPI.Controllers
                 DisplayName = user.DisplayName
             };
         }
+
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
         {
-            if (CheckEmailExistsAsync(registerDTO.Email).Result.Value)
+            if (CheckEmailExistsAsync(registerDTO.Email).Result)
             {
                 return new BadRequestObjectResult(
                     new ApiValidationErrorResponse{
-                        Errors = new [] {"The email address is already in use"}
+                        Errors = new [] { "Registration failed" }
                     }
                 );
             }
@@ -139,6 +134,11 @@ namespace BookwormsAPI.Controllers
                 Token = await _tokenService.CreateToken(user),
                 Email = user.Email
             };
+        }
+
+        private async Task<bool> CheckEmailExistsAsync(string email)
+        {
+            return await _userManager.FindByEmailAsync(email) != null;
         }
     }
 }
