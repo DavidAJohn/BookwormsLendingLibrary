@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
-using System.Threading.Tasks;
 using BookwormsAPI.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace BookwormsAPI.Data
 {
@@ -16,18 +13,21 @@ namespace BookwormsAPI.Data
             var authorsData = await File.ReadAllTextAsync("./Data/SeedData/authors.json");
             var authors = JsonSerializer.Deserialize<List<Author>>(authorsData);
 
-            using (var transaction = context.Database.BeginTransaction())
+            var strategy = context.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async () =>
             {
+                await using var transaction = context.Database.BeginTransaction();
+
                 foreach (var author in authors)
                 {
                     context.Authors.Add(author);
                 }
 
                 context.Database.ExecuteSqlInterpolated($"SET IDENTITY_INSERT Authors ON;");
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 context.Database.ExecuteSqlInterpolated($"SET IDENTITY_INSERT Authors OFF");
                 transaction.Commit();
-            }
+            });
         }
 
         public static async Task SeedCategoriesDataAsync(ApplicationDbContext context)
@@ -37,18 +37,21 @@ namespace BookwormsAPI.Data
             var categoriesData = await File.ReadAllTextAsync("./Data/SeedData/categories.json");
             var categories = JsonSerializer.Deserialize<List<Category>>(categoriesData);
 
-            using (var transaction = context.Database.BeginTransaction())
+            var strategy = context.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async () =>
             {
+                await using var transaction = context.Database.BeginTransaction();
+
                 foreach (var category in categories)
                 {
                     context.Categories.Add(category);
                 }
 
                 context.Database.ExecuteSqlInterpolated($"SET IDENTITY_INSERT Categories ON;");
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 context.Database.ExecuteSqlInterpolated($"SET IDENTITY_INSERT Categories OFF");
                 transaction.Commit();
-            }
+            });
         }
 
         public static async Task SeedBooksDataAsync(ApplicationDbContext context)
