@@ -157,6 +157,157 @@ namespace BookwormsAPI.Tests.IntegrationTests.Controllers
             result.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
         }
 
+        [Fact]
+        public async Task GetCurrentUser_ShouldReturnUserDTO_WhenUserIsAuthenticated()
+        {
+            // Arrange
+            var email = "test@test.com";
+
+            _httpContextAccessor.HttpContext = new DefaultHttpContext();
+            _httpContextAccessor.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.Role, "Borrower")
+            }));
+
+            var sut = await BuildAccountController(_databaseName, _httpContextAccessor.HttpContext);
+
+            //await CreateRegisteredUser(sut);
+
+            // Act
+            var result = (OkObjectResult)await sut.GetCurrentUser();
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status200OK);
+            result.Value.Should().BeOfType<UserDTO>();
+            result.Value.As<UserDTO>().Email.Should().Be(email);
+        }
+
+        [Fact]
+        public async Task GetCurrentUser_ShouldReturnUnauthorisedResponse_WhenUserIsNotAuthenticated()
+        {
+            // Arrange
+            _httpContextAccessor.HttpContext = new DefaultHttpContext();
+
+            var sut = await BuildAccountController(_databaseName, _httpContextAccessor.HttpContext);
+
+            // Act
+            var result = (UnauthorizedObjectResult)await sut.GetCurrentUser();
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
+        }
+
+        [Fact]
+        public async Task GetUserAddress_ShouldReturnAddressDTO_WhenUserIsAuthenticated()
+        {
+            // Arrange
+            _httpContextAccessor.HttpContext = new DefaultHttpContext();
+            _httpContextAccessor.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Email, "test@test.com")
+            }));
+
+            var sut = await BuildAccountController(_databaseName, _httpContextAccessor.HttpContext);
+
+            // Act
+            var result = (OkObjectResult)await sut.GetUserAddress();
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status200OK);
+            result.Value.Should().BeOfType<AddressDTO>();
+        }
+
+        [Fact]
+        public async Task GetUserAddress_ShouldReturnUnauthorisedResponse_WhenUserIsNotAuthenticated()
+        {
+            // Arrange
+            _httpContextAccessor.HttpContext = new DefaultHttpContext();
+
+            var sut = await BuildAccountController(_databaseName, _httpContextAccessor.HttpContext);
+
+            // Act
+            var result = (UnauthorizedObjectResult)await sut.GetUserAddress();
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
+        }
+
+        [Fact]
+        public async Task UpdateUserAddress_ShouldReturnAddressDTO_WhenUserIsAuthenticated()
+        {
+            // Arrange
+            _httpContextAccessor.HttpContext = new DefaultHttpContext();
+            _httpContextAccessor.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Email, "test@test.com")
+            }));
+
+            var sut = await BuildAccountController(_databaseName, _httpContextAccessor.HttpContext);
+
+            var addressDTO = new AddressDTO()
+            {
+                FirstName = "Updated",
+                LastName = "User",
+                Street = "Test Street",
+                City = "Test City",
+                County = "Test County",
+                PostCode = "TE5T 1NG"
+            };
+
+            // Act
+            var result = (OkObjectResult)await sut.UpdateUserAddress(addressDTO);
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status200OK);
+            result.Value.Should().BeOfType<AddressDTO>();
+            result.Value.As<AddressDTO>().FirstName.Should().Be(addressDTO.FirstName);
+        }
+
+        [Fact]
+        public async Task UpdateUserAddress_ShouldReturnUnauthorisedResponse_WhenUserIsNotAuthenticated()
+        {
+            // Arrange
+            _httpContextAccessor.HttpContext = new DefaultHttpContext();
+
+            var sut = await BuildAccountController(_databaseName, _httpContextAccessor.HttpContext);
+
+            var addressDTO = new AddressDTO()
+            {
+                FirstName = "Updated",
+                LastName = "User",
+                Street = "Test Street",
+                City = "Test City",
+                County = "Test County",
+                PostCode = "TE5T 1NG"
+            };
+
+            // Act
+            var result = (UnauthorizedObjectResult)await sut.UpdateUserAddress(addressDTO);
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
+        }
+
+        [Fact]
+        public async Task UpdateUserAddress_ShouldReturnBadRequest_WhenAddressDTOIsNull()
+        {
+            // Arrange
+            _httpContextAccessor.HttpContext = new DefaultHttpContext();
+            _httpContextAccessor.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Email, "test@test.com")
+            }));
+
+            var sut = await BuildAccountController(_databaseName, _httpContextAccessor.HttpContext);
+
+            // Act
+            var result = (BadRequestObjectResult)await sut.UpdateUserAddress(null);
+
+            // Assert
+            result.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        }
+
 
         // Helper methods
         // --------------
@@ -170,6 +321,24 @@ namespace BookwormsAPI.Tests.IntegrationTests.Controllers
         private async Task<AccountController> BuildAccountController(string databaseName, HttpContext httpContext)
         {
             var context = BuildIdentityContext(databaseName);
+            await context.Database.EnsureCreatedAsync();
+            context.Users.RemoveRange(context.Users);
+
+            await context.Users.AddAsync(new AppUser
+            {
+                Email = "test@test.com",
+                UserName = "test@test.com",
+                DisplayName = "Test",
+                Address = new Address()
+                {
+                    FirstName = "Test",
+                    LastName = "User",
+                    Street = "Test Street",
+                    City = "Test City",
+                    County = "Test County",
+                    PostCode = "TE5T 1NG"
+                }
+            });
 
             var testUserStore = new UserStore<AppUser>(context);
 
