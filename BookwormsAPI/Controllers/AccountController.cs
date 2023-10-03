@@ -40,6 +40,11 @@ namespace BookwormsAPI.Controllers
             var httpContext = _httpContextAccessor.HttpContext;
             var user = await _userManager.FindUserByEmailFromClaimsPrincipal(httpContext.User);
 
+            if (user == null)
+            {
+                return Unauthorized(new ApiResponse(401));
+            }
+
             var userDTO = new UserDTO
             {
                 Email = user.Email,
@@ -52,20 +57,36 @@ namespace BookwormsAPI.Controllers
 
         [Authorize]
         [HttpGet("address")]
-        public async Task<ActionResult<AddressDTO>> GetUserAddress()
+        public async Task<IActionResult> GetUserAddress()
         {
             var httpContext = _httpContextAccessor.HttpContext;
             var user = await _userManager.FindUserByClaimsPrincipalWithAddressAsync(httpContext.User);
 
-            return _mapper.Map<Address, AddressDTO>(user.Address);
+            if (user == null)
+            {
+                return Unauthorized(new ApiResponse(401));
+            }
+
+            return Ok(_mapper.Map<Address, AddressDTO>(user.Address));
         }
 
         [Authorize]
         [HttpPut("address")]
-        public async Task<ActionResult<AddressDTO>> UpdateUserAddress(AddressDTO addressDTO)
+        public async Task<IActionResult> UpdateUserAddress(AddressDTO addressDTO)
         {
+            if (addressDTO is null)
+            {
+                return BadRequest(new ApiResponse(400, "Invalid address supplied"));
+            }
+
             var httpContext = _httpContextAccessor.HttpContext;
             var user = await _userManager.FindUserByClaimsPrincipalWithAddressAsync(httpContext.User);
+
+            if (user == null)
+            {
+                return Unauthorized(new ApiResponse(401));
+            }
+
             user.Address = _mapper.Map<AddressDTO, Address>(addressDTO);
             
             var result = await _userManager.UpdateAsync(user);
@@ -75,7 +96,7 @@ namespace BookwormsAPI.Controllers
                 return Ok(_mapper.Map<Address, AddressDTO>(user.Address));
             }
 
-            return BadRequest("There was a problem updating this user");
+            return BadRequest(new ApiResponse(400, "There was a problem updating the address"));
         }
 
         [HttpPost("login")]
