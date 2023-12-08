@@ -353,7 +353,7 @@ namespace BookwormsAPI.Tests.IntegrationTests.Controllers
             MockAuth(httpContext);
             var signInManager = BuildSignInManager(userManager, httpContext);
 
-            return new AccountController(userManager, signInManager, Mock.Of<ITokenService>(), mapper, _httpContextAccessor);
+            return new AccountController(userManager, signInManager, Mock.Of<ITokenService>(), mapper, _httpContextAccessor, Mock.Of<ILogger<AccountController>>());
         }
 
         private static async Task CreateUserRoles(RoleManager<IdentityRole> roleManager)

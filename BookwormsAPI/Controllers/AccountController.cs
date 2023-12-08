@@ -18,19 +18,22 @@ namespace BookwormsAPI.Controllers
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(
             UserManager<AppUser> userManager, 
             SignInManager<AppUser> signInManager, 
             ITokenService tokenService, 
             IMapper mapper,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            ILogger<AccountController> logger)
         {
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _tokenService = tokenService;
             _signInManager = signInManager;
             _userManager = userManager;
+            _logger = logger;
         }
 
         [Authorize]
@@ -106,6 +109,7 @@ namespace BookwormsAPI.Controllers
 
             if (user == null)
             {
+                _logger.LogInformation("AccountController -> Login: User '{email}' not found", loginDTO.Email);
                 return Unauthorized(new ApiResponse(401));
             }
 
@@ -113,6 +117,7 @@ namespace BookwormsAPI.Controllers
 
             if (!result.Succeeded)
             {
+                _logger.LogInformation("AccountController -> Login: Login failed for user '{email}'", loginDTO.Email);
                 return Unauthorized(new ApiResponse(401));
             }
 
@@ -149,6 +154,7 @@ namespace BookwormsAPI.Controllers
 
             if (!result.Succeeded)
             {
+                _logger.LogWarning("AccountController -> Register: Registration failed because the user '{email}' could not be created by the UserManager", user.Email);
                 return BadRequest(new ApiResponse(400));
             }
 
@@ -156,6 +162,7 @@ namespace BookwormsAPI.Controllers
 
             if (!roleResult.Succeeded)
             {
+                _logger.LogWarning("AccountController -> Register: Registration failed because the role 'Borrower' could not be added to the user '{email}' by the UserManager", user.Email);
                 return BadRequest(new ApiResponse(400));
             }
 
@@ -165,6 +172,8 @@ namespace BookwormsAPI.Controllers
                 Token = await _tokenService.CreateToken(user),
                 Email = user.Email
             };
+
+            _logger.LogInformation("AccountController -> Register: Registration for user '{email}' was completed successfully", user.Email);
 
             return Ok(userDTO);
         }
