@@ -7,7 +7,7 @@ Bookworms Lending Library is a .NET application that combines a Blazor Server fr
 ##### BookwormsAPI project Build Status:
 [![Build Status - BookwormsAPI](https://dev.azure.com/davidajohn/Bookworms%20Library/_apis/build/status/Bookworms%20Library%20-%20BookwormsAPI?branchName=main)](https://dev.azure.com/davidajohn/Bookworms%20Library/_build/latest?definitionId=4&branchName=main)
 
-You can see a demo version of the site running on Microsoft's Azure cloud service at: [https://bookworkslibrary.azurewebsites.net](https://bookworkslibrary.azurewebsites.net)
+You can see a demo version of the site running on Microsoft Azure at: [https://bookwormslibrary.azurewebsites.net](https://bookwormslibrary.azurewebsites.net)
 
 
 ![Screenshot](https://bookwormslibrary.blob.core.windows.net/promo/bookworms_screenshot.png "Screenshot")
