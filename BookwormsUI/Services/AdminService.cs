@@ -13,8 +13,8 @@ namespace BookwormsUI.Services
     {
         private readonly ILocalStorageService _localStorage;
         private readonly IHttpClientFactory _httpClient;
-        private readonly SettingsService _settings;
-        public AdminService(IHttpClientFactory httpClient, ILocalStorageService localStorage, SettingsService settings)
+        private readonly ISettingsService _settings;
+        public AdminService(IHttpClientFactory httpClient, ILocalStorageService localStorage, ISettingsService settings)
         {
             _settings = settings;
             _httpClient = httpClient;

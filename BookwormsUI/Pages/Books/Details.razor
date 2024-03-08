@@ -6,7 +6,7 @@
 @inject NavigationManager navigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService ToastService
-@inject SettingsService settings
+@inject ISettingsService settings
 
 @if (int.Parse(Id) < 1 || string.IsNullOrWhiteSpace(Id))
 {

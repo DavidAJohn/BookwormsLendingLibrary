@@ -18,11 +18,11 @@ namespace BookwormsUI.Services
         private readonly IHttpClientFactory _httpClient;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly ILocalStorageService _localStorage;
-        private readonly SettingsService _settings;
+        private readonly ISettingsService _settings;
         public AuthenticationService(IHttpClientFactory httpClient, 
                             AuthenticationStateProvider authenticationStateProvider, 
                             ILocalStorageService localStorage,
-                            SettingsService settings)
+                            ISettingsService settings)
         {
             _localStorage = localStorage;
             _authenticationStateProvider = authenticationStateProvider;

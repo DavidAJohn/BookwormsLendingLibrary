@@ -6,9 +6,9 @@ namespace BookwormsUI.Services;
 
 public class AuthorService : BaseService<Author>, IAuthorService
 {
-    private readonly SettingsService _settings;
+    private readonly ISettingsService _settings;
 
-    public AuthorService(IHttpClientFactory client, ILocalStorageService localStorage, SettingsService settings) 
+    public AuthorService(IHttpClientFactory client, ILocalStorageService localStorage, ISettingsService settings) 
         : base(client, localStorage)
     {
         _settings = settings;

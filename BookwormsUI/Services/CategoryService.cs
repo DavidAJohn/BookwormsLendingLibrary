@@ -8,9 +8,9 @@ namespace BookwormsUI.Services;
 public class CategoryService : BaseService<Category>, ICategoryService
 {
     private readonly IHttpClientFactory _client;
-    private readonly SettingsService _settings;
+    private readonly ISettingsService _settings;
 
-    public CategoryService(IHttpClientFactory client, ILocalStorageService localStorage, SettingsService settings) 
+    public CategoryService(IHttpClientFactory client, ILocalStorageService localStorage, ISettingsService settings) 
         : base(client, localStorage)
     {
         _client = client;

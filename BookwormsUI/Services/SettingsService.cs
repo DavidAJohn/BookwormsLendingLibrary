@@ -1,9 +1,9 @@
+using BookwormsUI.Contracts;
 using BookwormsUI.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace BookwormsUI.Services
 {
-    public class SettingsService
+    public class SettingsService : ISettingsService
     {
         private readonly IConfiguration _config;
         public SettingsService(IConfiguration config)

@@ -9,10 +9,10 @@ namespace BookwormsUI.Services;
 
 public class RequestService : IRequestService
 {
-    private readonly SettingsService _settings;
+    private readonly ISettingsService _settings;
     private readonly IHttpClientFactory _httpClient;
     private readonly ILocalStorageService _localStorage;
-    public RequestService(SettingsService settings, IHttpClientFactory httpClient, ILocalStorageService localStorage)
+    public RequestService(ISettingsService settings, IHttpClientFactory httpClient, ILocalStorageService localStorage)
     {
         _localStorage = localStorage;
         _httpClient = httpClient;
