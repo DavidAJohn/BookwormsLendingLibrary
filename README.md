@@ -37,7 +37,7 @@ You can see a demo version of the site running on Microsoft Azure at: [https://b
 
 To run the application on your local machine, after cloning or downloading it from GitHub, you'll need the following:
 
-- The .NET 7 SDK installed locally
+- The .NET 8 SDK installed locally
 - SQL Server installed locally, or in a Docker container (see below)
 - An Azure account with a storage container (if you want to enable image uploads in the admin section)
 
