@@ -1,6 +1,8 @@
 # Bookworms Lending Library
 Bookworms Lending Library is a .NET application that combines a Blazor Server frontend with a Web API backend. It was built for an imaginary online library that mails books out to its borrowers.
 
+This is an experimental project. It was not created with the aim of becoming a production-ready enterprise solution and it should not be used as the basis for a production application.
+
 ##### BookwormsUI project Build Status: 
 [![Build Status - BookwormsUI](https://dev.azure.com/davidajohn/Bookworms%20Library/_apis/build/status/Bookworms%20Library-BookwormsUI?branchName=main)](https://dev.azure.com/davidajohn/Bookworms%20Library/_build/latest?definitionId=3&branchName=main)
 
